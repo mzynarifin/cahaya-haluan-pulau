@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { getSection } from "@/lib/data";
-import { ContactCta, Photo, TeamCards, type TeamMember } from "@/components/public-parts";
+import { ContactCta, Photo } from "@/components/public-parts";
+import { TeamCards, type TeamMember } from "@/components/team-cards";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = pageMetadata("/tentang", "Tentang Kami", "Kenali profil, visi, misi, sejarah, dan pengurus Cahaya Haluan Pulau melalui informasi resmi yang tersedia.");
@@ -27,7 +28,7 @@ export default async function About() {
       <Photo src={typeof profile.aboutImage === "string" ? profile.aboutImage : null}
         alt="Dokumentasi kegiatan Cahaya Haluan Pulau" label="Foto kegiatan perlu dilengkapi" />
     </div></section>
-    <section className="section accent-section"><div className="container">
+    <section className="section accent-section" id="pengurus"><div className="container">
       <div className="section-head"><div><span className="eyebrow">Pengurus</span><h2>Kenali pengurus</h2></div></div>
       <TeamCards items={members} />
     </div></section>

@@ -28,19 +28,3 @@ export function AlbumCards({ items }: { items: Album[] }) {
     </article>)}
   </div> : <div className="empty"><h3>Dokumentasi belum tersedia</h3><p>Album kegiatan akan ditampilkan setelah foto dan izin publikasinya dilengkapi.</p></div>;
 }
-
-export type TeamMember = { name: string; role: string; image?: string; visible?: boolean };
-
-export function TeamCards({ items }: { items: TeamMember[] }) {
-  const members = items.filter(member => member.visible && member.name && member.role);
-  return members.length ? <div className="team-grid">
-    {members.map((member, index) => <article className="team-card" key={`${member.name}-${index}`}>
-      <div className="team-card-media">
-        {member.image
-          ? <Image src={member.image} alt={`Foto ${member.name}`} fill sizes="(max-width: 560px) 100vw, (max-width: 1050px) 50vw, 25vw" />
-          : <span className="team-card-initials" aria-hidden="true">{member.name.trim().split(/\s+/).slice(0, 2).map(part => part[0]).join("").toUpperCase()}</span>}
-      </div>
-      <div className="team-card-body"><h3>{member.name}</h3><p>{member.role}</p></div>
-    </article>)}
-  </div> : <div className="empty"><h3>Data pengurus perlu dilengkapi</h3><p>Nama dan foto akan tampil setelah mendapat persetujuan publikasi.</p></div>;
-}

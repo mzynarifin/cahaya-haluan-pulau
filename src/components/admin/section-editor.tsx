@@ -113,7 +113,7 @@ export function SectionEditor({ section }: { section: SectionKey }) {
       {preview && <div className="content-card" style={{ marginTop: 25 }}><h3>Pratinjau informasi</h3>
         {config.fields.map(field => Boolean(content[field.name]) && <p key={field.name}><strong>{field.label}:</strong> {String(content[field.name])}</p>)}
         {list("facilities").map((item, i) => <p key={i}><strong>{item.name}</strong> — {item.description}</p>)}
-        {list("members").map((item, i) => <p key={i}><strong>{item.name}</strong> — {item.role}{item.visible ? "" : " (disembunyikan)"}</p>)}
+        {list("members").map((item, i) => <p key={i}><strong>{item.name}</strong> — {item.role?.trim() || "Pengurus"}{item.visible ? "" : " (disembunyikan)"}</p>)}
       </div>}
     </div></>;
 }
@@ -127,7 +127,7 @@ function ImageField({ label, hint, folder, value, onUploaded }: { label: string;
 function Repeater({ title, items, fields, imageFolder, onUpload, onChange }: { title: string; items: Item[]; fields: [string, string][]; imageFolder?: "team" | "facilities"; onUpload?: (path: string, url: string) => void; onChange: (items: Item[]) => void }) {
   return <div style={{ margin: "28px 0" }}><h3>{title}</h3>{items.map((item, i) => <div className="content-card" key={i} style={{ marginBottom: 12 }}>
     {fields.map(([key, label]) => <div className="field" key={key}><label htmlFor={`${title}-${i}-${key}`}>{label}</label>
-      <input id={`${title}-${i}-${key}`} value={String(item[key as keyof Item] || "")} onChange={e => onChange(items.map((value, index) => index === i ? { ...value, [key]: e.target.value } : value))} /></div>)}
+      <input id={`${title}-${i}-${key}`} value={String(item[key as keyof Item] || "")} placeholder={imageFolder === "team" && key === "role" ? "Jika kosong, tampil sebagai Pengurus" : undefined} onChange={e => onChange(items.map((value, index) => index === i ? { ...value, [key]: e.target.value } : value))} /></div>)}
     {imageFolder && <><MediaUpload label="Foto" folder={imageFolder} crop={imageFolder === "team" ? { aspect: 4 / 5, width: 800, title: "Atur foto pengurus" } : undefined} onUploaded={({ path, preview }) => { onUpload?.(path, preview); onChange(items.map((value, index) => index === i ? { ...value, image: preview } : value)); }} />
       {item.image && <img src={item.image} alt={`Pratinjau ${item.name || title}`} style={{ width: 130, aspectRatio: imageFolder === "team" ? "4 / 5" : undefined, objectFit: "cover", borderRadius: 4 }} />}</>}
     {title !== "Pertanyaan umum" && <label className="field"><span>Tampil di publik <input type="checkbox" checked={Boolean(item.visible)} onChange={e => onChange(items.map((value, index) => index === i ? { ...value, visible: e.target.checked } : value))} /></span></label>}
