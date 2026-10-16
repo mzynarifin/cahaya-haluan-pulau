@@ -66,7 +66,7 @@ export function SectionEditor({ section }: { section: SectionKey }) {
     try {
       const client = createClient(); if (!client) throw new Error("Layanan belum tersedia.");
       const next = { ...content };
-      for (const name of ["heroImage", "aboutImage", "image"]) {
+      for (const name of ["heroImage", "heroImageMobile", "aboutImage", "image"]) {
         if (typeof next[name] === "string" && uploads[next[name]]) next[name] = await promoteMedia(uploads[next[name]]);
       }
       for (const name of ["members", "facilities"]) {
@@ -95,7 +95,8 @@ export function SectionEditor({ section }: { section: SectionKey }) {
         {field.kind === "map" && <small>Salin URL embed, bukan kode iframe. Lokasi presisi perlu persetujuan pengurus.</small>}
       </div>)}
       {section === "profile" && <>
-        <ImageField label="Foto utama beranda" folder="hero" value={String(content.heroImage || "")} onUploaded={(path, url) => { set("heroImage", url); recordUpload(path, url); }} />
+        <ImageField label="Foto beranda desktop" hint="Disarankan gambar mendatar sekitar 16:9." folder="hero" value={String(content.heroImage || "")} onUploaded={(path, url) => { set("heroImage", url); recordUpload(path, url); }} />
+        <ImageField label="Foto beranda HP" hint="Disarankan gambar tegak sekitar 9:16. Jika kosong, foto desktop atau ilustrasi bawaan digunakan di HP." folder="hero" value={String(content.heroImageMobile || "")} onUploaded={(path, url) => { set("heroImageMobile", url); recordUpload(path, url); }} />
         <ImageField label="Foto halaman tentang" folder="about" value={String(content.aboutImage || "")} onUploaded={(path, url) => { set("aboutImage", url); recordUpload(path, url); }} />
       </>}
       {section === "accommodation" && <>
@@ -117,8 +118,9 @@ export function SectionEditor({ section }: { section: SectionKey }) {
     </div></>;
 }
 
-function ImageField({ label, folder, value, onUploaded }: { label: string; folder: "hero" | "about" | "asrama"; value: string; onUploaded: (path: string, url: string) => void }) {
+function ImageField({ label, hint, folder, value, onUploaded }: { label: string; hint?: string; folder: "hero" | "about" | "asrama"; value: string; onUploaded: (path: string, url: string) => void }) {
   return <div style={{ margin: "20px 0" }}><MediaUpload label={label} folder={folder} onUploaded={({ path, preview }) => onUploaded(path, preview)} />
+    {hint && <p className="tiny muted" style={{ marginTop: -10 }}>{hint}</p>}
     {value && <img src={value} alt={`Pratinjau ${label}`} style={{ width: 180, borderRadius: 8 }} />}</div>;
 }
 

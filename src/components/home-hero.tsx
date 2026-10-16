@@ -1,18 +1,22 @@
-import Image from "next/image";
+import { getImageProps } from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 
 export function HomeHero({ profile }: { profile: Record<string, unknown> }) {
-  const heroImage = typeof profile.heroImage === "string" && profile.heroImage.trim() ? profile.heroImage : null;
+  const desktopUpload = typeof profile.heroImage === "string" && profile.heroImage.trim() ? profile.heroImage : null;
+  const mobileUpload = typeof profile.heroImageMobile === "string" && profile.heroImageMobile.trim() ? profile.heroImageMobile : null;
+  const desktopImage = desktopUpload || "/hero-lighthouse.webp";
+  const mobileImage = mobileUpload || (desktopUpload ? desktopImage : "/hero-lighthouse-mobile.webp");
+  const mobileMode = mobileUpload ? "mobile-custom" : desktopUpload ? "mobile-reused" : "mobile-default";
+  const { props: desktopProps } = getImageProps({ src: desktopImage, alt: "", fill: true, sizes: "100vw", priority: true });
+  const { props: mobileProps } = getImageProps({ src: mobileImage, alt: "", fill: true, sizes: "100vw" });
 
   return <section className="hero home-hero">
     <div className="hero-visual has-photo" aria-hidden="true">
-      {heroImage
-        ? <Image src={heroImage} alt="" fill priority sizes="100vw" className="hero-visual-image" />
-        : <picture className="hero-artwork">
-            <source media="(max-width: 800px)" srcSet="/hero-lighthouse-mobile.webp" />
-            <img src="/hero-lighthouse.webp" alt="" className="hero-visual-image" fetchPriority="high" />
-          </picture>}
+      <picture className={`hero-artwork ${mobileMode}`}>
+        <source media="(max-width: 800px)" srcSet={mobileProps.srcSet} sizes={mobileProps.sizes} />
+        <img {...desktopProps} className="hero-visual-image" alt="" />
+      </picture>
     </div>
     <div className="container hero-content">
       <span className="eyebrow">Cahaya Haluan Pulau · Informasi Asrama</span>
