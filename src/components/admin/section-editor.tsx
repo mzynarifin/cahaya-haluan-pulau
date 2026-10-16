@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/browser";
 import { MediaUpload, promoteMedia } from "@/components/admin/media-upload";
+import { AdminPageSkeleton } from "@/components/admin/admin-skeleton";
 import { whatsappMessage } from "@/lib/config";
 
 type SectionKey = "profile" | "accommodation" | "team" | "contact";
@@ -83,7 +84,7 @@ export function SectionEditor({ section }: { section: SectionKey }) {
     finally { setBusy(false); }
   }
 
-  if (loading) return <p role="status">Memuat data...</p>;
+  if (loading) return <AdminPageSkeleton variant="form" />;
   return <><div className="admin-page-head"><div><span className="eyebrow">Konten publik</span><h1>{config.title}</h1><p>{config.description}</p></div></div>
     <div className="admin-form">
       {error && <div className="alert-error" role="alert">{error}</div>}{success && <div className="alert-success" role="status">{success}</div>}
