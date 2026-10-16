@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
+import "./institutional.css";
 import { siteName, siteUrl } from "@/lib/config";
 
 const siteDescription = "Informasi Cahaya Haluan Pulau, asrama, fasilitas, kegiatan, berita, dan cara menghubungi pengurus.";
