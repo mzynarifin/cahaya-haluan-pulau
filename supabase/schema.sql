@@ -113,6 +113,7 @@ alter table public.albums enable row level security;
 create policy "Published albums readable" on public.albums for select to anon, authenticated using (status = 'published' or public.is_admin());
 create policy "Admins insert albums" on public.albums for insert to authenticated with check (public.is_admin());
 create policy "Admins update albums" on public.albums for update to authenticated using (public.is_admin()) with check (public.is_admin());
+create policy "Admins delete albums" on public.albums for delete to authenticated using (public.is_admin());
 
 create table if not exists public.album_photos (
   id uuid primary key default gen_random_uuid(),

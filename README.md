@@ -21,6 +21,8 @@ Publishable key saja tidak dapat membuat tabel atau akun admin. Pemilik proyek p
 4. Tambahkan `http://localhost:3000/admin/auth/callback` ke daftar URL redirect Auth untuk pengembangan. Tambahkan URL produksi yang benar sebelum peluncuran.
 5. Atur `NEXT_PUBLIC_SITE_URL` ke domain produksi yang benar agar metadata dan sitemap tidak memakai localhost.
 
+Untuk proyek Supabase yang sudah berjalan, jalankan [album-delete-policy.sql](./supabase/album-delete-policy.sql) sekali di SQL Editor agar tombol **Hapus** pada galeri admin dapat digunakan.
+
 RLS melindungi tabel privat dan media draft. Mutasi status calon penghuni melalui fungsi `change_applicant_status` agar transisi dan riwayat tercatat bersama. Route `/api/admin/promote-media` memeriksa sesi dan peran admin sebelum menyalin foto draft ke bucket publik. Aplikasi tidak memakai service role key di browser.
 
 ## Konten yang harus dilengkapi pengurus
