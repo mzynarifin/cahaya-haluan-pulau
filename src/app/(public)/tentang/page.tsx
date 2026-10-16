@@ -1,6 +1,36 @@
 import type { Metadata } from "next";
 import { getSection } from "@/lib/data";
-import { ContactCta, Photo } from "@/components/public-parts";
+import { ContactCta, Photo, TeamCards, type TeamMember } from "@/components/public-parts";
 import { pageMetadata } from "@/lib/seo";
+
 export const metadata: Metadata = pageMetadata("/tentang", "Tentang Kami", "Kenali profil, visi, misi, sejarah, dan pengurus Cahaya Haluan Pulau melalui informasi resmi yang tersedia.");
-export default async function About() { const [profile, team]=await Promise.all([getSection("profile"),getSection("team")]); const members=Array.isArray(team.members)?team.members as {name:string;role:string;image?:string;visible?:boolean}[]:[]; return <><div className="page-hero"><div className="container"><span className="eyebrow">Tentang kami</span><h1>Mengenal Cahaya Haluan Pulau</h1><p className="lead">Profil lembaga dan orang-orang yang mengelola informasi tempat tinggal.</p></div></div><section className="section"><div className="container split"><div><span className="eyebrow">Profil</span><h2>{String(profile.name||"Cahaya Haluan Pulau")}</h2><p className="lead">{String(profile.description||"Informasi profil resmi sedang disiapkan oleh pengurus.")}</p>{Boolean(profile.history) && <><h3>Sejarah</h3><p>{String(profile.history)}</p></>}{Boolean(profile.vision) && <><h3>Visi</h3><p>{String(profile.vision)}</p></>}{Boolean(profile.mission) && <><h3>Misi</h3><p>{String(profile.mission)}</p></>}</div><Photo src={typeof profile.aboutImage==="string"?profile.aboutImage:null} alt="Dokumentasi kegiatan Cahaya Haluan Pulau" label="Foto kegiatan perlu dilengkapi"/></div></section><section className="section accent-section"><div className="container"><span className="eyebrow">Pengurus</span><h2>Kenali pengurus</h2>{members.filter(m=>m.visible && m.name && m.role).length ? <div className="card-grid">{members.filter(m=>m.visible && m.name && m.role).map((m,i)=><div className="content-card" key={i}>{m.image && <div className="card-image"><img src={m.image} alt={`Foto ${m.name}`}/></div>}<h3>{m.name}</h3><p>{m.role}</p></div>)}</div> : <div className="empty"><h3>Data pengurus perlu dilengkapi</h3><p>Nama dan foto akan tampil setelah mendapat persetujuan publikasi.</p></div>}</div></section><ContactCta/></>; }
+
+export default async function About() {
+  const [profile, team] = await Promise.all([getSection("profile"), getSection("team")]);
+  const members = Array.isArray(team.members) ? team.members as TeamMember[] : [];
+
+  return <>
+    <div className="page-hero"><div className="container">
+      <span className="eyebrow">Tentang kami</span>
+      <h1>Mengenal Cahaya Haluan Pulau</h1>
+      <p className="lead">Profil lembaga dan orang-orang yang mengelola informasi tempat tinggal.</p>
+    </div></div>
+    <section className="section"><div className="container split">
+      <div>
+        <span className="eyebrow">Profil</span>
+        <h2>{String(profile.name || "Cahaya Haluan Pulau")}</h2>
+        <p className="lead">{String(profile.description || "Informasi profil resmi sedang disiapkan oleh pengurus.")}</p>
+        {Boolean(profile.history) && <><h3>Sejarah</h3><p>{String(profile.history)}</p></>}
+        {Boolean(profile.vision) && <><h3>Visi</h3><p>{String(profile.vision)}</p></>}
+        {Boolean(profile.mission) && <><h3>Misi</h3><p>{String(profile.mission)}</p></>}
+      </div>
+      <Photo src={typeof profile.aboutImage === "string" ? profile.aboutImage : null}
+        alt="Dokumentasi kegiatan Cahaya Haluan Pulau" label="Foto kegiatan perlu dilengkapi" />
+    </div></section>
+    <section className="section accent-section"><div className="container">
+      <div className="section-head"><div><span className="eyebrow">Pengurus</span><h2>Kenali pengurus</h2></div></div>
+      <TeamCards items={members} />
+    </div></section>
+    <ContactCta />
+  </>;
+}

@@ -11,4 +11,36 @@ export function ContactCta() {
   return <section className="section editorial-band"><div className="container split"><div><span className="eyebrow" style={{color:"#b9d8f7"}}>Langkah berikutnya</span><h2>Ingin bertanya tentang tempat tinggal?</h2></div><div><p>Lihat informasi kontak resmi dan buka percakapan WhatsApp dengan pengurus melalui halaman Kontak.</p><Link className="btn" href="/kontak">Lihat Kontak <ArrowRight size={17}/></Link></div></div></section>;
 }
 export function NewsCards({ items }: { items: News[] }) { return items.length ? <div className="card-grid">{items.map(n=><article className="content-card" key={n.id}>{n.cover_url && <div className="card-image"><Image src={n.cover_url} alt={n.cover_alt || ""} width={600} height={380}/></div>}<span className="eyebrow">{formatDate(n.published_at)}</span><h3>{n.title}</h3><p>{n.excerpt}</p><Link href={`/berita/${n.slug}`} className="link-arrow">Baca berita <ArrowRight size={17}/></Link></article>)}</div> : <div className="empty"><h3>Belum ada berita terbit</h3><p>Pengurus akan menambahkan kabar terbaru setelah kontennya siap.</p></div>; }
-export function AlbumCards({ items }: { items: Album[] }) { return items.length ? <div className="card-grid">{items.map(a=><article className="content-card" key={a.id}>{a.cover_url && <div className="card-image"><Image src={a.cover_url} alt={`Sampul album ${a.title}`} width={600} height={380}/></div>}<span className="eyebrow">{formatDate(a.event_date)}</span><h3>{a.title}</h3><p>{a.description}</p><Link href={`/galeri/${a.slug}`} className="link-arrow">Lihat album <ArrowRight size={17}/></Link></article>)}</div> : <div className="empty"><h3>Dokumentasi belum tersedia</h3><p>Album kegiatan akan ditampilkan setelah foto dan izin publikasinya dilengkapi.</p></div>; }
+export function AlbumCards({ items }: { items: Album[] }) {
+  return items.length ? <div className="album-grid">
+    {items.map(album => <article className="album-card" key={album.id}>
+      <Link href={`/galeri/${album.slug}`} className="album-card-media" aria-label={`Buka album ${album.title}`}>
+        {album.cover_url
+          ? <Image src={album.cover_url} alt={`Sampul album ${album.title}`} fill sizes="(max-width: 560px) 100vw, (max-width: 1050px) 50vw, 33vw" />
+          : <span className="album-card-placeholder">Cahaya Haluan Pulau</span>}
+      </Link>
+      <div className="album-card-body">
+        <span className="album-card-date">{album.event_date ? formatDate(album.event_date) : "Dokumentasi kegiatan"}</span>
+        <h3><Link href={`/galeri/${album.slug}`}>{album.title}</Link></h3>
+        {album.description && <p>{album.description}</p>}
+        <Link href={`/galeri/${album.slug}`} className="album-card-link">Lihat album <ArrowRight size={17} aria-hidden="true" /></Link>
+      </div>
+    </article>)}
+  </div> : <div className="empty"><h3>Dokumentasi belum tersedia</h3><p>Album kegiatan akan ditampilkan setelah foto dan izin publikasinya dilengkapi.</p></div>;
+}
+
+export type TeamMember = { name: string; role: string; image?: string; visible?: boolean };
+
+export function TeamCards({ items }: { items: TeamMember[] }) {
+  const members = items.filter(member => member.visible && member.name && member.role);
+  return members.length ? <div className="team-grid">
+    {members.map((member, index) => <article className="team-card" key={`${member.name}-${index}`}>
+      <div className="team-card-media">
+        {member.image
+          ? <Image src={member.image} alt={`Foto ${member.name}`} fill sizes="(max-width: 560px) 100vw, (max-width: 1050px) 50vw, 25vw" />
+          : <span className="team-card-initials" aria-hidden="true">{member.name.trim().split(/\s+/).slice(0, 2).map(part => part[0]).join("").toUpperCase()}</span>}
+      </div>
+      <div className="team-card-body"><h3>{member.name}</h3><p>{member.role}</p></div>
+    </article>)}
+  </div> : <div className="empty"><h3>Data pengurus perlu dilengkapi</h3><p>Nama dan foto akan tampil setelah mendapat persetujuan publikasi.</p></div>;
+}

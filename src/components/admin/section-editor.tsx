@@ -128,8 +128,8 @@ function Repeater({ title, items, fields, imageFolder, onUpload, onChange }: { t
   return <div style={{ margin: "28px 0" }}><h3>{title}</h3>{items.map((item, i) => <div className="content-card" key={i} style={{ marginBottom: 12 }}>
     {fields.map(([key, label]) => <div className="field" key={key}><label htmlFor={`${title}-${i}-${key}`}>{label}</label>
       <input id={`${title}-${i}-${key}`} value={String(item[key as keyof Item] || "")} onChange={e => onChange(items.map((value, index) => index === i ? { ...value, [key]: e.target.value } : value))} /></div>)}
-    {imageFolder && <><MediaUpload label="Foto" folder={imageFolder} onUploaded={({ path, preview }) => { onUpload?.(path, preview); onChange(items.map((value, index) => index === i ? { ...value, image: preview } : value)); }} />
-      {item.image && <img src={item.image} alt={`Pratinjau ${item.name || title}`} style={{ width: 130, borderRadius: 8 }} />}</>}
+    {imageFolder && <><MediaUpload label="Foto" folder={imageFolder} crop={imageFolder === "team" ? { aspect: 4 / 5, width: 800, title: "Atur foto pengurus" } : undefined} onUploaded={({ path, preview }) => { onUpload?.(path, preview); onChange(items.map((value, index) => index === i ? { ...value, image: preview } : value)); }} />
+      {item.image && <img src={item.image} alt={`Pratinjau ${item.name || title}`} style={{ width: 130, aspectRatio: imageFolder === "team" ? "4 / 5" : undefined, objectFit: "cover", borderRadius: 4 }} />}</>}
     {title !== "Pertanyaan umum" && <label className="field"><span>Tampil di publik <input type="checkbox" checked={Boolean(item.visible)} onChange={e => onChange(items.map((value, index) => index === i ? { ...value, visible: e.target.checked } : value))} /></span></label>}
     <button className="btn btn-quiet" type="button" onClick={() => onChange(items.filter((_, index) => index !== i))}>Hapus baris</button>
   </div>)}<button className="btn btn-outline" type="button" onClick={() => onChange([...items, {}])}>Tambah {title.toLowerCase()}</button></div>;
