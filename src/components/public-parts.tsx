@@ -24,9 +24,9 @@ export function NewsCards({ items }: { items: News[] }) {
 export function AlbumCards({ items }: { items: Album[] }) {
   return items.length ? <div className="album-grid">
     {items.map(album => <article className="album-card" key={album.id}>
-      <Link href={`/galeri/${album.slug}`} className="album-card-media" style={{ aspectRatio: imageAspectFromUrl(album.cover_url, 4 / 3) }} aria-label={`Buka album ${album.title}`}>
+      <Link href={`/galeri/${album.slug}`} className="album-card-media" aria-label={`Buka album ${album.title}`}>
         {album.cover_url
-          ? <Image src={album.cover_url} alt={`Sampul album ${album.title}`} fill sizes="(max-width: 560px) 100vw, (max-width: 1050px) 50vw, 33vw" />
+          ? <Image src={album.cover_url} alt={`Sampul album ${album.title}`} fill sizes="260px" />
           : <span className="album-card-placeholder">Cahaya Haluan Pulau</span>}
       </Link>
       <div className="album-card-body">
