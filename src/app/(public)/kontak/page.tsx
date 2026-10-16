@@ -30,12 +30,11 @@ export default async function Contact() {
     <section className="section"><div className="container split">
       <div>
         <h2>WhatsApp pengurus</h2>
-        <p>Klik tombol untuk membuka WhatsApp. Pesan awal akan terisi otomatis dan dapat Anda ubah sebelum mengirimnya.</p>
+        <p>Klik tombol untuk menghubungi pengurus melalui WhatsApp.</p>
         {wa ? <>
           <a className="btn btn-primary" href={wa} target="_blank" rel="noopener noreferrer">
             Hubungi Pengurus via WhatsApp <ArrowUpRight size={18}/>
           </a>
-          <div className="contact-message"><strong>Pesan awal</strong><p>{message}</p></div>
         </> : <div className="notice">Nomor WhatsApp resmi belum tersedia. Silakan gunakan informasi kontak lain yang tercantum di halaman ini.</div>}
       </div>
       <div className="content-card"><h3>Informasi lain</h3><ul className="inline-list">
