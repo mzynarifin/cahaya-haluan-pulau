@@ -2,16 +2,16 @@
 
 import { useState } from "react";
 import { ImageCropDialog } from "@/components/admin/image-crop-dialog";
-import { imagePresets } from "@/lib/image-presets";
+import { imagePresets, type CroppedImage } from "@/lib/image-presets";
 
 export function GalleryCropUpload({ existingCount, disabled, onReady, onCroppingChange }: {
   existingCount: number;
   disabled: boolean;
-  onReady: (files: File[]) => Promise<void>;
+  onReady: (files: CroppedImage[]) => Promise<void>;
   onCroppingChange: (value: boolean) => void;
 }) {
   const [queue, setQueue] = useState<File[]>([]);
-  const [cropped, setCropped] = useState<File[]>([]);
+  const [cropped, setCropped] = useState<CroppedImage[]>([]);
   const [processing, setProcessing] = useState(false);
   const [error, setError] = useState("");
 
@@ -38,8 +38,8 @@ export function GalleryCropUpload({ existingCount, disabled, onReady, onCropping
     onCroppingChange(false);
   }
 
-  async function accept(file: File) {
-    const next = [...cropped, file];
+  async function accept(image: CroppedImage) {
+    const next = [...cropped, image];
     if (queue.length > 1) {
       setCropped(next);
       setQueue(current => current.slice(1));
@@ -60,7 +60,7 @@ export function GalleryCropUpload({ existingCount, disabled, onReady, onCropping
       <input id="album-photos" type="file" accept="image/jpeg,image/png,image/webp" multiple
         disabled={disabled || processing || queue.length > 0}
         onChange={event => { choose(event.target.files); event.target.value = ""; }} />
-      <small>Maksimal 20 foto per album, 5 MB per foto. Potong satu per satu sebelum diunggah; pratinjau memakai rasio kartu galeri 4:3.</small>
+      <small>Maksimal 20 foto per album, 5 MB per foto. Pilih rasio untuk setiap foto, lalu atur area crop sebelum diunggah.</small>
       {error && <span className="field-error" role="alert">{error}</span>}
     </div>
     {queue[0] && <ImageCropDialog key={`${queue[0].name}-${cropped.length}`} file={queue[0]}

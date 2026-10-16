@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useRef, useState } from "react";
+import { imageAspectFromUrl } from "@/lib/image-presets";
 
 export type TeamMember = { name: string; role?: string; image?: string; visible?: boolean };
 
@@ -39,7 +40,7 @@ export function TeamCards({ items }: { items: TeamMember[] }) {
   return <div className="team-gallery">
     <div ref={trackRef} className="team-grid" role="region" aria-label="Daftar pengurus" tabIndex={0} onScroll={updateActive}>
       {members.map((member, index) => <article className="team-card" key={`${member.name}-${index}`}>
-        <div className="team-card-media">
+        <div className="team-card-media" style={{ aspectRatio: imageAspectFromUrl(member.image, 4 / 5) }}>
           {member.image
             ? <Image src={member.image} alt={`Foto ${member.name}`} fill sizes="(max-width: 640px) 230px, 240px" />
             : <span className="team-card-initials" aria-hidden="true">{member.name.trim().split(/\s+/).slice(0, 2).map(part => part[0]).join("").toUpperCase()}</span>}

@@ -5,7 +5,7 @@ import { createClient } from "@/lib/supabase/browser";
 import { MediaUpload, promoteMedia } from "@/components/admin/media-upload";
 import { AdminPageSkeleton } from "@/components/admin/admin-skeleton";
 import { whatsappMessage } from "@/lib/config";
-import { imagePresets, type ImagePreset } from "@/lib/image-presets";
+import { imageAspectFromUrl, imagePresets, type ImagePreset } from "@/lib/image-presets";
 
 type SectionKey = "profile" | "accommodation" | "team" | "contact";
 type Item = { name?: string; role?: string; description?: string; visible?: boolean; question?: string; answer?: string; image?: string };
@@ -96,7 +96,7 @@ export function SectionEditor({ section }: { section: SectionKey }) {
         {field.kind === "map" && <small>Salin URL embed, bukan kode iframe. Lokasi presisi perlu persetujuan pengurus.</small>}
       </div>)}
       {section === "profile" && <>
-        <ImageField label="Foto beranda desktop" hint="Foto akan mengisi bidang beranda desktop." folder="hero" preset={imagePresets.heroDesktop} value={String(content.heroImage || "")} onUploaded={(path, url) => { set("heroImage", url); recordUpload(path, url); }} />
+        <ImageField label="Foto beranda desktop" hint="Foto akan tampil utuh di beranda; format lanskap disarankan untuk layar desktop." folder="hero" preset={imagePresets.heroDesktop} value={String(content.heroImage || "")} onUploaded={(path, url) => { set("heroImage", url); recordUpload(path, url); }} />
         <ImageField label="Foto beranda HP" hint="Jika kosong, foto desktop atau ilustrasi bawaan digunakan di HP." folder="hero" preset={imagePresets.heroMobile} value={String(content.heroImageMobile || "")} onUploaded={(path, url) => { set("heroImageMobile", url); recordUpload(path, url); }} />
         <ImageField label="Foto halaman tentang" folder="about" preset={imagePresets.about} value={String(content.aboutImage || "")} onUploaded={(path, url) => { set("aboutImage", url); recordUpload(path, url); }} />
       </>}
@@ -122,7 +122,7 @@ export function SectionEditor({ section }: { section: SectionKey }) {
 function ImageField({ label, hint, folder, preset, value, onUploaded }: { label: string; hint?: string; folder: "hero" | "about" | "asrama"; preset: ImagePreset; value: string; onUploaded: (path: string, url: string) => void }) {
   return <div style={{ margin: "20px 0" }}><MediaUpload label={label} folder={folder} preset={preset} onUploaded={({ path, preview }) => onUploaded(path, preview)} />
     {hint && <p className="tiny muted" style={{ marginTop: -10 }}>{hint}</p>}
-    {value && <img src={value} alt={`Pratinjau ${label}`} style={{ width: 180, aspectRatio: preset.aspect, objectFit: "cover", borderRadius: 4 }} />}</div>;
+    {value && <img src={value} alt={`Pratinjau ${label}`} style={{ width: 180, aspectRatio: imageAspectFromUrl(value, preset.aspect), objectFit: "contain", borderRadius: 4 }} />}</div>;
 }
 
 function Repeater({ title, items, fields, imageFolder, onUpload, onChange }: { title: string; items: Item[]; fields: [string, string][]; imageFolder?: "team" | "facilities"; onUpload?: (path: string, url: string) => void; onChange: (items: Item[]) => void }) {
@@ -130,7 +130,7 @@ function Repeater({ title, items, fields, imageFolder, onUpload, onChange }: { t
     {fields.map(([key, label]) => <div className="field" key={key}><label htmlFor={`${title}-${i}-${key}`}>{label}</label>
       <input id={`${title}-${i}-${key}`} value={String(item[key as keyof Item] || "")} placeholder={imageFolder === "team" && key === "role" ? "Jika kosong, tampil sebagai Pengurus" : undefined} onChange={e => onChange(items.map((value, index) => index === i ? { ...value, [key]: e.target.value } : value))} /></div>)}
     {imageFolder && <><MediaUpload label={imageFolder === "team" ? "Foto pengurus" : "Foto fasilitas"} folder={imageFolder} preset={imageFolder === "team" ? imagePresets.team : imagePresets.facilities} onUploaded={({ path, preview }) => { onUpload?.(path, preview); onChange(items.map((value, index) => index === i ? { ...value, image: preview } : value)); }} />
-      {item.image && <img src={item.image} alt={`Pratinjau ${item.name || title}`} style={{ width: 130, aspectRatio: imageFolder === "team" ? imagePresets.team.aspect : imagePresets.facilities.aspect, objectFit: "cover", borderRadius: 4 }} />}</>}
+      {item.image && <img src={item.image} alt={`Pratinjau ${item.name || title}`} style={{ width: 130, aspectRatio: imageAspectFromUrl(item.image, imageFolder === "team" ? imagePresets.team.aspect : imagePresets.facilities.aspect), objectFit: "contain", borderRadius: 4 }} />}</>}
     {title !== "Pertanyaan umum" && <label className="field"><span>Tampil di publik <input type="checkbox" checked={Boolean(item.visible)} onChange={e => onChange(items.map((value, index) => index === i ? { ...value, visible: e.target.checked } : value))} /></span></label>}
     <button className="btn btn-quiet" type="button" onClick={() => onChange(items.filter((_, index) => index !== i))}>Hapus baris</button>
   </div>)}<button className="btn btn-outline" type="button" onClick={() => onChange([...items, {}])}>Tambah {title.toLowerCase()}</button></div>;

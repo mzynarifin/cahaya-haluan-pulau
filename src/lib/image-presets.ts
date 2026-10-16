@@ -5,6 +5,24 @@ export type ImagePreset = {
   orientation: "Lanskap" | "Potret";
 };
 
+export type CropShape = "landscape" | "portrait" | "four-five";
+export type CroppedImage = { file: File; shape: CropShape };
+
+export const cropShapes = {
+  landscape: { label: "Lanskap", ratio: "16:9", aspect: 16 / 9, orientation: "Lanskap", maxWidth: 1920, folder: "landscape" },
+  portrait: { label: "Potret", ratio: "9:16", aspect: 9 / 16, orientation: "Potret", maxWidth: 1080, folder: "portrait" },
+  "four-five": { label: "Potret", ratio: "4:5", aspect: 4 / 5, orientation: "Potret", maxWidth: 1200, folder: "four-five" },
+} as const;
+
+export function defaultCropShape(preset: ImagePreset): CropShape {
+  return preset.ratio === "9:16" ? "portrait" : preset.ratio === "4:5" ? "four-five" : "landscape";
+}
+
+export function imageAspectFromUrl(url: string | null | undefined, fallback: number): number {
+  const shape = url?.match(/\/(landscape|portrait|four-five)\/[a-f0-9-]{36}\.(?:jpe?g|png|webp)(?:[?#]|$)/)?.[1] as CropShape | undefined;
+  return shape ? cropShapes[shape].aspect : fallback;
+}
+
 export const imagePresets = {
   heroDesktop: { aspect: 16 / 9, outputWidth: 1920, ratio: "16:9", orientation: "Lanskap" },
   heroMobile: { aspect: 9 / 16, outputWidth: 1080, ratio: "9:16", orientation: "Potret" },
