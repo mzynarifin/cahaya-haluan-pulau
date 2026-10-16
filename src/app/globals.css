@@ -112,3 +112,12 @@
 @media(max-width:800px){.admin-shell{display:block}.admin-sidebar{display:none}.admin-sidebar.open{display:flex;position:fixed;top:60px;bottom:0;left:0;width:min(280px,88vw);height:auto;min-height:0;z-index:60}.admin-backdrop{display:block;position:fixed;inset:60px 0 0;border:0;background:rgba(10,31,48,.5);z-index:55}.admin-mobile-top{position:sticky;top:0;z-index:65;min-height:60px;padding:8px 20px;background:#153b5c}.admin-mobile-top .menu-button{background:#24577a;border-color:#4d7c9b;color:#fff}.admin-mobile-top .menu-button:hover{background:#2d668b}.admin-mobile-brand{display:flex;align-items:baseline;gap:7px;color:#fff;font-size:.9rem;font-weight:800}.admin-mobile-brand:hover{color:#fff}.admin-mobile-brand small{color:#b6d7e9;font-size:.68rem;font-weight:700;text-transform:uppercase}.admin-main{padding:0 20px 50px}.admin-top{min-height:88px;margin-bottom:28px}}
 @media(max-width:560px){.admin-account{gap:8px}.admin-account-email{display:none}.admin-top{min-height:76px}.admin-page-head{display:flex;align-items:flex-start;flex-direction:column;gap:15px}.admin-page-head h1{font-size:1.85rem}.stat-grid,.admin-quick-grid,.admin-skeleton-cards{grid-template-columns:1fr}.stat{min-height:135px}.admin-quick-section{padding-top:34px}.admin-quick-card{min-height:185px}.admin-skeleton-cards{margin-top:40px}.admin-skeleton-cards .admin-skeleton-panel:nth-child(n+2){display:none}.admin-skeleton-row{grid-template-columns:2fr 1fr}.admin-skeleton-row .skeleton-block:last-child{display:none}.admin-main .data-table th,.admin-main .data-table td{padding:12px 14px}.admin-skeleton-form{padding:20px}}
 @media(prefers-reduced-motion:reduce){.admin-page-enter,.admin-sidebar-footer svg,.admin-quick-action svg{animation:none;transition:none}.admin-nav a:hover,.stat:hover,.admin-quick-card:hover,.admin-quick-card:focus-visible,.admin-quick-card:hover .admin-quick-action svg,.admin-sidebar-footer a:hover svg{transform:none}}
+
+/* Prevent browser initiated zoom on mobile controls while preserving pinch zoom. */
+@media(max-width:800px){
+  input,textarea,select{font-size:16px}
+  a,button,input,textarea,select{touch-action:manipulation}
+  .hero-grid,.intro-grid,.split{grid-template-columns:minmax(0,1fr)}
+  .auth-links,.pagination{flex-wrap:wrap}
+  .content-card,.inline-list li,.admin-form{overflow-wrap:anywhere}
+}

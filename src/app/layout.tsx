@@ -1,8 +1,9 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { siteName, siteUrl } from "@/lib/config";
 
 const siteDescription = "Informasi Cahaya Haluan Pulau, asrama, fasilitas, kegiatan, berita, dan cara menghubungi pengurus.";
+export const viewport: Viewport = { width: "device-width", initialScale: 1 };
 export const metadata: Metadata = {
   title: { default: "Cahaya Haluan Pulau | Informasi Asrama", template: `%s | ${siteName}` },
   description: siteDescription,
