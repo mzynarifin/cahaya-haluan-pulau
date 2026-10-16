@@ -3,16 +3,16 @@
 import { useState } from "react";
 import { createClient } from "@/lib/supabase/browser";
 import { ImageCropDialog } from "@/components/admin/image-crop-dialog";
+import type { ImagePreset } from "@/lib/image-presets";
 
 type Uploaded = { path: string; preview: string };
 type Folder = "news" | "gallery" | "hero" | "about" | "asrama" | "team" | "facilities";
-type CropOptions = { aspect: number; width: number; title: string };
 
-export function MediaUpload({ folder, onUploaded, label = "Pilih foto", crop }: {
+export function MediaUpload({ folder, onUploaded, label = "Pilih foto", preset }: {
   folder: Folder;
   onUploaded: (item: Uploaded) => void;
   label?: string;
-  crop?: CropOptions;
+  preset: ImagePreset;
 }) {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
@@ -45,9 +45,7 @@ export function MediaUpload({ folder, onUploaded, label = "Pilih foto", crop }: 
       setError("Gunakan JPG, PNG, atau WebP maksimal 5 MB.");
       return;
     }
-    if (crop) { setSelected(file); return; }
-    try { await upload(file); }
-    catch (cause) { setError(cause instanceof Error ? cause.message : "Unggahan gagal. Coba lagi."); }
+    setSelected(file);
   }
 
   return <>
@@ -55,11 +53,11 @@ export function MediaUpload({ folder, onUploaded, label = "Pilih foto", crop }: 
       <label>{label}<input type="file" accept="image/jpeg,image/png,image/webp" disabled={busy || Boolean(selected)}
         onChange={event => { void choose(event.target.files?.[0]); event.target.value = ""; }} /></label>
       <small>JPG, PNG, atau WebP. Maksimal 5 MB. Foto draft tetap privat.</small>
-      {crop && <small>Pratinjau crop akan muncul sebelum foto diunggah.</small>}
+      <small>Aturan foto: {preset.orientation} {preset.ratio}. Atur kotak crop sebelum diunggah.</small>
       {busy && <small role="status">Mengunggah foto...</small>}
       {error && <span className="field-error" role="alert">{error}</span>}
     </div>
-    {selected && crop && <ImageCropDialog file={selected} title={crop.title} aspect={crop.aspect} outputWidth={crop.width}
+    {selected && <ImageCropDialog file={selected} title={`Atur ${label.toLowerCase()}`} preset={preset}
       onCancel={() => setSelected(null)} onConfirm={async cropped => {
         await upload(cropped);
         setSelected(null);

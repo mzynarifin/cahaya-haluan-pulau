@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { ImageCropDialog } from "@/components/admin/image-crop-dialog";
+import { imagePresets } from "@/lib/image-presets";
 
 export function GalleryCropUpload({ existingCount, disabled, onReady, onCroppingChange }: {
   existingCount: number;
@@ -64,6 +65,6 @@ export function GalleryCropUpload({ existingCount, disabled, onReady, onCropping
     </div>
     {queue[0] && <ImageCropDialog key={`${queue[0].name}-${cropped.length}`} file={queue[0]}
       title={`Atur foto galeri ${cropped.length + 1} dari ${cropped.length + queue.length}`}
-      aspect={4 / 3} outputWidth={1600} onCancel={cancel} onConfirm={accept} />}
+      preset={imagePresets.gallery} onCancel={cancel} onConfirm={accept} />}
   </>;
 }

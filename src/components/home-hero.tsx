@@ -13,7 +13,7 @@ export function HomeHero({ profile }: { profile: Record<string, unknown> }) {
 
   return <section className="hero home-hero">
     <div className="hero-visual has-photo" aria-hidden="true">
-      <picture className={`hero-artwork ${mobileMode}`}>
+      <picture className={`hero-artwork ${mobileMode}${desktopUpload ? " desktop-uploaded" : ""}`}>
         <source media="(max-width: 800px)" srcSet={mobileProps.srcSet} sizes={mobileProps.sizes} />
         <img {...desktopProps} className="hero-visual-image" alt="" />
       </picture>
