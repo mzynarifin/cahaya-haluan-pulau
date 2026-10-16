@@ -7,6 +7,11 @@
 @media(max-width:560px){.container{width:min(100% - 40px,1200px)}.section{padding:56px 0}.section-head,.admin-page-head{display:block}.section-head .link-arrow,.admin-page-head .btn{margin-top:14px}.card-grid,.card-grid.two,.footer-grid,.stat-grid{grid-template-columns:1fr}.footer-bottom{display:block}.photo-frame{aspect-ratio:1.1}.searchbar{display:grid}.auth-card{padding:24px}.admin-form{padding:18px}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{transition-duration:.01ms!important;animation-duration:.01ms!important}}
 
+.password-input{position:relative}
+.password-input input{padding-right:56px}
+.password-toggle{position:absolute;top:50%;right:2px;transform:translateY(-50%);display:grid;place-items:center;width:44px;height:44px;padding:0;border:0;border-radius:8px;background:transparent;color:var(--primary)}
+.password-toggle:hover{background:var(--subtle);color:var(--primary-hover)}
+
 /* Public navigation and route feedback */
 .site-header{box-shadow:0 2px 18px rgba(18,47,76,.04)}
 .brand{gap:12px;transition:color .2s ease}
