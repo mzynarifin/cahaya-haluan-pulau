@@ -2,6 +2,8 @@
 
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
+import { createPortal } from "react-dom";
+import { ArrowRight, ChevronLeft, ChevronRight, Expand, X } from "lucide-react";
 import type { Photo } from "@/lib/data";
 
 export function GalleryLightbox({ photos }: { photos: Photo[] }) {
@@ -9,6 +11,7 @@ export function GalleryLightbox({ photos }: { photos: Photo[] }) {
   const buttons = useRef<(HTMLButtonElement | null)[]>([]);
   const close = useRef<HTMLButtonElement>(null);
   const lastActive = useRef(0);
+  const touchStart = useRef<{ x: number; y: number } | null>(null);
   const isOpen = active !== null;
 
   useEffect(() => {
@@ -20,7 +23,9 @@ export function GalleryLightbox({ photos }: { photos: Photo[] }) {
 
     close.current?.focus();
     const previousOverflow = document.body.style.overflow;
+    const previousRootOverflow = document.documentElement.style.overflow;
     document.body.style.overflow = "hidden";
+    document.documentElement.style.overflow = "hidden";
 
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") setActive(null);
@@ -44,37 +49,59 @@ export function GalleryLightbox({ photos }: { photos: Photo[] }) {
     return () => {
       document.removeEventListener("keydown", onKeyDown);
       document.body.style.overflow = previousOverflow;
+      document.documentElement.style.overflow = previousRootOverflow;
       buttons.current[lastActive.current]?.focus();
     };
   }, [isOpen, photos.length]);
 
   return <>
-    <div className="gallery-photo-grid" style={{ maxWidth: Math.min(1120, photos.length * 280) }}>
+    <div className={`gallery-photo-grid${photos.length === 1 ? " is-single" : ""}`} style={{ maxWidth: Math.min(1200, photos.length * 300) }}>
       {photos.map((photo, index) => <button
           className="gallery-tile"
           ref={element => { buttons.current[index] = element; }}
           key={photo.id}
           onClick={() => setActive(index)}
-          aria-label={`Perbesar foto: ${photo.alt}`}
+          aria-label={`Buka foto ${index + 1} dari ${photos.length}: ${photo.alt}`}
         >
-          <span className="gallery-tile-media"><Image src={photo.image_url} alt={photo.alt} fill sizes="(max-width: 430px) 85vw, (max-width: 700px) 50vw, (max-width: 1050px) 33vw, 25vw" /></span>
+          <span className="gallery-tile-media">
+            <Image src={photo.image_url} alt={photo.alt} fill sizes="(max-width: 640px) 50vw, (max-width: 900px) 33vw, 25vw" />
+            <span className="gallery-tile-number" aria-hidden="true">{String(index + 1).padStart(2, "0")}</span>
+            <span className="gallery-tile-zoom" aria-hidden="true"><Expand size={17} /></span>
+          </span>
+          <span className="gallery-tile-body">
+            <span className="gallery-tile-caption">{photo.caption?.trim() || photo.alt}</span>
+            <span className="gallery-tile-action">Lihat foto <ArrowRight size={15} aria-hidden="true" /></span>
+          </span>
         </button>)}
     </div>
-    {active !== null && <div className="lightbox" role="dialog" aria-modal="true" aria-label={`Foto ${active + 1} dari ${photos.length}`}>
+    {active !== null && createPortal(<div className="lightbox" role="dialog" aria-modal="true" aria-label={`Foto ${active + 1} dari ${photos.length}`}>
       <div className="lightbox-panel">
         <div className="lightbox-top">
           <span>Foto {active + 1} dari {photos.length}</span>
-          <button className="lightbox-close" ref={close} onClick={() => setActive(null)}>Tutup ×</button>
+          <button className="lightbox-close" ref={close} onClick={() => setActive(null)} aria-label="Tutup foto"><X size={20} aria-hidden="true" /></button>
         </div>
-        <div className="lightbox-stage">
-          <Image src={photos[active].image_url} alt={photos[active].alt} fill sizes="(max-width: 800px) 100vw, 90vw" />
+        <div className="lightbox-viewer">
+          <div className="lightbox-stage"
+            onTouchStart={event => { touchStart.current = { x: event.touches[0].clientX, y: event.touches[0].clientY }; }}
+            onTouchEnd={event => {
+              const start = touchStart.current;
+              touchStart.current = null;
+              if (!start || photos.length < 2) return;
+              const deltaX = event.changedTouches[0].clientX - start.x;
+              const deltaY = event.changedTouches[0].clientY - start.y;
+              if (Math.abs(deltaX) > 55 && Math.abs(deltaX) > Math.abs(deltaY) * 1.3) {
+                setActive(index => index === null ? index : (index + (deltaX < 0 ? 1 : -1) + photos.length) % photos.length);
+              }
+            }}>
+            <Image src={photos[active].image_url} alt={photos[active].alt} fill sizes="(max-width: 800px) 100vw, 90vw" />
+          </div>
+          {photos.length > 1 && <div className="lightbox-controls">
+            <button type="button" onClick={() => setActive((active - 1 + photos.length) % photos.length)} aria-label="Foto sebelumnya"><ChevronLeft size={24} aria-hidden="true" /></button>
+            <button type="button" onClick={() => setActive((active + 1) % photos.length)} aria-label="Foto berikutnya"><ChevronRight size={24} aria-hidden="true" /></button>
+          </div>}
         </div>
         <p className="lightbox-caption">{photos[active].caption || photos[active].alt}</p>
-        <div className="lightbox-controls">
-          <button onClick={() => setActive((active - 1 + photos.length) % photos.length)}>← Sebelumnya</button>
-          <button onClick={() => setActive((active + 1) % photos.length)}>Berikutnya →</button>
-        </div>
       </div>
-    </div>}
+    </div>, document.body)}
   </>;
 }
