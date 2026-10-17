@@ -27,8 +27,6 @@
 .site-header .header-cta:hover,.site-header .header-cta:focus-visible,.site-header .site-nav .mobile-cta:hover,.site-header .site-nav .mobile-cta:focus-visible{background:var(--primary-hover);color:#fff;box-shadow:0 7px 17px rgba(25,89,166,.22);transform:translateY(-2px)}
 .page-enter{animation:page-enter .28s ease-out both}
 @keyframes page-enter{from{opacity:.75;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
-.hero-logo-frame{width:100%;height:100%;display:grid;place-items:center;background:#fff;padding:20px}
-.hero-logo-frame img{max-width:100%;max-height:100%;width:auto;height:100%;object-fit:contain}
 
 /* Route skeletons reserve the page shape while server content loads. */
 .public-skeleton{min-height:65vh}

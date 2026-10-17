@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { createPortal } from "react-dom";
-import { ArrowRight, ChevronLeft, ChevronRight, Expand, X } from "lucide-react";
+import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import type { Photo } from "@/lib/data";
 
 export function GalleryLightbox({ photos }: { photos: Photo[] }) {
@@ -63,15 +63,7 @@ export function GalleryLightbox({ photos }: { photos: Photo[] }) {
           onClick={() => setActive(index)}
           aria-label={`Buka foto ${index + 1} dari ${photos.length}: ${photo.alt}`}
         >
-          <span className="gallery-tile-media">
-            <Image src={photo.image_url} alt={photo.alt} fill sizes="(max-width: 640px) 50vw, (max-width: 900px) 33vw, 25vw" />
-            <span className="gallery-tile-number" aria-hidden="true">{String(index + 1).padStart(2, "0")}</span>
-            <span className="gallery-tile-zoom" aria-hidden="true"><Expand size={17} /></span>
-          </span>
-          <span className="gallery-tile-body">
-            <span className="gallery-tile-caption">{photo.caption?.trim() || photo.alt}</span>
-            <span className="gallery-tile-action">Lihat foto <ArrowRight size={15} aria-hidden="true" /></span>
-          </span>
+          <Image src={photo.image_url} alt={photo.alt} fill sizes="(max-width: 640px) 50vw, (max-width: 900px) 33vw, 25vw" />
         </button>)}
     </div>
     {active !== null && createPortal(<div className="lightbox" role="dialog" aria-modal="true" aria-label={`Foto ${active + 1} dari ${photos.length}`}>
