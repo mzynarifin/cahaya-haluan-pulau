@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { createClient } from "@/lib/supabase/browser";
 import { ImageCropDialog } from "@/components/admin/image-crop-dialog";
-import { cropShapes, type CroppedImage, type ImagePreset } from "@/lib/image-presets";
+import { type CroppedImage, type ImagePreset } from "@/lib/image-presets";
 
 type Uploaded = { path: string; preview: string };
 type Folder = "news" | "gallery" | "hero" | "about" | "asrama" | "team" | "facilities";
@@ -27,7 +27,7 @@ export function MediaUpload({ folder, onUploaded, label = "Pilih foto", preset }
     setBusy(true);
     try {
       const ext = file.type === "image/jpeg" ? "jpg" : file.type === "image/png" ? "png" : "webp";
-      const path = `${folder}/${cropShapes[shape].folder}/${crypto.randomUUID()}.${ext}`;
+      const path = `${folder}/${shape}/${crypto.randomUUID()}.${ext}`;
       const { error: uploadError } = await client.storage.from("draft-media").upload(path, file, { contentType: file.type });
       if (uploadError) throw new Error("Unggahan gagal. Coba lagi.");
       const { data, error: signedError } = await client.storage.from("draft-media").createSignedUrl(path, 3600);
@@ -53,7 +53,7 @@ export function MediaUpload({ folder, onUploaded, label = "Pilih foto", preset }
       <label>{label}<input type="file" accept="image/jpeg,image/png,image/webp" disabled={busy || Boolean(selected)}
         onChange={event => { void choose(event.target.files?.[0]); event.target.value = ""; }} /></label>
       <small>JPG, PNG, atau WebP. Maksimal 5 MB. Foto draft tetap privat.</small>
-      <small>Pilih Lanskap 16:9, Potret 9:16, atau Potret 4:5 saat crop.</small>
+      <small>Foto akan dipotong ke rasio {preset.ratio}. Sesuaikan area foto melalui sudut kotak.</small>
       {busy && <small role="status">Mengunggah foto...</small>}
       {error && <span className="field-error" role="alert">{error}</span>}
     </div>
