@@ -96,12 +96,12 @@ export function SectionEditor({ section }: { section: SectionKey }) {
         {field.kind === "map" && <small>Salin URL embed, bukan kode iframe. Lokasi presisi perlu persetujuan pengurus.</small>}
       </div>)}
       {section === "profile" && <>
-        <ImageField label="Foto beranda desktop" hint="Foto akan tampil utuh di beranda; format lanskap disarankan untuk layar desktop." folder="hero" preset={imagePresets.heroDesktop} value={String(content.heroImage || "")} onUploaded={(path, url) => { set("heroImage", url); recordUpload(path, url); }} />
-        <ImageField label="Foto beranda HP" hint="Jika kosong, foto desktop atau ilustrasi bawaan digunakan di HP." folder="hero" preset={imagePresets.heroMobile} value={String(content.heroImageMobile || "")} onUploaded={(path, url) => { set("heroImageMobile", url); recordUpload(path, url); }} />
-        <ImageField label="Foto halaman tentang" folder="about" preset={imagePresets.about} value={String(content.aboutImage || "")} onUploaded={(path, url) => { set("aboutImage", url); recordUpload(path, url); }} />
+        <ImageField label="Foto beranda desktop" hint="Foto memenuhi seluruh area beranda dan dapat terpotong di tepinya. Format lanskap disarankan untuk layar desktop." folder="hero" preset={imagePresets.heroDesktop} value={String(content.heroImage || "")} onUploaded={(path, url) => { set("heroImage", url); recordUpload(path, url); }} />
+        <ImageField label="Foto beranda HP" hint="Foto memenuhi layar HP dan dapat terpotong. Jika kosong, foto desktop atau ilustrasi bawaan digunakan." folder="hero" preset={imagePresets.heroMobile} value={String(content.heroImageMobile || "")} onUploaded={(path, url) => { set("heroImageMobile", url); recordUpload(path, url); }} />
+        <ImageField label="Foto halaman tentang" hint="Foto memenuhi bingkai pada desktop dan HP; bagian tepi dapat terpotong." folder="about" preset={imagePresets.about} value={String(content.aboutImage || "")} onUploaded={(path, url) => { set("aboutImage", url); recordUpload(path, url); }} />
       </>}
       {section === "accommodation" && <>
-        <ImageField label="Foto asrama" folder="asrama" preset={imagePresets.accommodation} value={String(content.image || "")} onUploaded={(path, url) => { set("image", url); recordUpload(path, url); }} />
+        <ImageField label="Foto asrama" hint="Foto memenuhi bingkai Tempat tinggal di beranda; bagian tepi dapat terpotong." folder="asrama" preset={imagePresets.accommodation} value={String(content.image || "")} onUploaded={(path, url) => { set("image", url); recordUpload(path, url); }} />
         <Repeater title="Fasilitas" items={list("facilities")} fields={[["name", "Nama fasilitas"], ["description", "Keterangan"]]}
           imageFolder="facilities" onUpload={recordUpload} onChange={items => set("facilities", items)} />
         <Repeater title="Pertanyaan umum" items={list("faqs")} fields={[["question", "Pertanyaan"], ["answer", "Jawaban"]]}

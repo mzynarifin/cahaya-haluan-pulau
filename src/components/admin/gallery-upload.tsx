@@ -37,7 +37,7 @@ export function GalleryUpload({ existingCount, disabled, onReady }: {
     <input id="album-photos" type="file" accept="image/jpeg,image/png,image/webp" multiple
       disabled={disabled || processing}
       onChange={event => { void choose(event.target.files); event.target.value = ""; }} />
-    <small>Maksimal 20 foto per album, 5 MB per foto. Foto asli tetap utuh saat dibuka; pratinjau galeri tampil dalam bingkai 4:5.</small>
+    <small>Maksimal 20 foto per album, 5 MB per foto. Sampul album tampil 5:4 dan dapat terpotong; foto asli tetap utuh saat dibuka. Foto di dalam album tampil dalam bingkai 4:5.</small>
     {error && <span className="field-error" role="alert">{error}</span>}
   </div>;
 }
