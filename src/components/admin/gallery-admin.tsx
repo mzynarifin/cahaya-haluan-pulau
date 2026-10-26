@@ -4,7 +4,7 @@ import { useEffect,useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/browser";
-import { promoteMedia } from "@/components/admin/media-upload";
+import { promoteMedia } from "@/lib/admin-media";
 import { GalleryUpload } from "@/components/admin/gallery-upload";
 type Album={id:string;title:string;slug:string;description:string|null;event_date:string|null;cover_url:string|null;status:string;version:number};
 type Photo={id:string;album_id:string;image_url:string|null;storage_path:string|null;alt:string;caption:string|null;display_order:number;preview?:string};

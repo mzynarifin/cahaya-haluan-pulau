@@ -1,11 +1,16 @@
 "use client";
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import dynamic from "next/dynamic";
 import { createClient } from "@/lib/supabase/browser";
-import { MediaUpload, promoteMedia } from "@/components/admin/media-upload";
+import { promoteMedia } from "@/lib/admin-media";
 import { AdminPageSkeleton } from "@/components/admin/admin-skeleton";
 import { whatsappMessage } from "@/lib/config";
 import { imageAspectFromUrl, imagePresets, type ImagePreset } from "@/lib/image-presets";
+
+const MediaUpload = dynamic(
+  () => import("@/components/admin/media-upload").then(module => module.MediaUpload),
+  { ssr: false, loading: () => <div className="notice" role="status">Memuat alat gambar...</div> },
+);
 
 type SectionKey = "profile" | "accommodation" | "team" | "contact";
 type Item = { name?: string; role?: string; description?: string; visible?: boolean; question?: string; answer?: string; image?: string };
@@ -32,7 +37,7 @@ const configs: Record<SectionKey, { title: string; description: string; fields: 
 };
 
 export function SectionEditor({ section }: { section: SectionKey }) {
-  const config = configs[section]; const router = useRouter();
+  const config = configs[section];
   const [content, setContent] = useState<Record<string, unknown>>({});
   const [version, setVersion] = useState(1); const [loading, setLoading] = useState(true);
   const [busy, setBusy] = useState(false); const [dirty, setDirty] = useState(false);
@@ -80,7 +85,16 @@ export function SectionEditor({ section }: { section: SectionKey }) {
       if (dbError) throw new Error("Perubahan gagal disimpan. Periksa data dan coba lagi.");
       if (!data) throw new Error("Data sudah diubah oleh admin lain. Salin isian Anda lalu muat ulang.");
       setVersion(data.version); setContent(next); setUploads({}); setDirty(false);
-      setSuccess("Perubahan berhasil disimpan dan tampil di website."); router.refresh();
+      let refreshed = false;
+      try {
+        const response = await fetch("/api/admin/revalidate-content", { method: "POST", credentials: "same-origin" });
+        refreshed = response.ok;
+      } catch {
+        // The saved section is still valid; its public cache expires within 60 seconds.
+      }
+      setSuccess(refreshed
+        ? "Perubahan berhasil disimpan dan tampil di website."
+        : "Perubahan tersimpan. Halaman publik akan diperbarui otomatis dalam 60 detik.");
     } catch (e) { setError(e instanceof Error ? e.message : "Penyimpanan gagal."); }
     finally { setBusy(false); }
   }
@@ -93,7 +107,7 @@ export function SectionEditor({ section }: { section: SectionKey }) {
         {field.kind === "textarea" ? <textarea id={field.name} value={String(content[field.name] || "")} placeholder={field.name === "whatsappMessage" ? whatsappMessage : undefined} onChange={e => set(field.name, e.target.value)} />
           : <input id={field.name} type={field.kind === "email" ? "email" : "text"} value={String(content[field.name] || "")} onChange={e => set(field.name, e.target.value)} />}
         {field.name === "whatsappMessage" && <small>Kosongkan untuk memakai teks contoh di atas. Pesan muncul di WhatsApp dan tetap harus dikirim oleh pengunjung.</small>}
-        {field.kind === "map" && <small>Salin URL embed, bukan kode iframe. Lokasi presisi perlu persetujuan pengurus.</small>}
+        {field.kind === "map" && <small>Tempel URL dari atribut src iframe, bukan seluruh kode. Setelah disimpan, peta muncul di halaman Kontak.</small>}
       </div>)}
       {section === "profile" && <>
         <ImageField label="Foto beranda desktop" hint="Foto memenuhi seluruh area beranda dan dapat terpotong di tepinya. Format lanskap disarankan untuk layar desktop." folder="hero" preset={imagePresets.heroDesktop} value={String(content.heroImage || "")} onUploaded={(path, url) => { set("heroImage", url); recordUpload(path, url); }} />

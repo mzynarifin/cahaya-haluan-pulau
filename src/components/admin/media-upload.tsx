@@ -1,9 +1,14 @@
 "use client";
 
 import { useState } from "react";
+import dynamic from "next/dynamic";
 import { createClient } from "@/lib/supabase/browser";
-import { ImageCropDialog } from "@/components/admin/image-crop-dialog";
 import { type CroppedImage, type ImagePreset } from "@/lib/image-presets";
+
+const ImageCropDialog = dynamic(
+  () => import("@/components/admin/image-crop-dialog").then(module => module.ImageCropDialog),
+  { ssr: false, loading: () => <div className="notice" role="status">Memuat editor foto...</div> },
+);
 
 type Uploaded = { path: string; preview: string };
 type Folder = "news" | "gallery" | "hero" | "about" | "asrama" | "team" | "facilities";
@@ -63,11 +68,4 @@ export function MediaUpload({ folder, onUploaded, label = "Pilih foto", preset }
         setSelected(null);
       }} />}
   </>;
-}
-
-export async function promoteMedia(path: string) {
-  const response = await fetch("/api/admin/promote-media", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ path }) });
-  const body = await response.json();
-  if (!response.ok) throw new Error(body.error || "Media gagal diterbitkan.");
-  return body.url as string;
 }

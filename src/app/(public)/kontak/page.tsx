@@ -43,8 +43,11 @@ export default async function Contact() {
         <li><strong>Jam kontak</strong> {String(contact.contactHours || "Perlu dilengkapi")}</li>
       </ul></div>
     </div></section>
-    {map && <section className="section" style={{paddingTop:0}}><div className="container"><h2>Lokasi</h2>
-      <iframe title="Peta lokasi Cahaya Haluan Pulau" src={map} loading="lazy" referrerPolicy="no-referrer-when-downgrade" style={{width:"100%",height:380,border:0,borderRadius:12}}/>
-    </div></section>}
+    {map && <section id="lokasi" className="section" aria-labelledby="contact-location-title" style={{ paddingTop: 0 }}>
+      <div className="container"><h2 id="contact-location-title">Lokasi</h2>
+        <iframe title="Peta lokasi Cahaya Haluan Pulau" src={map} loading="lazy" referrerPolicy="no-referrer-when-downgrade"
+          allowFullScreen style={{ width: "100%", height: "clamp(280px, 42vw, 460px)", border: 0, borderRadius: 12 }} />
+      </div>
+    </section>}
   </>;
 }

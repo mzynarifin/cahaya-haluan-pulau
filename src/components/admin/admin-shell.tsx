@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import {
   ArrowUpRight, Building2, ContactRound, Images, LayoutDashboard,
   LogOut, Menu, Newspaper, Phone, UsersRound, X,
@@ -26,12 +26,9 @@ const navigation = [
 export function AdminShell({ children, email }: { children: React.ReactNode; email: string }) {
   const [open, setOpen] = useState(false);
   const path = usePathname();
-  const router = useRouter();
-
   async function logout() {
     await createClient()?.auth.signOut();
-    router.replace("/admin/login");
-    router.refresh();
+    window.location.replace("/admin/login");
   }
 
   return <>

@@ -3,6 +3,13 @@ import { createServerClient } from "@supabase/ssr";
 
 export async function proxy(request: NextRequest) {
   let response = NextResponse.next({ request });
+  const noSessionRefreshPaths = new Set([
+    "/admin/login",
+    "/admin/lupa-password",
+    "/admin/reset-password",
+    "/admin/auth/callback",
+  ]);
+  if (noSessionRefreshPaths.has(request.nextUrl.pathname)) return response;
   if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY) return response;
   const supabase = createServerClient(process.env.NEXT_PUBLIC_SUPABASE_URL, process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY, {
     cookies: {
