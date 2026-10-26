@@ -2,6 +2,8 @@ import Link from "next/link";
 import { PublicHeader, Brand } from "@/components/public-header";
 import { PublicPageMotion } from "@/components/public-page-motion";
 
+export const revalidate = 60;
+
 export default function PublicLayout({ children }: { children: React.ReactNode }) {
   return <>
     <PublicHeader/>

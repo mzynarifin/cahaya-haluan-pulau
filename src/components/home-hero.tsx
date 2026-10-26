@@ -7,7 +7,7 @@ export function HomeHero({ profile }: { profile: Record<string, unknown> }) {
   const mobileUpload = typeof profile.heroImageMobile === "string" && profile.heroImageMobile.trim() ? profile.heroImageMobile : null;
   const desktopImage = desktopUpload || "/hero-lighthouse.webp";
   const mobileImage = mobileUpload || (desktopUpload ? desktopImage : "/hero-lighthouse-mobile.webp");
-  const { props: desktopProps } = getImageProps({ src: desktopImage, alt: "", fill: true, sizes: "100vw", priority: true });
+  const { props: desktopProps } = getImageProps({ src: desktopImage, alt: "", fill: true, sizes: "100vw", fetchPriority: "high" });
   const { props: mobileProps } = getImageProps({ src: mobileImage, alt: "", fill: true, sizes: "100vw" });
 
   return <section className="hero home-hero">

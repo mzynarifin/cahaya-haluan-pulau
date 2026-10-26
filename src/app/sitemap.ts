@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
 import { siteUrl } from "@/lib/config";
 import { getAlbums, getNews } from "@/lib/data";
-export const dynamic = "force-dynamic";
+export const revalidate = 300;
 export default async function sitemap():Promise<MetadataRoute.Sitemap>{const [first,albums]=await Promise.all([getNews(1),getAlbums()]);const other=await Promise.all(Array.from({length:Math.max(0,Math.ceil(first.total/9)-1)},(_,i)=>getNews(i+2)));const news=[...first.items,...other.flatMap(x=>x.items)];const pages=[{path:"",priority:1},{path:"/tentang",priority:.7},{path:"/asrama",priority:.9},{path:"/berita",priority:.8},{path:"/galeri",priority:.7},{path:"/kontak",priority:.7},{path:"/kebijakan-privasi",priority:.2}];return [...pages.map(p=>({url:`${siteUrl}${p.path}`,changeFrequency:"weekly" as const,priority:p.priority})),...news.map(n=>({url:`${siteUrl}/berita/${n.slug}`,lastModified:n.published_at||undefined,changeFrequency:"monthly" as const,priority:.7})),...albums.map(a=>({url:`${siteUrl}/galeri/${a.slug}`,changeFrequency:"monthly" as const,priority:.6}))]}

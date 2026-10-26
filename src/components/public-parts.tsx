@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight } from "lucide-react";
-import { type News } from "@/lib/data";
+import { type NewsPreview } from "@/lib/data";
 import { formatDate } from "@/lib/config";
 import { imageAspectFromUrl } from "@/lib/image-presets";
 
@@ -11,11 +11,11 @@ export function Photo({ src, alt, label = "Dokumentasi asli perlu dilengkapi", a
 export function ContactCta() {
   return <section className="section editorial-band"><div className="container split"><div><span className="eyebrow" style={{color:"#b9d8f7"}}>Langkah berikutnya</span><h2>Ingin bertanya tentang tempat tinggal?</h2></div><div><p>Lihat informasi kontak resmi dan buka percakapan WhatsApp dengan pengurus melalui halaman Kontak.</p><Link className="btn" href="/kontak">Lihat Kontak <ArrowRight size={17}/></Link></div></div></section>;
 }
-export function NewsCards({ items }: { items: News[] }) {
+export function NewsCards({ items }: { items: NewsPreview[] }) {
   return items.length ? <div className="card-grid">{items.map(news => {
     const aspect = imageAspectFromUrl(news.cover_url, 16 / 10);
     return <article className="content-card" key={news.id}>
-      {news.cover_url && <div className="card-image" style={{ aspectRatio: aspect }}><Image src={news.cover_url} alt={news.cover_alt || ""} width={600} height={Math.round(600 / aspect)} /></div>}
+      {news.cover_url && <div className="card-image" style={{ aspectRatio: aspect }}><Image src={news.cover_url} alt={news.cover_alt || ""} width={600} height={Math.round(600 / aspect)} sizes="(max-width: 560px) calc(100vw - 120px), (max-width: 800px) calc((100vw - 152px) / 2), (max-width: 1240px) calc((100vw - 220px) / 3), 320px" /></div>}
       <span className="eyebrow">{formatDate(news.published_at)}</span><h3>{news.title}</h3><p>{news.excerpt}</p>
       <Link href={`/berita/${news.slug}`} className="link-arrow">Baca berita <ArrowRight size={17}/></Link>
     </article>;
