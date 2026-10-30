@@ -347,9 +347,9 @@ p { color: var(--muted); }
   .section-head { margin-bottom: 24px; }
   .section .container > .eyebrow + h2 { margin-bottom: 20px; }
   .inline-list li { gap: 12px; padding-block: 14px; }
-  .contact-info-list .contact-email-row { flex-direction: column; align-items: stretch; gap: 4px; }
-  .contact-info-list .contact-email-row strong { flex: none; }
-  .contact-info-list .contact-email { flex: initial; width: 100%; }
+  .contact-info-list .contact-email-row { align-items: flex-start; gap: 10px; }
+  .contact-info-list .contact-email-row strong { flex-basis: 3.75rem; }
+  .contact-info-list .contact-email { flex: 1 1 0%; width: auto; font-size: clamp(.78rem, 3.5vw, .9rem); }
   .searchbar { gap: 10px; margin: 0 0 24px; }
   .site-footer { padding-top: 44px; }
   .footer-grid { gap: 28px; }
@@ -388,6 +388,11 @@ p { color: var(--muted); }
   .team-controls button { display: grid; place-items: center; width: 44px; height: 44px; border: 1px solid #b8cbd6; border-radius: 4px; background: #fff; color: #174a69; }
   .team-controls button:hover:not(:disabled) { border-color: #1d638b; background: #edf3f7; }
   .team-controls button:disabled { opacity: .4; cursor: not-allowed; }
+}
+
+@media (max-width: 360px) {
+  .contact-info-list .contact-email-row { gap: 8px; }
+  .contact-info-list .contact-email-row strong { flex-basis: 3.25rem; }
 }
 
 @media (max-height: 500px) {
