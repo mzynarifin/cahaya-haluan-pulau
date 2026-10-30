@@ -37,8 +37,8 @@ export default async function Contact() {
           </a>
         </> : <div className="notice">Nomor WhatsApp resmi belum tersedia. Silakan gunakan informasi kontak lain yang tercantum di halaman ini.</div>}
       </div>
-      <div className="content-card"><h3>Informasi lain</h3><ul className="inline-list">
-        <li><strong>Email</strong> {email ? <a href={`mailto:${email}`} className="link-arrow">{email}</a> : "Perlu dilengkapi"}</li>
+      <div className="content-card"><h3>Informasi lain</h3><ul className="inline-list contact-info-list">
+        <li className="contact-email-row"><strong>Email</strong> {email ? <a href={`mailto:${email}`} className="link-arrow contact-email">{email}</a> : "Perlu dilengkapi"}</li>
         <li><strong>Alamat</strong> {String(contact.publicAddress || "Perlu dilengkapi")}</li>
         <li><strong>Jam kontak</strong> {String(contact.contactHours || "Perlu dilengkapi")}</li>
       </ul></div>

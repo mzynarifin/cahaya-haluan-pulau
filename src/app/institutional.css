@@ -98,6 +98,10 @@ p { color: var(--muted); }
 .inline-list { border-top-color: #bfccd6; }
 .inline-list li { border-bottom-color: #bfccd6; gap: 20px; }
 .inline-list strong { color: var(--primary); }
+.contact-info-list .contact-email-row { align-items: flex-start; }
+.contact-info-list .contact-email-row strong { flex: 0 0 5.25rem; padding-top: .1rem; }
+.contact-info-list .contact-email { display: block; flex: 1 1 0%; min-inline-size: 0; overflow-wrap: anywhere; word-break: normal; line-height: 1.55; text-decoration: underline; text-decoration-color: #b8d2e3; text-underline-offset: .2em; }
+.contact-info-list .contact-email:hover { text-decoration-color: currentColor; }
 .page-enter .content-card, .content-card { border: 1px solid #cbd6de; border-radius: 4px; background: #fff; box-shadow: none; padding: clamp(22px, 2.3vw, 34px); }
 .page-enter .card-grid .content-card::before { height: 3px; background: #1d638b; }
 .card-grid { gap: 24px; }
@@ -343,6 +347,9 @@ p { color: var(--muted); }
   .section-head { margin-bottom: 24px; }
   .section .container > .eyebrow + h2 { margin-bottom: 20px; }
   .inline-list li { gap: 12px; padding-block: 14px; }
+  .contact-info-list .contact-email-row { flex-direction: column; align-items: stretch; gap: 4px; }
+  .contact-info-list .contact-email-row strong { flex: none; }
+  .contact-info-list .contact-email { flex: initial; width: 100%; }
   .searchbar { gap: 10px; margin: 0 0 24px; }
   .site-footer { padding-top: 44px; }
   .footer-grid { gap: 28px; }
