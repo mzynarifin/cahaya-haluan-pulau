@@ -141,7 +141,7 @@ function ImageField({ label, hint, folder, preset, value, onUploaded }: { label:
 
 function Repeater({ title, items, fields, imageFolder, onUpload, onChange }: { title: string; items: Item[]; fields: [string, string][]; imageFolder?: "team" | "facilities"; onUpload?: (path: string, url: string) => void; onChange: (items: Item[]) => void }) {
   const isTeam = imageFolder === "team";
-  return <div className={`repeater${isTeam ? " team-repeater" : ""}`} style={{ margin: "28px 0" }}>
+  return <div className={`repeater${isTeam ? " team-repeater" : ""}`} style={{ margin: isTeam ? "14px 0" : "28px 0" }}>
     <div className={isTeam ? "team-repeater-heading" : undefined}>
       <h3>{title}</h3>
       {isTeam && <p>Atur nama, jabatan, foto, dan status publikasi setiap pengurus.</p>}
