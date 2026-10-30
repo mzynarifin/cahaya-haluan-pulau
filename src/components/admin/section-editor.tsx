@@ -100,8 +100,8 @@ export function SectionEditor({ section }: { section: SectionKey }) {
   }
 
   if (loading) return <AdminPageSkeleton variant="form" />;
-  return <><div className="admin-page-head"><div><span className="eyebrow">Konten publik</span><h1>{config.title}</h1><p>{config.description}</p></div></div>
-    <div className="admin-form">
+  return <><div className={`admin-page-head${section === "team" ? " team-admin-page-head" : ""}`}><div><span className="eyebrow">Konten publik</span><h1>{config.title}</h1><p>{config.description}</p></div></div>
+    <div className={`admin-form${section === "team" ? " team-admin-form" : ""}`}>
       {error && <div className="alert-error" role="alert">{error}</div>}{success && <div className="alert-success" role="status">{success}</div>}
       {config.fields.map(field => <div className="field" key={field.name}><label htmlFor={field.name}>{field.label}</label>
         {field.kind === "textarea" ? <textarea id={field.name} value={String(content[field.name] || "")} placeholder={field.name === "whatsappMessage" ? whatsappMessage : undefined} onChange={e => set(field.name, e.target.value)} />
@@ -140,12 +140,35 @@ function ImageField({ label, hint, folder, preset, value, onUploaded }: { label:
 }
 
 function Repeater({ title, items, fields, imageFolder, onUpload, onChange }: { title: string; items: Item[]; fields: [string, string][]; imageFolder?: "team" | "facilities"; onUpload?: (path: string, url: string) => void; onChange: (items: Item[]) => void }) {
-  return <div style={{ margin: "28px 0" }}><h3>{title}</h3>{items.map((item, i) => <div className="content-card" key={i} style={{ marginBottom: 12 }}>
-    {fields.map(([key, label]) => <div className="field" key={key}><label htmlFor={`${title}-${i}-${key}`}>{label}</label>
-      <input id={`${title}-${i}-${key}`} value={String(item[key as keyof Item] || "")} placeholder={imageFolder === "team" && key === "role" ? "Jika kosong, tampil sebagai Pengurus" : undefined} onChange={e => onChange(items.map((value, index) => index === i ? { ...value, [key]: e.target.value } : value))} /></div>)}
-    {imageFolder && <><MediaUpload label={imageFolder === "team" ? "Foto pengurus" : "Foto fasilitas"} folder={imageFolder} preset={imageFolder === "team" ? imagePresets.team : imagePresets.facilities} onUploaded={({ path, preview }) => { onUpload?.(path, preview); onChange(items.map((value, index) => index === i ? { ...value, image: preview } : value)); }} />
-      {item.image && <img src={item.image} alt={`Pratinjau ${item.name || title}`} style={{ width: 130, aspectRatio: imageAspectFromUrl(item.image, imageFolder === "team" ? imagePresets.team.aspect : imagePresets.facilities.aspect), objectFit: "contain", borderRadius: 4 }} />}</>}
-    {title !== "Pertanyaan umum" && <label className="field"><span>Tampil di publik <input type="checkbox" checked={Boolean(item.visible)} onChange={e => onChange(items.map((value, index) => index === i ? { ...value, visible: e.target.checked } : value))} /></span></label>}
-    <button className="btn btn-quiet" type="button" onClick={() => onChange(items.filter((_, index) => index !== i))}>Hapus baris</button>
-  </div>)}<button className="btn btn-outline" type="button" onClick={() => onChange([...items, {}])}>Tambah {title.toLowerCase()}</button></div>;
+  const isTeam = imageFolder === "team";
+  return <div className={`repeater${isTeam ? " team-repeater" : ""}`} style={{ margin: "28px 0" }}>
+    <div className={isTeam ? "team-repeater-heading" : undefined}>
+      <h3>{title}</h3>
+      {isTeam && <p>Atur nama, jabatan, foto, dan status publikasi setiap pengurus.</p>}
+    </div>
+    {items.map((item, i) => <div className={`content-card${isTeam ? " team-editor-card" : ""}`} key={i} style={isTeam ? undefined : { marginBottom: 12 }}>
+      {isTeam && <div className="team-editor-card-heading"><strong>Pengurus {String(i + 1).padStart(2, "0")}</strong>
+        <span className={`team-editor-status ${item.visible ? "is-visible" : "is-hidden"}`}>{item.visible ? "Tampil" : "Disembunyikan"}</span></div>}
+      <div className={isTeam ? "team-editor-card-content" : undefined}>
+        <div className={isTeam ? "team-editor-fields" : undefined}>
+          {fields.map(([key, label]) => <div className={`field${isTeam ? " team-editor-field" : ""}`} key={key}><label htmlFor={`${title}-${i}-${key}`}>{label}</label>
+            <input id={`${title}-${i}-${key}`} value={String(item[key as keyof Item] || "")} placeholder={isTeam && key === "role" ? "Jika kosong, tampil sebagai Pengurus" : undefined} onChange={e => onChange(items.map((value, index) => index === i ? { ...value, [key]: e.target.value } : value))} /></div>)}
+        </div>
+        {imageFolder && <div className={isTeam ? `team-editor-media${item.image ? " has-preview" : ""}` : undefined}>
+          <MediaUpload label={imageFolder === "team" ? "Foto pengurus" : "Foto fasilitas"} folder={imageFolder} preset={imageFolder === "team" ? imagePresets.team : imagePresets.facilities} onUploaded={({ path, preview }) => { onUpload?.(path, preview); onChange(items.map((value, index) => index === i ? { ...value, image: preview } : value)); }} />
+          {item.image && <img className={isTeam ? "team-editor-preview" : undefined} src={item.image} alt={`Pratinjau ${item.name || title}`} style={isTeam ? undefined : { width: 130, aspectRatio: imageAspectFromUrl(item.image, imagePresets.facilities.aspect), objectFit: "contain", borderRadius: 4 }} />}
+        </div>}
+        {isTeam
+          ? <div className="team-editor-actions">
+            <label className="team-editor-visibility"><span>Tampil di publik <input type="checkbox" checked={Boolean(item.visible)} onChange={e => onChange(items.map((value, index) => index === i ? { ...value, visible: e.target.checked } : value))} /></span></label>
+            <button className="btn btn-quiet" type="button" onClick={() => onChange(items.filter((_, index) => index !== i))}>Hapus pengurus</button>
+          </div>
+          : <>
+            {title !== "Pertanyaan umum" && <label className="field"><span>Tampil di publik <input type="checkbox" checked={Boolean(item.visible)} onChange={e => onChange(items.map((value, index) => index === i ? { ...value, visible: e.target.checked } : value))} /></span></label>}
+            <button className="btn btn-quiet" type="button" onClick={() => onChange(items.filter((_, index) => index !== i))}>Hapus baris</button>
+          </>}
+      </div>
+    </div>)}
+    <button className="btn btn-outline" type="button" onClick={() => onChange([...items, {}])}>Tambah {title.toLowerCase()}</button>
+  </div>;
 }

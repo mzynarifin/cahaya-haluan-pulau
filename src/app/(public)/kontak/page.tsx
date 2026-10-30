@@ -37,11 +37,11 @@ export default async function Contact() {
           </a>
         </> : <div className="notice">Nomor WhatsApp resmi belum tersedia. Silakan gunakan informasi kontak lain yang tercantum di halaman ini.</div>}
       </div>
-      <div className="content-card"><h3>Informasi lain</h3><ul className="inline-list contact-info-list">
-        <li className="contact-email-row"><strong>Email</strong> {email ? <a href={`mailto:${email}`} className="link-arrow contact-email">{email.split(/([@.])/).map((part, index) => <span key={index}>{part}{(part === "@" || part === ".") && <wbr/>}</span>)}</a> : "Perlu dilengkapi"}</li>
-        <li><strong>Alamat</strong> {String(contact.publicAddress || "Perlu dilengkapi")}</li>
-        <li><strong>Jam kontak</strong> {String(contact.contactHours || "Perlu dilengkapi")}</li>
-      </ul></div>
+      <div className="content-card contact-details-card"><h3>Informasi lain</h3><dl className="contact-info-list">
+        <div className="contact-info-row"><dt>Email</dt><dd>{email ? <a href={`mailto:${email}`} className="link-arrow contact-email">{email.split(/([@.])/).map((part, index) => <span key={index}>{part}{(part === "@" || part === ".") && <wbr/>}</span>)}</a> : "Perlu dilengkapi"}</dd></div>
+        <div className="contact-info-row"><dt>Alamat</dt><dd>{String(contact.publicAddress || "Perlu dilengkapi")}</dd></div>
+        <div className="contact-info-row"><dt>Jam kontak</dt><dd>{String(contact.contactHours || "Perlu dilengkapi")}</dd></div>
+      </dl></div>
     </div></section>
     {map && <section id="lokasi" className="section" aria-labelledby="contact-location-title" style={{ paddingTop: 0 }}>
       <div className="container"><h2 id="contact-location-title">Lokasi</h2>
