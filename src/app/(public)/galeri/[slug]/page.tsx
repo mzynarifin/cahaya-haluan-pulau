@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { ArrowLeft } from "lucide-react";
 import { getAlbumBySlug } from "@/lib/data";
 import { formatDate, siteName, siteUrl } from "@/lib/config";
 import { GalleryLightbox } from "@/components/gallery-lightbox";
@@ -61,7 +62,12 @@ export default async function GalleryDetail({ params }: { params: Promise<{ slug
     <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData).replace(/</g, "\\u003c") }} />
     <div className="page-hero album-detail-hero">
       <div className="container">
-        <Link href="/galeri" className="link-arrow">← Kembali ke galeri</Link>
+        <nav className="album-detail-nav" aria-label="Navigasi galeri">
+          <Link href="/galeri" className="album-back-link">
+            <ArrowLeft size={18} aria-hidden="true" />
+            <span>Kembali ke galeri</span>
+          </Link>
+        </nav>
         <span className="eyebrow album-detail-date">{formatDate(album.event_date)}</span>
         <h1>{album.title}</h1>
         {album.description && <p className="lead">{album.description}</p>}
