@@ -66,6 +66,7 @@ alter table public.news enable row level security;
 create policy "Published news readable" on public.news for select to anon, authenticated using (status = 'published' or public.is_admin());
 create policy "Admins insert news" on public.news for insert to authenticated with check (public.is_admin());
 create policy "Admins update news" on public.news for update to authenticated using (public.is_admin()) with check (public.is_admin());
+create policy "Admins delete news" on public.news for delete to authenticated using (public.is_admin());
 create index if not exists news_published_at on public.news(published_at desc) where status = 'published';
 
 create or replace function public.set_news_audit() returns trigger language plpgsql as $$
