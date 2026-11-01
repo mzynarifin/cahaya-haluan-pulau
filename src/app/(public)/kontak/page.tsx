@@ -21,33 +21,48 @@ export default async function Contact() {
   const email = typeof contact.email === "string" && /^[^@]+@[^@]+\.[^@]+$/.test(contact.email)
     ? contact.email : null;
 
-  return <>
-    <div className="page-hero"><div className="container">
-      <span className="eyebrow">Hubungi kami</span>
-      <h1>Bicara dengan pengurus</h1>
-      <p className="lead">Tanyakan informasi tempat tinggal dan penerimaan secara langsung.</p>
-    </div></div>
-    <section className="section"><div className="container split">
-      <div>
-        <h2>WhatsApp pengurus</h2>
-        <p>Klik tombol untuk menghubungi pengurus melalui WhatsApp.</p>
-        {wa ? <>
-          <a className="btn btn-primary" href={wa} target="_blank" rel="noopener noreferrer">
-            Hubungi Pengurus via WhatsApp <ArrowUpRight size={18}/>
-          </a>
-        </> : <div className="notice">Nomor WhatsApp resmi belum tersedia. Silakan gunakan informasi kontak lain yang tercantum di halaman ini.</div>}
+  return <div className="contact-page">
+    <div className="page-hero">
+      <div className="container">
+        <span className="eyebrow">Hubungi kami</span>
+        <h1>Bicara dengan pengurus</h1>
+        <p className="lead">Tanyakan informasi tempat tinggal dan penerimaan secara langsung.</p>
       </div>
-      <div className="content-card contact-details-card"><h3>Informasi lain</h3><dl className="contact-info-list">
-        <div className="contact-info-row"><dt>Email</dt><dd>{email ? <a href={`mailto:${email}`} className="link-arrow contact-email">{email.split(/([@.])/).map((part, index) => <span key={index}>{part}{(part === "@" || part === ".") && <wbr/>}</span>)}</a> : "Perlu dilengkapi"}</dd></div>
-        <div className="contact-info-row"><dt>Alamat</dt><dd>{String(contact.publicAddress || "Perlu dilengkapi")}</dd></div>
-        <div className="contact-info-row"><dt>Jam kontak</dt><dd>{String(contact.contactHours || "Perlu dilengkapi")}</dd></div>
-      </dl></div>
-    </div></section>
-    {map && <section id="lokasi" className="section" aria-labelledby="contact-location-title" style={{ paddingTop: 0 }}>
-      <div className="container"><h2 id="contact-location-title">Lokasi</h2>
-        <iframe title="Peta lokasi Cahaya Haluan Pulau" src={map} loading="lazy" referrerPolicy="no-referrer-when-downgrade"
-          allowFullScreen style={{ width: "100%", height: "clamp(280px, 42vw, 460px)", border: 0, borderRadius: 12 }} />
+    </div>
+    <section className="section contact-overview-section">
+      <div className="container contact-overview">
+        <div className="contact-whatsapp-card">
+          <span className="eyebrow">Kontak utama</span>
+          <h2>WhatsApp pengurus</h2>
+          <p>Hubungi pengurus melalui WhatsApp untuk bertanya tentang tempat tinggal dan penerimaan.</p>
+          {wa ? <a className="btn contact-whatsapp-cta" href={wa} target="_blank" rel="noopener noreferrer">
+            Hubungi Pengurus via WhatsApp <ArrowUpRight size={18} aria-hidden="true" />
+          </a> : <div className="notice">Nomor WhatsApp resmi belum tersedia. Silakan gunakan informasi kontak lain yang tercantum di halaman ini.</div>}
+        </div>
+        <div className="content-card contact-details-card">
+          <span className="eyebrow">Informasi lainnya</span>
+          <h3>Kontak resmi</h3>
+          <dl className="contact-info-list">
+            <div className="contact-info-row">
+              <dt>Email</dt>
+              <dd>{email ? <a href={`mailto:${email}`} className="link-arrow contact-email">{email.split(/([@.])/).map((part, index) => <span key={index}>{part}{(part === "@" || part === ".") && <wbr />}</span>)}</a> : "Perlu dilengkapi"}</dd>
+            </div>
+            <div className="contact-info-row"><dt>Alamat</dt><dd>{String(contact.publicAddress || "Perlu dilengkapi")}</dd></div>
+            <div className="contact-info-row"><dt>Jam kontak</dt><dd>{String(contact.contactHours || "Perlu dilengkapi")}</dd></div>
+          </dl>
+        </div>
+      </div>
+    </section>
+    {map && <section id="lokasi" className="section contact-location-section" aria-labelledby="contact-location-title">
+      <div className="container">
+        <div className="contact-location-heading">
+          <span className="eyebrow">Lokasi</span>
+          <h2 id="contact-location-title">Temukan kami</h2>
+        </div>
+        <div className="contact-map-frame">
+          <iframe title="Peta lokasi Cahaya Haluan Pulau" src={map} loading="lazy" referrerPolicy="no-referrer-when-downgrade" allowFullScreen />
+        </div>
       </div>
     </section>}
-  </>;
+  </div>;
 }
