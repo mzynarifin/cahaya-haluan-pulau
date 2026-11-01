@@ -9,7 +9,18 @@ export function Photo({ src, alt, label = "Dokumentasi asli perlu dilengkapi", a
   return <div className="photo-frame" style={{ aspectRatio: aspectRatio ?? imageAspectFromUrl(src, 4 / 3) }}>{src ? <Image src={src} alt={alt || "Dokumentasi kegiatan Cahaya Haluan Pulau"} fill sizes="(max-width: 800px) 100vw, 50vw" /> : <div className="photo-placeholder"><span className="photo-caption">Cahaya Haluan Pulau</span><div className="visual-lines" aria-hidden="true">{[45,70,54,86,61,75,50].map((n,i)=><span key={i} style={{"--h":`${n}%`} as React.CSSProperties}/>)}</div><span className="photo-caption">{label}</span></div>}</div>;
 }
 export function ContactCta() {
-  return <section className="section editorial-band"><div className="container split"><div><span className="eyebrow" style={{color:"#b9d8f7"}}>Langkah berikutnya</span><h2>Ingin bertanya tentang tempat tinggal?</h2></div><div><p>Lihat informasi kontak resmi dan buka percakapan WhatsApp dengan pengurus melalui halaman Kontak.</p><Link className="btn" href="/kontak">Lihat Kontak <ArrowRight size={17}/></Link></div></div></section>;
+  return <section className="section editorial-band next-step-section" aria-labelledby="next-step-title">
+    <div className="container next-step-layout">
+      <div className="next-step-heading">
+        <span className="eyebrow next-step-eyebrow">Langkah berikutnya</span>
+        <h2 id="next-step-title">Ingin bertanya tentang tempat tinggal?</h2>
+      </div>
+      <div className="next-step-content">
+        <p>Lihat informasi kontak resmi dan buka percakapan WhatsApp dengan pengurus melalui halaman Kontak.</p>
+        <Link className="btn next-step-link" href="/kontak">Lihat Kontak <ArrowRight size={17} aria-hidden="true" /></Link>
+      </div>
+    </div>
+  </section>;
 }
 export function NewsCards({ items }: { items: NewsPreview[] }) {
   return items.length ? <div className="card-grid">{items.map(news => {
