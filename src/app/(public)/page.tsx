@@ -46,7 +46,6 @@ export default async function Home() {
               <li><strong>02</strong> Fasilitas yang sudah diverifikasi</li>
               <li><strong>03</strong> Biaya dan persyaratan penerimaan</li>
             </ul>
-            <div style={{ marginTop: 24 }}><Link href="/asrama" className="btn btn-outline">Lihat informasi asrama <ArrowRight size={17} /></Link></div>
           </div>
         </div>
       </div>
