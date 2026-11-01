@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { Images, Pencil, Plus, Trash2 } from "lucide-react";
 import { AdminPageSkeleton } from "@/components/admin/admin-skeleton";
 import { createClient } from "@/lib/supabase/browser";
 import { formatDate } from "@/lib/config";
@@ -79,15 +80,22 @@ export function GalleryList() {
     }
   }
 
-  return <>
-    <div className="admin-page-head"><div><span className="eyebrow">Dokumentasi</span><h1>Galeri</h1><p>Kelola album dan foto kegiatan.</p></div><Link className="btn btn-primary" href="/admin/galeri/baru">Buat Album</Link></div>
+  return <div className="gallery-admin">
+    <div className="admin-page-head"><div><span className="eyebrow">Dokumentasi</span><h1>Galeri</h1><p>Kelola album dan foto kegiatan.</p></div><Link className="btn btn-primary" href="/admin/galeri/baru"><Plus size={18} aria-hidden="true" />Buat Album</Link></div>
     {error && <div className="alert-error" role="alert">{error}</div>}
     {success && <div className="alert-success" role="status">{success}</div>}
-    {loading ? <AdminPageSkeleton variant="list" embedded /> : items.length ? <div className="table-wrap"><table className="data-table"><thead><tr><th>Album</th><th>Tanggal kegiatan</th><th>Status</th><th>Tindakan</th></tr></thead><tbody>
-      {items.map(album => <tr key={album.id}><td><strong>{album.title}</strong></td><td>{formatDate(album.event_date)}</td><td><span className={`status ${album.status}`}>{album.status}</span></td><td><div className="album-actions">
-        <Link className="link-arrow" href={`/admin/galeri/${album.id}/edit`}>Ubah</Link>
-        <button type="button" className="btn btn-danger" disabled={deletingId !== null} onClick={() => removeAlbum(album)}>{deletingId === album.id ? "Menghapus..." : "Hapus"}</button>
-      </div></td></tr>)}
+    {loading ? <AdminPageSkeleton variant="list" embedded /> : items.length ? <div className="table-wrap gallery-table-wrap"><table className="data-table gallery-table"><thead><tr><th>Album</th><th>Tanggal kegiatan</th><th>Status</th><th className="gallery-actions-heading">Tindakan</th></tr></thead><tbody>
+      {items.map(album => <tr key={album.id}>
+        <td className="gallery-cell gallery-cell-title"><span className="gallery-cell-label">Album</span><div><span className="gallery-album-icon"><Images size={17} aria-hidden="true" /></span><strong>{album.title}</strong></div></td>
+        <td className="gallery-cell gallery-cell-date"><span className="gallery-cell-label">Tanggal kegiatan</span>{formatDate(album.event_date)}</td>
+        <td className="gallery-cell gallery-cell-status"><span className="gallery-cell-label">Status</span><span className={`status ${album.status}`}>{album.status}</span></td>
+        <td className="gallery-cell gallery-cell-actions"><div className="gallery-row-actions">
+          <Link className="btn btn-quiet gallery-action-edit" href={`/admin/galeri/${album.id}/edit`}><Pencil size={15} aria-hidden="true" />Ubah</Link>
+          <button type="button" className="btn btn-danger gallery-action-delete" disabled={deletingId !== null} onClick={() => removeAlbum(album)} aria-label={`Hapus album: ${album.title}`}>
+            <Trash2 size={15} aria-hidden="true" />{deletingId === album.id ? "Menghapus..." : "Hapus"}
+          </button>
+        </div></td>
+      </tr>)}
     </tbody></table></div> : <div className="empty"><h3>Belum ada album</h3><p>Buat album pertama sebagai draft.</p></div>}
-  </>;
+  </div>;
 }
