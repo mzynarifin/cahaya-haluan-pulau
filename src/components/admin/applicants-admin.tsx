@@ -4,6 +4,7 @@ import { useEffect,useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
+import { ArrowUpRight, Plus, Search, UserRound } from "lucide-react";
 import { z } from "zod";
 import { createClient } from "@/lib/supabase/browser";
 import { useDebouncedValue } from "@/lib/use-debounced-value";
@@ -64,20 +65,20 @@ export function ApplicantsList() {
 
   return <>
     <div className="admin-page-head"><div><span className="eyebrow">Penerimaan</span><h1>Calon Penghuni</h1><p>Data ini hanya tersedia bagi admin. Catat setelah mendapat persetujuan.</p></div>
-      <Link className="btn btn-primary" href="/admin/pendaftar/baru">Catat Calon Penghuni</Link>
+      <Link className="btn btn-primary" href="/admin/pendaftar/baru"><Plus size={18} aria-hidden="true" />Catat Calon Penghuni</Link>
     </div>
-    <div className="searchbar">
-      <input aria-label="Cari nama atau nomor" placeholder="Cari nama atau nomor" value={query} onChange={event => { setQuery(event.target.value); setPage(1); }} />
+    <div className="searchbar applicants-toolbar">
+      <label className="applicants-search"><Search size={18} aria-hidden="true" /><input aria-label="Cari nama atau nomor" placeholder="Cari nama atau nomor WhatsApp" value={query} onChange={event => { setQuery(event.target.value); setPage(1); }} /></label>
       <select aria-label="Filter status" value={status} onChange={event => { setStatus(event.target.value); setPage(1); }}>
         <option value="">Semua status</option>{statuses.map(value => <option key={value}>{value}</option>)}
       </select>
     </div>
-    {error && <div className="alert-error">{error}</div>}
+    {error && <div className="alert-error" role="alert">{error}</div>}
     {loading ? <AdminPageSkeleton variant="list" embedded /> : items.length ?
-      <div className="table-wrap"><table className="data-table"><thead><tr><th>Nama</th><th>Asal</th><th>Tahun</th><th>Status</th><th>Tindakan</th></tr></thead>
-        <tbody>{items.map(applicant => <tr key={applicant.id}><td><strong>{applicant.full_name}</strong><div className="tiny muted">{applicant.whatsapp}</div></td>
-          <td>{applicant.origin}</td><td>{applicant.entry_year}</td><td><span className={`status ${applicant.status}`}>{applicant.status}</span></td>
-          <td><Link className="link-arrow" href={`/admin/pendaftar/${applicant.id}`}>Detail →</Link></td></tr>)}</tbody>
+      <div className="table-wrap applicants-table-wrap"><table className="data-table applicants-table"><thead><tr><th>Nama</th><th>Asal</th><th>Tahun masuk</th><th>Status</th><th>Tindakan</th></tr></thead>
+        <tbody>{items.map(applicant => <tr key={applicant.id}><td className="applicant-cell applicant-name-cell"><span className="applicant-cell-label">Calon penghuni</span><div className="applicant-person"><span className="applicant-avatar"><UserRound size={18} aria-hidden="true" /></span><span className="applicant-person-copy"><strong>{applicant.full_name}</strong><span className="applicant-secondary">{applicant.whatsapp}</span><span className="applicant-created">Dicatat {formatDate(applicant.created_at)}</span></span></div></td>
+          <td className="applicant-cell applicant-origin-cell"><span className="applicant-cell-label">Daerah asal</span>{applicant.origin}</td><td className="applicant-cell applicant-year-cell"><span className="applicant-cell-label">Tahun masuk</span>{applicant.entry_year}</td><td className="applicant-cell applicant-status-cell"><span className="applicant-cell-label">Status</span><span className={`status ${applicant.status}`}>{applicant.status}</span></td>
+          <td className="applicant-cell applicant-action-cell"><span className="applicant-cell-label">Tindakan</span><Link className="btn btn-quiet applicants-detail-link" href={`/admin/pendaftar/${applicant.id}`}>Detail<ArrowUpRight size={16} aria-hidden="true" /></Link></td></tr>)}</tbody>
       </table></div> : <div className="empty"><h3>{debouncedQuery ? "Tidak ada hasil" : "Belum ada calon penghuni"}</h3>
         <p>{debouncedQuery ? "Periksa nama atau nomor yang dicari." : "Catat calon penghuni dari percakapan WhatsApp setelah persetujuan."}</p></div>}
     {total > 20 && <div className="pagination"><button className="btn btn-quiet" disabled={page === 1} onClick={() => setPage(page - 1)}>Sebelumnya</button>
