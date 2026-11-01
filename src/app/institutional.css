@@ -111,8 +111,19 @@ p { color: var(--muted); }
 .photo-frame { max-height: 720px; background: #e5eef3; }
 .photo-frame img { object-fit: contain; }
 .about-profile { align-items: center; }
-.about-profile .photo-frame, .home-accommodation .photo-frame { width: 100%; max-height: none; }
-.about-profile .photo-frame img, .home-accommodation .photo-frame img { object-fit: cover; object-position: center; }
+.about-profile .photo-frame, .accommodation-visual .photo-frame { width: 100%; max-height: none; }
+.about-profile .photo-frame img, .accommodation-visual .photo-frame img { object-fit: cover; object-position: center; }
+.accommodation-layout { display: grid; grid-template-columns: minmax(0, 1.03fr) minmax(320px, .97fr); align-items: center; gap: clamp(36px, 6vw, 84px); }
+.accommodation-copy { min-width: 0; max-width: 660px; }
+.accommodation-copy h2 { margin: 0 0 18px; color: #17364d; font-size: clamp(1.85rem, 3.2vw, 2.6rem); font-weight: 800; line-height: 1.12; letter-spacing: -.035em; text-wrap: balance; }
+.home-accommodation-section .accommodation-copy .eyebrow { display: flex; width: fit-content; margin-bottom: 14px; }
+.accommodation-description { max-width: 620px; margin: 0; color: #425b6d; font-size: clamp(1.05rem, 1.3vw, 1.16rem); line-height: 1.8; }
+.accommodation-facts { margin: 26px 0 24px; border-top: 1px solid #bfccd6; }
+.accommodation-facts > div { display: grid; grid-template-columns: minmax(100px, .44fr) minmax(0, 1.4fr); align-items: start; gap: 22px; padding: 15px 0; border-bottom: 1px solid #bfccd6; }
+.accommodation-facts dt { color: #174562; font-size: .88rem; font-weight: 750; }
+.accommodation-facts dd { min-width: 0; margin: 0; color: #425b6d; font-size: .96rem; line-height: 1.6; overflow-wrap: anywhere; }
+.accommodation-cta { min-height: 48px; padding-inline: 20px; }
+.accommodation-visual .photo-frame { aspect-ratio: 4 / 3; border-radius: 4px; box-shadow: none; }
 .card-image { max-height: 360px; border-radius: 3px; }
 .card-image img { width: 100%; height: 100%; object-fit: contain; }
 .team-gallery { max-width: 1060px; margin-inline: auto; }
@@ -535,6 +546,9 @@ p { color: var(--muted); }
   .about-profile-visual { max-width: 720px; }
   .about-profile-details { margin-top: 42px; }
   .about-profile-detail { grid-template-columns: minmax(155px, .6fr) minmax(0, 1.5fr); gap: 24px; }
+  .accommodation-layout { grid-template-columns: minmax(0, 1fr); gap: 32px; }
+  .accommodation-copy { max-width: 760px; }
+  .accommodation-visual { max-width: 720px; }
 }
 @media (max-width: 560px) {
   .about-profile-section { padding-block: 48px; }
@@ -543,6 +557,11 @@ p { color: var(--muted); }
   .about-profile-intro { font-size: 1.05rem; line-height: 1.75; }
   .about-profile-detail { grid-template-columns: minmax(0, 1fr); gap: 10px; padding: 22px 0; }
   .about-profile-detail-heading { gap: 11px; }
+  .accommodation-layout { gap: 24px; }
+  .accommodation-copy h2 { font-size: clamp(1.85rem, 8vw, 2.35rem); }
+  .accommodation-facts { margin: 22px 0; }
+  .accommodation-facts > div { grid-template-columns: 100px minmax(0, 1fr); gap: 14px; padding: 13px 0; }
+  .accommodation-facts dt, .accommodation-facts dd { font-size: .9rem; }
 }
 
 .gallery-albums-section { padding-top: clamp(36px, 5vw, 56px); }

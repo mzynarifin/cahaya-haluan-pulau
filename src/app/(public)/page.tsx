@@ -31,21 +31,22 @@ export default async function Home() {
         </div>
       </div>
     </section>
-    <section className="section">
+    <section className="section home-accommodation-section">
       <div className="container">
-        <div className="section-head">
-          <div><span className="eyebrow">Tempat tinggal</span><h2>Kenali asrama sebelum menghubungi pengurus</h2></div>
-          <Link href="/asrama" className="link-arrow">Selengkapnya <ArrowRight size={18} /></Link>
-        </div>
-        <div className="split home-accommodation">
-          <Photo aspectRatio={4 / 3} src={typeof accommodation.image === "string" ? accommodation.image : null} alt="Dokumentasi bangunan atau ruang asrama" label="Foto asrama perlu dilengkapi" />
-          <div>
-            <p className="lead">{String(accommodation.description || "Informasi mengenai kondisi tempat tinggal, fasilitas, biaya, dan persyaratan sedang disiapkan untuk publikasi.")}</p>
-            <ul className="inline-list">
-              <li><strong>01</strong> Kondisi tempat tinggal dan ruang</li>
-              <li><strong>02</strong> Fasilitas yang sudah diverifikasi</li>
-              <li><strong>03</strong> Biaya dan persyaratan penerimaan</li>
-            </ul>
+        <div className="accommodation-layout">
+          <div className="accommodation-copy">
+            <span className="eyebrow">Tempat tinggal</span>
+            <h2>Kenali asrama sebelum menghubungi pengurus</h2>
+            <p className="lead accommodation-description">{String(accommodation.description || "Penjelasan kondisi asrama sedang dilengkapi oleh pengurus.")}</p>
+            <dl className="accommodation-facts">
+              <div><dt>Lokasi</dt><dd>{String(accommodation.publicAddress || "Perlu dilengkapi oleh pengurus")}</dd></div>
+              <div><dt>Biaya</dt><dd>{String(accommodation.feeDescription || "Perlu dikonfirmasi kepada pengurus")}</dd></div>
+              <div><dt>Syarat</dt><dd>{String(accommodation.requirements || "Perlu dikonfirmasi kepada pengurus")}</dd></div>
+            </dl>
+            <Link href="/asrama" className="btn btn-primary accommodation-cta">Lihat Asrama & Fasilitas <ArrowRight size={17} aria-hidden="true" /></Link>
+          </div>
+          <div className="accommodation-visual">
+            <Photo aspectRatio={4 / 3} src={typeof accommodation.image === "string" ? accommodation.image : null} alt="Dokumentasi bangunan atau ruang asrama" label="Foto asrama perlu dilengkapi" />
           </div>
         </div>
       </div>
