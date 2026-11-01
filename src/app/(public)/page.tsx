@@ -20,7 +20,7 @@ export default async function Home() {
     getAlbums(),
   ]);
 
-  return <>
+  return <div className="home-page">
     <HomeHero profile={profile} />
     <section className="section accent-section home-intro-section" aria-labelledby="home-intro-title">
       <div className="container home-intro-grid">
@@ -73,5 +73,5 @@ export default async function Home() {
       </div>
     </section>
     <ContactCta />
-  </>;
+  </div>;
 }
