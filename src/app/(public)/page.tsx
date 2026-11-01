@@ -22,12 +22,15 @@ export default async function Home() {
 
   return <>
     <HomeHero profile={profile} />
-    <section className="section accent-section">
-      <div className="container intro-grid">
-        <div><span className="eyebrow">Mengenal kami</span><h2>Informasi yang jelas untuk calon penghuni dan keluarga.</h2></div>
-        <div>
-          <p className="lead">{String(profile.description || "Cahaya Haluan Pulau menyediakan informasi tentang tempat tinggal bagi mereka yang ingin melanjutkan pendidikan di Pulau Jawa.")}</p>
-          <Link href="/tentang" className="link-arrow">Baca profil lembaga <ArrowRight size={18} /></Link>
+    <section className="section accent-section home-intro-section" aria-labelledby="home-intro-title">
+      <div className="container home-intro-grid">
+        <div className="home-intro-heading">
+          <span className="eyebrow">Mengenal kami</span>
+          <h2 id="home-intro-title">Informasi yang jelas untuk calon penghuni dan keluarga.</h2>
+        </div>
+        <div className="home-intro-copy">
+          <p>{String(profile.description || "Cahaya Haluan Pulau menyediakan informasi tentang tempat tinggal bagi mereka yang ingin melanjutkan pendidikan di Pulau Jawa.")}</p>
+          <Link href="/tentang" className="link-arrow">Baca profil lembaga <ArrowRight size={18} aria-hidden="true" /></Link>
         </div>
       </div>
     </section>
