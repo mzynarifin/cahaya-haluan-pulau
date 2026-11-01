@@ -116,8 +116,20 @@ export function NewsList() {
 
       const { data: deleted, error: deleteError } = await client.from("news")
         .delete().eq("id", row.id).eq("version", current.version).select("id").maybeSingle();
-      if (deleteError) throw new Error("Berita gagal dihapus. Periksa kebijakan hapus berita di Supabase.");
-      if (!deleted) throw new Error("Berita sudah diubah atau dihapus oleh admin lain. Muat ulang halaman.");
+      if (deleteError) {
+        if (deleteError.code === "42501") {
+          throw new Error("Database menolak penghapusan. Terapkan policy Admins delete news di Supabase.");
+        }
+        throw new Error("Berita gagal dihapus. Periksa izin dan koneksi Supabase.");
+      }
+      if (!deleted) {
+        const { data: latest, error: checkError } = await client.from("news")
+          .select("version").eq("id", row.id).maybeSingle();
+        if (checkError) throw new Error("Penghapusan tidak terkonfirmasi. Muat ulang daftar berita.");
+        if (!latest) throw new Error("Berita sudah dihapus oleh admin lain. Muat ulang daftar berita.");
+        if (latest.version !== current.version) throw new Error("Berita baru saja diubah admin lain. Muat ulang daftar berita.");
+        throw new Error("Database belum mengizinkan penghapusan. Jalankan supabase/news-delete-policy.sql.");
+      }
 
       setItems(current => current.filter(item => item.id !== row.id));
       setTotal(current => Math.max(0, current - 1));
