@@ -19,7 +19,7 @@ export default async function Accommodation() {
   const visibleFacilities = facilities.filter(facility => facility.visible && facility.name);
   const faqs = Array.isArray(data.faqs) ? data.faqs as { question: string; answer: string }[] : [];
 
-  return <>
+  return <div className="accommodation-page">
     <div className="page-hero">
       <div className="container">
         <span className="eyebrow">Tempat tinggal</span>
@@ -83,5 +83,5 @@ export default async function Accommodation() {
       </div>
     </section>
     <ContactCta />
-  </>;
+  </div>;
 }

@@ -696,3 +696,49 @@ p { color: var(--muted); }
   .home-page .next-step-heading h2 { font-size: clamp(1.75rem, 7.5vw, 2.2rem); }
   .home-page .content-card h3 { font-size: 1.05rem; }
 }
+
+.news-list-section { padding-top: clamp(30px, 3.5vw, 44px); }
+.news-search { margin: 0 0 24px; }
+@media (max-width: 800px) {
+  .news-list-section { padding-top: 32px; }
+}
+@media (max-width: 560px) {
+  .news-list-section { padding-top: 24px; }
+  .news-search { margin-bottom: 18px; }
+}
+
+.about-page .eyebrow, .accommodation-page .eyebrow { font-size: .74rem; font-weight: 700; letter-spacing: .12em; }
+.about-page .page-hero h1, .accommodation-page .page-hero h1 {
+  font-size: clamp(2.4rem, 3.8vw, 4rem);
+  font-weight: 600;
+  line-height: 1.14;
+  letter-spacing: -.035em;
+}
+.about-page h2, .accommodation-page h2 {
+  font-size: clamp(1.5rem, 2.35vw, 2rem);
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -.025em;
+}
+.about-page .about-profile-copy h2, .accommodation-page .accommodation-copy h2 {
+  font-size: clamp(1.75rem, 2.85vw, 2.25rem);
+  font-weight: 600;
+  line-height: 1.18;
+  letter-spacing: -.03em;
+}
+.about-page h3, .accommodation-page h3 { font-size: 1.08rem; font-weight: 600; line-height: 1.35; }
+.about-page .about-profile-detail-heading span, .accommodation-page .accommodation-facts dt { font-weight: 600; }
+.accommodation-page .faq summary { font-weight: 600; }
+.about-page .next-step-heading h2, .accommodation-page .next-step-heading h2 {
+  font-size: clamp(1.85rem, 3vw, 2.5rem);
+  font-weight: 600;
+  line-height: 1.16;
+  letter-spacing: -.03em;
+}
+@media (max-width: 560px) {
+  .about-page .page-hero h1, .accommodation-page .page-hero h1 { font-size: clamp(1.9rem, 8vw, 2.3rem); }
+  .about-page h2, .accommodation-page h2 { font-size: clamp(1.4rem, 6vw, 1.8rem); }
+  .about-page .about-profile-copy h2, .accommodation-page .accommodation-copy h2 { font-size: clamp(1.7rem, 7vw, 2.05rem); }
+  .about-page h3, .accommodation-page h3 { font-size: 1.05rem; }
+  .about-page .next-step-heading h2, .accommodation-page .next-step-heading h2 { font-size: clamp(1.75rem, 7.5vw, 2.2rem); }
+}

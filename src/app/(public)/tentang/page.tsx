@@ -16,7 +16,7 @@ export default async function About() {
     { number: "03", title: "Misi", content: profile.mission },
   ].filter((detail) => Boolean(detail.content));
 
-  return <>
+  return <div className="about-page">
     <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({ "@context": "https://schema.org", "@type": "AboutPage", "@id": `${siteUrl}/tentang#about`, url: `${siteUrl}/tentang`, name: `Tentang ${siteName}`, inLanguage: "id-ID", about: { "@id": `${siteUrl}/#organization` }, isPartOf: { "@id": `${siteUrl}/#website` } }).replace(/</g, "\\u003c") }} />
     <div className="page-hero"><div className="container">
       <span className="eyebrow">Tentang kami</span>
@@ -52,5 +52,5 @@ export default async function About() {
       <TeamCards items={members} />
     </div></section>
     <ContactCta />
-  </>;
+  </div>;
 }
