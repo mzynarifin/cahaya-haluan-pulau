@@ -56,7 +56,7 @@ export default async function Home() {
           <div><span className="eyebrow">Dokumentasi</span><h2>Kegiatan dan kebersamaan</h2></div>
           <Link href="/galeri" className="link-arrow">Semua album <ArrowRight size={18} /></Link>
         </div>
-        <AlbumCards items={albums} />
+        <AlbumCards items={albums.slice(0, 3)} />
       </div>
     </section>
     <section className="section">

@@ -115,36 +115,24 @@ p { color: var(--muted); }
 .about-profile .photo-frame img, .home-accommodation .photo-frame img { object-fit: cover; object-position: center; }
 .card-image { max-height: 360px; border-radius: 3px; }
 .card-image img { width: 100%; height: 100%; object-fit: contain; }
-.album-grid { display: flex; gap: 16px; overflow-x: auto; overflow-y: hidden; padding: 4px 4px 12px; scroll-snap-type: x mandatory; scroll-padding-inline: 4px; scrollbar-width: none; overscroll-behavior-inline: contain; }
-.album-grid::-webkit-scrollbar { display: none; }
-.album-carousel-controls { display: flex; justify-content: flex-end; gap: 10px; margin-top: 12px; }
-.album-carousel-controls button { display: grid; place-items: center; width: 44px; height: 44px; border: 1px solid #b8cbd6; border-radius: 4px; background: #fff; color: #174a69; }
-.album-carousel-controls button:hover:not(:disabled) { border-color: #1d638b; background: #edf3f7; }
-.album-carousel-controls button:disabled { opacity: .4; cursor: not-allowed; }
-.album-carousel-count { display: grid; place-items: center; min-width: 48px; color: #365a70; font-size: .9rem; font-weight: 700; font-variant-numeric: tabular-nums; }
 .team-gallery { max-width: 1060px; margin-inline: auto; }
 .team-grid { display: flex; flex-wrap: wrap; justify-content: center; align-items: stretch; gap: 20px; }
 .team-card { flex: 0 0 212px; width: 212px; }
 .team-controls { display: none; }
 .album-card, .team-card { min-width: 0; overflow: hidden; border: 1px solid #cbd6de; border-radius: 4px; background: #fff; transition: border-color .2s ease, box-shadow .2s ease; }
-.album-card:hover, .album-card:focus-within, .team-card:hover { border-color: #8eafc2; box-shadow: 0 8px 22px rgba(20, 44, 61, .08); }
-.album-card { display: flex; flex: 0 0 min(225px, calc(100vw - 44px)); flex-direction: column; scroll-snap-align: start; }
+.team-card:hover { border-color: #8eafc2; box-shadow: 0 8px 22px rgba(20, 44, 61, .08); }
+.album-card { display: flex; flex-direction: column; }
 .album-card-media, .team-card-media { position: relative; display: block; overflow: hidden; background: #e5eef3; }
-.album-card-media { aspect-ratio: 5 / 4; }
+.album-card-media { width: 100%; }
 .team-card-media { aspect-ratio: 4 / 5; max-height: 340px; }
-.album-card-media img, .team-card-media img { width: 100%; height: 100%; object-fit: contain; transition: transform .28s ease; }
-.album-card-media img { object-fit: cover; }
-.album-card:hover .album-card-media img, .album-card:focus-within .album-card-media img { transform: scale(1.025); }
+.team-card-media img { width: 100%; height: 100%; object-fit: contain; transition: transform .28s ease; }
+.album-card-image img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 .album-card-placeholder, .team-card-initials { display: grid; place-items: center; width: 100%; height: 100%; color: #2e5a75; font-weight: 750; }
+.album-card-placeholder { position: absolute; inset: 0; }
 .album-card-placeholder { padding: 20px; font-size: .82rem; letter-spacing: .08em; text-align: center; text-transform: uppercase; }
 .team-card-initials { font-size: clamp(3rem, 7vw, 6rem); letter-spacing: -.05em; }
-.album-card-body { display: flex; flex: 1; flex-direction: column; padding: 18px; }
-.album-card-date { color: #4a6779; font-size: .78rem; font-weight: 750; letter-spacing: .055em; text-transform: uppercase; }
-.album-card h3 { margin: 8px 0 10px; color: #173b56; font-size: 1.12rem; line-height: 1.36; }
-.album-card h3 a:hover { color: var(--primary); }
-.album-card p { display: -webkit-box; overflow: hidden; margin: 0 0 16px; color: #526a7a; font-size: .92rem; line-height: 1.55; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
-.album-card-link { display: inline-flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: auto; padding-top: 12px; border-top: 1px solid #dce5eb; color: var(--primary); font-size: .9rem; font-weight: 750; }
-.album-card-link:hover { color: var(--primary-hover); }
+.album-card-date { margin-bottom: 0; }
+.album-card-link { align-self: flex-start; }
 .team-card-body { min-height: 86px; padding: 16px 18px 18px; }
 .team-card h3 { margin: 0 0 5px; color: #173b56; font-size: 1.04rem; line-height: 1.35; overflow-wrap: anywhere; }
 .team-card p { margin: 0; color: #536e80; font-size: .86rem; line-height: 1.45; }
@@ -335,7 +323,6 @@ p { color: var(--muted); }
   .site-footer .footer-links { gap: 0; }
   .site-footer .footer-links a { display: flex; align-items: center; min-height: 44px; }
   .page-enter .link-arrow { min-height: 44px; align-items: center; }
-  .album-carousel-controls button { width: 48px; height: 48px; }
   .album-card-link { min-height: 44px; }
   .page-enter .home-hero { min-height: calc(100svh - 74px); align-items: flex-start; padding: var(--first-content-offset) 0 min(32svh, 300px); }
   .hero-visual.has-photo::after { background: linear-gradient(to bottom, #173d5a 0%, rgba(23, 61, 90, .96) 32%, rgba(23, 61, 90, .5) 68%, rgba(23, 61, 90, 0) 100%); }
@@ -388,7 +375,6 @@ p { color: var(--muted); }
   .section-head { display: block; }
   .section-head .link-arrow { margin-top: 16px; }
   .card-grid, .card-grid.two, .footer-grid, .stat-grid, .admin-quick-grid { grid-template-columns: minmax(0, 1fr); }
-  .album-carousel-controls { justify-content: center; }
   .crop-backdrop { padding: 10px; }
   .crop-dialog { max-height: calc(100svh - 20px); }
   .crop-actions .btn { flex: 1; }
@@ -449,8 +435,7 @@ p { color: var(--muted); }
 @media (prefers-reduced-motion: reduce) {
   .site-navigation .site-nav.open, .page-enter, .admin-page-enter { animation: none !important; }
   .btn, .site-navigation .site-nav a:not(.btn) { transition: none; }
-  .album-card, .team-card, .album-card-media img, .team-card-media img { transition: none; }
-  .album-card:hover .album-card-media img, .album-card:focus-within .album-card-media img { transform: none; }
+  .album-card, .team-card, .team-card-media img { transition: none; }
   .gallery-photo-grid .gallery-tile { transition: none; }
 }
 
@@ -554,3 +539,5 @@ p { color: var(--muted); }
   .about-profile-detail { grid-template-columns: minmax(0, 1fr); gap: 10px; padding: 22px 0; }
   .about-profile-detail-heading { gap: 11px; }
 }
+
+.gallery-albums-section { padding-top: clamp(36px, 5vw, 56px); }
