@@ -453,3 +453,104 @@ p { color: var(--muted); }
   .album-card:hover .album-card-media img, .album-card:focus-within .album-card-media img { transform: none; }
   .gallery-photo-grid .gallery-tile { transition: none; }
 }
+
+/* About page profile */
+.about-profile-section {
+  padding-block: clamp(58px, 8vw, 104px);
+  background: #fff;
+}
+.about-profile {
+  display: grid;
+  grid-template-columns: minmax(0, 1.06fr) minmax(300px, .8fr);
+  align-items: center;
+  gap: clamp(36px, 7vw, 92px);
+}
+.about-profile-copy { max-width: 680px; }
+.about-profile-copy .eyebrow { margin-bottom: 16px; }
+.about-profile-copy h2 {
+  max-width: 620px;
+  margin: 0 0 22px;
+  color: #173d5a;
+  font-size: clamp(2.15rem, 4vw, 3.35rem);
+  font-weight: 800;
+  line-height: 1.08;
+  letter-spacing: -.045em;
+  text-wrap: balance;
+}
+.about-profile-intro {
+  max-width: 620px;
+  margin: 0;
+  color: #425b6d;
+  font-size: clamp(1.05rem, 1.35vw, 1.2rem);
+  line-height: 1.85;
+}
+.about-profile-visual { width: 100%; }
+.about-profile-visual .photo-frame {
+  width: 100%;
+  max-height: none;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border: 1px solid #d2e0e9;
+  border-radius: 16px;
+  background: #e5eef3;
+  box-shadow: 0 18px 40px rgba(23, 61, 90, .1);
+}
+.about-profile-visual .photo-frame img { object-fit: cover; object-position: center; }
+.about-profile-visual .photo-placeholder { background: linear-gradient(145deg, #eff6fa, #e2eef5); }
+.about-profile-details {
+  margin-top: clamp(52px, 7vw, 84px);
+  border-top: 1px solid #bdccd7;
+}
+.about-profile-detail {
+  display: grid;
+  grid-template-columns: minmax(190px, .72fr) minmax(0, 1.8fr);
+  align-items: start;
+  gap: clamp(24px, 5vw, 68px);
+  padding: 26px 0;
+  border-bottom: 1px solid #bdccd7;
+}
+.about-profile-detail-heading {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+}
+.about-profile-detail-heading span {
+  flex: none;
+  color: var(--primary);
+  font-size: .8rem;
+  font-weight: 750;
+  letter-spacing: .08em;
+  font-variant-numeric: tabular-nums;
+}
+.about-profile-detail-heading h3 {
+  margin: 0;
+  color: #173d5a;
+  font-size: 1.15rem;
+  font-weight: 750;
+  line-height: 1.3;
+  letter-spacing: -.015em;
+}
+.about-profile-detail > p {
+  max-width: 780px;
+  margin: 0;
+  color: #425b6d;
+  font-size: 1rem;
+  line-height: 1.8;
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+}
+@media (max-width: 800px) {
+  .about-profile { grid-template-columns: minmax(0, 1fr); gap: 32px; }
+  .about-profile-copy { max-width: 760px; }
+  .about-profile-visual { max-width: 720px; }
+  .about-profile-details { margin-top: 42px; }
+  .about-profile-detail { grid-template-columns: minmax(155px, .6fr) minmax(0, 1.5fr); gap: 24px; }
+}
+@media (max-width: 560px) {
+  .about-profile-section { padding-block: 48px; }
+  .about-profile-copy .eyebrow { margin-bottom: 12px; }
+  .about-profile-copy h2 { margin-bottom: 16px; font-size: clamp(2rem, 9vw, 2.65rem); line-height: 1.12; }
+  .about-profile-intro { font-size: 1.05rem; line-height: 1.75; }
+  .about-profile-detail { grid-template-columns: minmax(0, 1fr); gap: 10px; padding: 22px 0; }
+  .about-profile-detail-heading { gap: 11px; }
+}

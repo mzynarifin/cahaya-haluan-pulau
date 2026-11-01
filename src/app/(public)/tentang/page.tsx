@@ -10,6 +10,11 @@ export const metadata: Metadata = pageMetadata("/tentang", "Profil, Visi, Misi, 
 export default async function About() {
   const [profile, team] = await Promise.all([getSection("profile"), getSection("team")]);
   const members = Array.isArray(team.members) ? team.members as TeamMember[] : [];
+  const profileDetails = [
+    { number: "01", title: "Sejarah", content: profile.history },
+    { number: "02", title: "Visi", content: profile.vision },
+    { number: "03", title: "Misi", content: profile.mission },
+  ].filter((detail) => Boolean(detail.content));
 
   return <>
     <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({ "@context": "https://schema.org", "@type": "AboutPage", "@id": `${siteUrl}/tentang#about`, url: `${siteUrl}/tentang`, name: `Tentang ${siteName}`, inLanguage: "id-ID", about: { "@id": `${siteUrl}/#organization` }, isPartOf: { "@id": `${siteUrl}/#website` } }).replace(/</g, "\\u003c") }} />
@@ -18,18 +23,30 @@ export default async function About() {
       <h1>Mengenal Cahaya Haluan Pulau</h1>
       <p className="lead">Profil lembaga dan orang-orang yang mengelola informasi tempat tinggal.</p>
     </div></div>
-    <section className="section"><div className="container split about-profile">
-      <div>
-        <span className="eyebrow">Profil</span>
-        <h2>{String(profile.name || "Cahaya Haluan Pulau")}</h2>
-        <p className="lead">{String(profile.description || "Informasi profil resmi sedang disiapkan oleh pengurus.")}</p>
-        {Boolean(profile.history) && <><h3>Sejarah</h3><p>{String(profile.history)}</p></>}
-        {Boolean(profile.vision) && <><h3>Visi</h3><p>{String(profile.vision)}</p></>}
-        {Boolean(profile.mission) && <><h3>Misi</h3><p>{String(profile.mission)}</p></>}
+    <section className="section about-profile-section" aria-labelledby="about-profile-title">
+      <div className="container">
+        <div className="about-profile">
+          <div className="about-profile-copy">
+            <span className="eyebrow">Profil lembaga</span>
+            <h2 id="about-profile-title">{String(profile.name || "Cahaya Haluan Pulau")}</h2>
+            <p className="about-profile-intro">{String(profile.description || "Informasi profil resmi sedang disiapkan oleh pengurus.")}</p>
+          </div>
+          <div className="about-profile-visual">
+            <Photo src={typeof profile.aboutImage === "string" ? profile.aboutImage : null} aspectRatio={4 / 3}
+              alt="Dokumentasi kegiatan Cahaya Haluan Pulau" label="Foto kegiatan perlu dilengkapi" />
+          </div>
+        </div>
+        {profileDetails.length > 0 && <div className="about-profile-details">
+          {profileDetails.map((detail) => <section className="about-profile-detail" key={detail.number}>
+            <div className="about-profile-detail-heading">
+              <span aria-hidden="true">{detail.number}</span>
+              <h3>{detail.title}</h3>
+            </div>
+            <p>{String(detail.content)}</p>
+          </section>)}
+        </div>}
       </div>
-      <Photo src={typeof profile.aboutImage === "string" ? profile.aboutImage : null} aspectRatio={4 / 3}
-        alt="Dokumentasi kegiatan Cahaya Haluan Pulau" label="Foto kegiatan perlu dilengkapi" />
-    </div></section>
+    </section>
     <section className="section accent-section" id="pengurus"><div className="container">
       <div className="section-head"><div><span className="eyebrow">Pengurus</span><h2>Kenali pengurus</h2></div></div>
       <TeamCards items={members} />
