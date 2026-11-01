@@ -971,3 +971,23 @@ p { color: var(--muted); }
   .applicants-toolbar { grid-template-columns: minmax(0, 1fr); gap: 10px; padding: 12px; }
   .applicants-list .applicants-pagination { flex-wrap: wrap; justify-content: center; }
 }
+
+.applicant-detail-layout { align-items: start; gap: clamp(18px, 3vw, 34px); }
+.applicant-data-card { max-width: none; }
+.applicant-data-card h2 { margin-bottom: 18px; color: #173b5d; font-size: 1.3rem; }
+.applicant-data-table { width: 100%; border: 1px solid #dce8ef; border-collapse: separate; border-spacing: 0; border-radius: 12px; background: #fff; }
+.applicant-data-table th, .applicant-data-table td { padding: 13px 15px; border-bottom: 1px solid #e7eef3; text-align: left; vertical-align: top; }
+.applicant-data-table tr:first-child th { border-top-left-radius: 12px; }
+.applicant-data-table tr:first-child td { border-top-right-radius: 12px; }
+.applicant-data-table th { width: 38%; background: #f5f9fb; color: #567084; font-size: .83rem; font-weight: 650; line-height: 1.5; }
+.applicant-data-table td { color: #263f52; font-size: .92rem; font-weight: 550; line-height: 1.6; overflow-wrap: anywhere; }
+.applicant-data-table tr:last-child th, .applicant-data-table tr:last-child td { border-bottom: 0; }
+.applicant-data-table tr:last-child th { border-bottom-left-radius: 12px; }
+.applicant-data-table tr:last-child td { border-bottom-right-radius: 12px; }
+.applicant-data-notes { white-space: pre-wrap; }
+.applicant-data-card .form-actions { gap: 10px; padding-top: 16px; border-top: 1px solid #e7eef3; }
+@media (max-width: 560px) {
+  .applicant-data-table th, .applicant-data-table td { padding: 11px 12px; }
+  .applicant-data-table th { width: 42%; font-size: .78rem; }
+  .applicant-data-table td { font-size: .88rem; }
+}
