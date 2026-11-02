@@ -198,16 +198,9 @@ begin
   if not found then raise exception 'not_found' using errcode = 'P0002'; end if;
   if current_row.version <> p_expected_version then raise exception 'version_conflict' using errcode = '40001'; end if;
   if current_row.status = p_to then return current_row; end if;
-  permitted := case current_row.status
-    when 'Baru' then p_to in ('Dihubungi','Mengundurkan diri')
-    when 'Dihubungi' then p_to in ('Diproses','Mengundurkan diri')
-    when 'Diproses' then p_to in ('Diterima','Ditolak','Mengundurkan diri')
-    when 'Diterima' then p_to in ('Diproses','Mengundurkan diri')
-    when 'Ditolak' then p_to = 'Diproses'
-    when 'Mengundurkan diri' then p_to = 'Diproses'
-    else false end;
+  permitted := coalesce(p_to in ('Baru','Dihubungi','Diproses','Diterima','Ditolak','Mengundurkan diri'), false);
   if not permitted then raise exception 'invalid_transition' using errcode = '22023'; end if;
-  if (p_to = 'Ditolak' or (p_to = 'Diproses' and current_row.status in ('Diterima','Ditolak','Mengundurkan diri'))) and nullif(trim(p_reason),'') is null then
+  if (p_to = 'Ditolak' or (current_row.status in ('Diterima','Ditolak','Mengundurkan diri') and p_to in ('Baru','Dihubungi','Diproses'))) and nullif(trim(p_reason),'') is null then
     raise exception 'reason_required' using errcode = '22023';
   end if;
   perform set_config('app.status_change_allowed','yes',true);
