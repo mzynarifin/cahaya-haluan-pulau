@@ -570,6 +570,16 @@ p { color: var(--muted); }
 }
 
 .gallery-albums-section { padding-top: clamp(36px, 5vw, 56px); }
+@media (max-width: 560px) {
+  .gallery-albums-section { padding-top: 32px; padding-bottom: 48px; }
+  .gallery-albums-section .card-grid { gap: 16px; }
+  .gallery-albums-section .album-card { padding: 0; border-radius: 12px; box-shadow: 0 7px 20px rgba(24, 58, 84, .08); }
+  .gallery-albums-section .album-card-media { margin-bottom: 0; border-bottom: 1px solid #dce8ef; border-radius: 11px 11px 0 0; }
+  .gallery-albums-section .album-card-date { margin: 16px 18px 0; color: #61798b; font-size: .69rem; line-height: 1.45; }
+  .gallery-albums-section .album-card h3 { margin: 6px 18px 8px; font-size: 1.12rem; line-height: 1.32; text-wrap: balance; overflow-wrap: anywhere; }
+  .gallery-albums-section .album-card p { margin: 0 18px 8px; font-size: .92rem; line-height: 1.6; }
+  .gallery-albums-section .album-card-link { align-self: stretch; justify-content: space-between; margin: auto 12px 12px; padding: 8px 12px; border: 1px solid #d5e3ec; border-radius: 6px; background: #f2f7fa; }
+}
 
 .home-intro-section { background: #eaf1f5; }
 .home-intro-grid {
@@ -973,8 +983,20 @@ p { color: var(--muted); }
 }
 @media (max-width: 560px) {
   .applicants-list .admin-page-head .btn { margin-left: 0; }
+  .applicants-list .admin-page-head .btn { width: 100%; min-height: 48px; }
   .applicants-toolbar { grid-template-columns: minmax(0, 1fr); gap: 10px; padding: 12px; }
   .applicants-list .applicants-pagination { flex-wrap: wrap; justify-content: center; }
+  .applicants-table tbody { gap: 14px; }
+  .applicants-table tbody tr { gap: 0 14px; padding: 16px; border-radius: 14px; box-shadow: 0 7px 20px rgba(24, 58, 84, .07); }
+  .applicants-table .applicant-name-cell { padding-bottom: 14px !important; }
+  .applicants-table .applicant-name-cell > .applicant-cell-label { display: none; }
+  .applicant-avatar { width: 44px; height: 44px; border-radius: 50%; }
+  .applicants-table .applicant-origin-cell { display: grid; grid-column: 1; align-content: start; justify-content: start; gap: 4px; }
+  .applicants-table .applicant-year-cell { display: grid; grid-column: 2; align-content: start; justify-content: start; gap: 4px; }
+  .applicants-table .applicant-status-cell { margin-top: 8px; padding-top: 12px !important; border-top: 1px solid #e7eef3 !important; }
+  .applicants-table .applicant-status-cell .status { max-width: 68%; text-align: center; white-space: normal; line-height: 1.25; }
+  .applicants-table .applicant-action-cell { gap: 12px; }
+  .applicants-table .applicant-action-cell .applicants-detail-link { flex: 1; min-height: 46px; }
 }
 
 .applicant-detail-layout { align-items: start; gap: clamp(18px, 3vw, 34px); }
