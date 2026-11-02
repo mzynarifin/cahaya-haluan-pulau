@@ -91,6 +91,9 @@ p { color: var(--muted); }
 .page-enter { --first-content-offset: clamp(22px, 2.5vw, 38px); }
 .page-enter > .home-hero { align-items: flex-start; padding-top: var(--first-content-offset); }
 .page-enter > .page-hero, .page-enter > article.section { padding-top: var(--first-content-offset); }
+.page-enter > .about-page > .page-hero,
+.page-enter > .accommodation-page > .page-hero,
+.page-enter > .contact-page > .page-hero { padding-top: var(--first-content-offset); }
 .public-skeleton .skeleton-hero { padding-top: clamp(22px, 2.5vw, 38px); }
 .page-enter .accent-section, .accent-section { background: #f0f4f6; }
 .intro-grid, .split { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(28px, 5vw, 90px); }
