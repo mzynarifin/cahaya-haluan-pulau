@@ -158,6 +158,8 @@ p { color: var(--muted); }
 .editorial-band a.btn:hover { background: #eaf1f5; }
 .article.container { max-width: 850px; margin-inline: auto; }
 .article-body { line-height: 1.85; }
+.article-body ul { margin-block: 1rem; padding-inline-start: 1.5rem; list-style: disc; }
+.article-body li + li { margin-top: .35rem; }
 .article-body figure img { max-height: 700px; object-fit: contain; }
 .faq summary { color: #193d57; }
 .searchbar { max-width: 800px; }
