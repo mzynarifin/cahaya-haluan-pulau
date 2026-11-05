@@ -11,7 +11,8 @@ export default async function ProtectedLayout({ children }: { children: React.Re
 
   // Validate the cookie-backed JWT before using its identity for authorization.
   const { data, error } = await client.auth.getClaims();
-  const userId = typeof data.claims?.sub === "string" ? data.claims.sub : null;
+  const claims = data?.claims;
+  const userId = typeof claims?.sub === "string" ? claims.sub : null;
   if (error || !userId) {
     redirect("/admin-chppanel?next=/admin&error=session");
   }
@@ -25,6 +26,6 @@ export default async function ProtectedLayout({ children }: { children: React.Re
     </div></main>;
   }
 
-  const email = typeof data.claims?.email === "string" ? data.claims.email : "Admin";
+  const email = typeof claims?.email === "string" ? claims.email : "Admin";
   return <AdminShell email={email}>{children}</AdminShell>;
 }
