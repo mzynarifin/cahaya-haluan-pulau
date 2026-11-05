@@ -18,5 +18,5 @@ export async function GET(request: NextRequest) {
     if (!error) return noIndexRedirect(new URL(next, request.url));
   }
 
-  return noIndexRedirect(new URL("/admin/login?error=callback", request.url));
+  return noIndexRedirect(new URL("/admin-chppanel?error=callback", request.url));
 }

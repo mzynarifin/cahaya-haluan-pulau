@@ -28,7 +28,7 @@ export function AdminShell({ children, email }: { children: React.ReactNode; ema
   const path = usePathname();
   async function logout() {
     await createClient()?.auth.signOut();
-    window.location.replace("/admin/login");
+    window.location.replace("/admin-chppanel");
   }
 
   return <>

@@ -7,13 +7,13 @@ export const metadata: Metadata = { robots: { index: false, follow: false } };
 
 export default async function ProtectedLayout({ children }: { children: React.ReactNode }) {
   const client = await createClient();
-  if (!client) redirect("/admin/login");
+  if (!client) redirect("/admin-chppanel");
 
   // Validate the cookie-backed JWT before using its identity for authorization.
   const { data, error } = await client.auth.getClaims();
   const userId = typeof data.claims?.sub === "string" ? data.claims.sub : null;
   if (error || !userId) {
-    redirect("/admin/login?next=/admin&error=session");
+    redirect("/admin-chppanel?next=/admin&error=session");
   }
 
   const { data: role } = await client.from("admin_users").select("user_id").eq("user_id", userId).maybeSingle();
@@ -21,7 +21,7 @@ export default async function ProtectedLayout({ children }: { children: React.Re
     return <main id="main" className="section"><div className="container">
       <h1>Akses ditolak</h1>
       <p>Akun ini berhasil masuk, tetapi belum diberi izin admin. Minta pengelola menambahkan UUID akun ke tabel admin_users.</p>
-      <a href="/admin/login" className="btn btn-outline">Kembali ke login</a>
+      <a href="/admin-chppanel" className="btn btn-outline">Kembali ke login</a>
     </div></main>;
   }
 
