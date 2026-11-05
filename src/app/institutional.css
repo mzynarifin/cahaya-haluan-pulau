@@ -951,12 +951,13 @@ p { color: var(--muted); }
 .applicants-search input:focus { outline: 0; }
 .applicants-toolbar select { width: 100%; min-height: 46px; padding: 10px 13px; border: 1px solid #cbd8e2; border-radius: 9px; background: #fff; color: #23465f; }
 .applicants-toolbar select:focus { border-color: #478fbf; outline: 3px solid rgba(90, 165, 206, .18); outline-offset: 0; }
-.applicants-table { min-width: 860px; }
+.applicants-table { min-width: 860px; table-layout: fixed; }
 .applicants-table th, .applicants-table td { vertical-align: middle; }
-.applicants-table th:first-child { width: 35%; }
-.applicants-table th:nth-child(2) { width: 23%; }
-.applicants-table th:nth-child(3) { width: 14%; }
+.applicants-table th:first-child { width: 30%; }
+.applicants-table th:nth-child(2) { width: 17%; }
+.applicants-table th:nth-child(3) { width: 11%; }
 .applicants-table th:nth-child(4) { width: 17%; }
+.applicants-table th:last-child { width: 25%; }
 .applicants-table th:last-child, .applicants-table td:last-child { text-align: right; }
 .applicant-person { display: flex; align-items: center; gap: 12px; min-width: 0; }
 .applicant-avatar { display: grid; place-items: center; flex: none; width: 40px; height: 40px; border: 1px solid #dce8ef; border-radius: 12px; background: #f0f7fb; color: #2b6b94; }
@@ -967,7 +968,8 @@ p { color: var(--muted); }
 .applicant-origin-cell { color: #415b6e; }
 .applicant-year-cell { color: #294a61; font-variant-numeric: tabular-nums; font-weight: 650; }
 .applicant-cell-label { display: none; }
-.applicant-actions { display: flex; align-items: center; justify-content: flex-end; gap: 8px; flex-wrap: wrap; }
+.applicant-actions { display: flex; align-items: center; justify-content: flex-end; gap: 6px; flex-wrap: nowrap; white-space: nowrap; }
+.applicant-actions > .btn { flex: 0 0 auto; }
 .applicants-detail-link { justify-content: center; min-height: 40px; padding: 7px 12px; border: 1px solid #d3e1eb; border-radius: 8px; background: #fff; color: #234d6d; font-size: .86rem; white-space: nowrap; }
 .applicants-detail-link:hover, .applicants-detail-link:focus-visible { border-color: #a9cbe1; background: #f2f8fc; color: #173c5a; }
 .applicants-delete-button { min-height: 40px; padding: 7px 12px; border-radius: 8px; font-size: .86rem; white-space: nowrap; }
