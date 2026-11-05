@@ -9,11 +9,9 @@ export default async function ProtectedLayout({ children }: { children: React.Re
   const client = await createClient();
   if (!client) redirect("/admin/login");
 
-  // The cookie-backed session identifies the candidate account. The RLS-protected
-  // admin_users query below is the authorization check and rejects invalid tokens.
-  const { data, error } = await client.auth.getSession();
-  const session = data.session;
-  const userId = session?.user.id;
+  // Validate the cookie-backed JWT before using its identity for authorization.
+  const { data, error } = await client.auth.getClaims();
+  const userId = typeof data.claims?.sub === "string" ? data.claims.sub : null;
   if (error || !userId) {
     redirect("/admin/login?next=/admin&error=session");
   }
@@ -27,6 +25,6 @@ export default async function ProtectedLayout({ children }: { children: React.Re
     </div></main>;
   }
 
-  const email = session?.user.email || "Admin";
+  const email = typeof data.claims?.email === "string" ? data.claims.email : "Admin";
   return <AdminShell email={email}>{children}</AdminShell>;
 }
