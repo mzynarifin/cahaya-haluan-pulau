@@ -2,7 +2,11 @@ export const siteName = "Cahaya Haluan Pulau";
 const defaultSiteUrl = process.env.NODE_ENV === "production"
   ? "https://www.cahayahaluanpulau.com"
   : "http://localhost:3000";
-export const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL || defaultSiteUrl).replace(/\/+$/, "");
+const configuredSiteUrl = process.env.NEXT_PUBLIC_SITE_URL?.trim();
+const localSiteUrl = /^https?:\/\/(?:localhost|127\.0\.0\.1)(?::\d+)?(?:\/|$)/i.test(configuredSiteUrl || "");
+export const siteUrl = (
+  process.env.NODE_ENV === "production" && localSiteUrl ? defaultSiteUrl : configuredSiteUrl || defaultSiteUrl
+).replace(/\/+$/, "");
 export const configured = Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY);
 export const whatsappMessage = "Halo pengurus Cahaya Haluan Pulau, saya ingin bertanya tentang tempat tinggal untuk melanjutkan pendidikan di Pulau Jawa.";
 
