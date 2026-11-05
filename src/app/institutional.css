@@ -89,7 +89,7 @@ p { color: var(--muted); }
 .page-hero h1 { max-width: 1100px; margin: 12px 0 18px; color: #17364d; }
 .page-hero .lead { max-width: 850px; }
 .page-enter { --first-content-offset: clamp(22px, 2.5vw, 38px); }
-.page-enter > .home-hero { align-items: flex-start; padding-top: var(--first-content-offset); }
+.page-enter .home-hero { align-items: flex-start; padding-top: var(--first-content-offset); }
 .page-enter > .page-hero, .page-enter > article.section { padding-top: var(--first-content-offset); }
 .page-enter > .about-page > .page-hero,
 .page-enter > .accommodation-page > .page-hero,
