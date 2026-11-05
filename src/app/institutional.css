@@ -207,6 +207,7 @@ p { color: var(--muted); }
 .auth-intro-footer { color: #d0dee7; font-size: .88rem; }
 .auth-panel { display: grid; place-items: center; padding: clamp(24px, 5vw, 72px); }
 .auth-card { width: min(100%, 510px); padding: clamp(28px, 3vw, 48px); border: 1px solid #cbd6de; border-radius: 4px; box-shadow: none; }
+.auth-wrap .auth-card { min-height: 36rem; }
 .auth-card h1 { margin: 28px 0 10px; font-size: clamp(2rem, 3vw, 2.6rem); }
 .auth-card .brand-logo { width: 50px; height: 50px; }
 .auth-links { flex-wrap: wrap; }
@@ -360,6 +361,7 @@ p { color: var(--muted); }
   .auth-intro-footer { display: none; }
   .auth-panel { display: block; padding: 20px 20px 48px; }
   .auth-card { margin-inline: auto; }
+  .auth-wrap .auth-card { min-height: 0; }
   .auth-links a { display: inline-flex; align-items: center; min-height: 44px; }
   .admin-shell { display: block; }
   .admin-sidebar { display: none; }
