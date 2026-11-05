@@ -967,10 +967,23 @@ p { color: var(--muted); }
 .applicant-origin-cell { color: #415b6e; }
 .applicant-year-cell { color: #294a61; font-variant-numeric: tabular-nums; font-weight: 650; }
 .applicant-cell-label { display: none; }
+.applicant-actions { display: flex; align-items: center; justify-content: flex-end; gap: 8px; flex-wrap: wrap; }
 .applicants-detail-link { justify-content: center; min-height: 40px; padding: 7px 12px; border: 1px solid #d3e1eb; border-radius: 8px; background: #fff; color: #234d6d; font-size: .86rem; white-space: nowrap; }
 .applicants-detail-link:hover, .applicants-detail-link:focus-visible { border-color: #a9cbe1; background: #f2f8fc; color: #173c5a; }
+.applicants-delete-button { min-height: 40px; padding: 7px 12px; border-radius: 8px; font-size: .86rem; white-space: nowrap; }
 .applicants-list .empty { max-width: none; }
 .applicants-list .applicants-pagination { justify-content: space-between; gap: 12px; margin: 16px 0 0; padding: 12px 14px; border: 1px solid #dce8ef; border-radius: 12px; background: #fff; color: #536d80; font-size: .9rem; }
+.applicant-delete-dialog { width: min(calc(100% - 32px), 520px); max-width: 520px; max-height: calc(100vh - 32px); margin: auto; padding: 0; overflow-y: auto; border: 1px solid #d8e3eb; border-radius: 16px; background: #fff; color: #1d3548; box-shadow: 0 24px 72px rgba(16, 42, 64, .24); }
+.applicant-delete-dialog::backdrop { background: rgba(13, 31, 46, .52); backdrop-filter: blur(3px); }
+.applicant-delete-dialog-content { padding: clamp(24px, 5vw, 34px); }
+.applicant-delete-icon { display: grid; place-items: center; width: 48px; height: 48px; margin-bottom: 18px; border: 1px solid #f1cece; border-radius: 14px; background: #fff3f3; color: #902b2b; }
+.applicant-delete-dialog h2 { margin: 8px 0 10px; color: #1d3548; font-size: 1.4rem; }
+.applicant-delete-dialog p { margin-bottom: 10px; color: #536a7c; }
+.applicant-delete-dialog p strong { color: #263e51; }
+.applicant-delete-dialog .field { margin: 20px 0 0; }
+.applicant-delete-dialog .field input { min-height: 48px; }
+.applicant-delete-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 24px; }
+.applicant-delete-actions .btn { min-height: 46px; }
 @media (max-width: 800px) {
   .applicants-table-wrap { overflow: visible; border: 0; background: transparent; box-shadow: none; }
   .applicants-table { display: block; min-width: 0; }
@@ -985,6 +998,7 @@ p { color: var(--muted); }
   .applicants-table .applicant-year-cell { grid-column: 1; justify-content: flex-start; }
   .applicants-table .applicant-status-cell { grid-column: 1 / -1; justify-content: space-between; }
   .applicants-table td:last-child { grid-column: 1 / -1; justify-content: space-between; margin-top: 4px; padding-top: 12px !important; border-top: 1px solid #e7eef3 !important; }
+  .applicants-table .applicant-action-cell .applicant-actions { flex: 1; min-width: 0; }
 }
 @media (max-width: 560px) {
   .applicants-list .admin-page-head .btn { margin-left: 0; }
@@ -1001,7 +1015,10 @@ p { color: var(--muted); }
   .applicants-table .applicant-status-cell { margin-top: 8px; padding-top: 12px !important; border-top: 1px solid #e7eef3 !important; }
   .applicants-table .applicant-status-cell .status { max-width: 68%; text-align: center; white-space: normal; line-height: 1.25; }
   .applicants-table .applicant-action-cell { gap: 12px; }
-  .applicants-table .applicant-action-cell .applicants-detail-link { flex: 1; min-height: 46px; }
+  .applicants-table .applicant-action-cell .applicant-actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+  .applicants-table .applicant-action-cell .applicants-detail-link, .applicants-table .applicant-action-cell .applicants-delete-button { width: 100%; min-width: 0; min-height: 46px; padding-inline: 8px; }
+  .applicant-delete-actions { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.35fr); }
+  .applicant-delete-actions .btn { width: 100%; padding-inline: 10px; }
 }
 
 .applicant-detail-layout { align-items: start; gap: clamp(18px, 3vw, 34px); }
