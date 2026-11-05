@@ -4,6 +4,7 @@ import { createServerClient } from "@supabase/ssr";
 export async function proxy(request: NextRequest) {
   let response = NextResponse.next({ request });
   const noSessionRefreshPaths = new Set([
+    "/admin/login",
     "/admin/lupa-password",
     "/admin/reset-password",
     "/admin/auth/callback",
