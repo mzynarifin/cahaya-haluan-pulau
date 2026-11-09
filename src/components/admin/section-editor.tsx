@@ -6,6 +6,7 @@ import { promoteMedia } from "@/lib/admin-media";
 import { AdminPageSkeleton } from "@/components/admin/admin-skeleton";
 import { whatsappMessage } from "@/lib/config";
 import { imageAspectFromUrl, imagePresets, type ImagePreset } from "@/lib/image-presets";
+import styles from "./section-editor.module.css";
 
 const MediaUpload = dynamic(
   () => import("@/components/admin/media-upload").then(module => module.MediaUpload),
@@ -148,9 +149,9 @@ function ImageField({ label, hint, folder, preset, value, onUploaded }: { label:
 
 function Repeater({ title, items, fields, imageFolder, onUpload, onChange }: { title: string; items: Item[]; fields: [string, string][]; imageFolder?: "team" | "facilities"; onUpload?: (path: string, url: string) => void; onChange: (items: Item[]) => void }) {
   const isTeam = imageFolder === "team";
-  return <div className={`repeater${isTeam ? " team-repeater" : ""}`} style={{ margin: isTeam ? "14px 0" : "28px 0" }}>
-    <div className={isTeam ? "team-repeater-heading" : undefined}>
-      <h3>{title}</h3>
+  return <div className={`repeater${isTeam ? " team-repeater" : ` ${styles.accommodationRepeater}`}`} style={isTeam ? { margin: "14px 0" } : undefined}>
+    <div className={isTeam ? "team-repeater-heading" : styles.accommodationRepeaterHeading}>
+      {isTeam ? <h3>{title}</h3> : <h2 className={styles.accommodationRepeaterTitle}>{title}</h2>}
       {isTeam && <p>Atur nama, jabatan, foto, dan status publikasi setiap pengurus.</p>}
     </div>
     {items.map((item, i) => <div className={`content-card${isTeam ? " team-editor-card" : ""}`} key={i} style={isTeam ? undefined : { marginBottom: 12 }}>
