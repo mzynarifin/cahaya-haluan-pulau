@@ -8,15 +8,24 @@ import { pageMetadata } from "@/lib/seo";
 export const metadata: Metadata = pageMetadata(
   "/asrama",
   "Asrama & Fasilitas",
-  "Informasi asrama Cahaya Haluan Pulau, termasuk fasilitas, kondisi tempat tinggal, biaya, dan persyaratan yang telah disampaikan pengurus.",
+  "Kenali asrama Cahaya Haluan Pulau, fasilitas yang tersedia, sasaran penghuni, dan informasi resmi dari pengurus.",
 );
 
 export default async function Accommodation() {
   const data = await getSection("accommodation");
   const facilities = Array.isArray(data.facilities)
-    ? data.facilities as { name: string; description?: string; visible?: boolean; image?: string }[]
+    ? data.facilities as { name?: string; description?: string; visible?: boolean; image?: string }[]
     : [];
-  const visibleFacilities = facilities.filter(facility => facility.visible && facility.name);
+  const visibleFacilities = facilities.filter(facility => facility.visible && typeof facility.name === "string" && facility.name.trim());
+  const primaryFacilities = visibleFacilities.slice(0, 3)
+    .map(facility => typeof facility.name === "string" ? facility.name.trim() : "")
+    .filter(Boolean)
+    .join(", ");
+  const accommodationFacts = [
+    { label: "Lokasi", value: typeof data.publicAddress === "string" ? data.publicAddress.trim() : "" },
+    { label: "Fasilitas utama", value: primaryFacilities },
+    { label: "Sasaran penghuni", value: typeof data.targetResidents === "string" ? data.targetResidents.trim() : "" },
+  ].filter(fact => fact.value);
   const faqs = Array.isArray(data.faqs) ? data.faqs as { question: string; answer: string }[] : [];
 
   return <div className="accommodation-page">
@@ -24,19 +33,17 @@ export default async function Accommodation() {
       <div className="container">
         <span className="eyebrow">Tempat tinggal</span>
         <h1>Asrama & Fasilitas</h1>
-        <p className="lead">Informasi yang membantu Anda mengenal tempat tinggal sebelum berbicara dengan pengurus.</p>
+        <p className="lead">Kenali lokasi, fasilitas, dan sasaran penghuni sebelum menghubungi pengurus.</p>
       </div>
     </div>
     <section className="section accommodation-overview-section">
       <div className="container accommodation-layout">
         <div className="accommodation-copy">
-          <h2>Informasi asrama</h2>
+          <h2>Gambaran asrama</h2>
           <p className="lead accommodation-description">{String(data.description || "Penjelasan kondisi asrama sedang dilengkapi oleh pengurus.")}</p>
-          <dl className="accommodation-facts">
-            <div><dt>Lokasi</dt><dd>{String(data.publicAddress || "Perlu dilengkapi oleh pengurus")}</dd></div>
-            <div><dt>Biaya</dt><dd>{String(data.feeDescription || "Perlu dikonfirmasi kepada pengurus")}</dd></div>
-            <div><dt>Syarat</dt><dd>{String(data.requirements || "Perlu dikonfirmasi kepada pengurus")}</dd></div>
-          </dl>
+          {accommodationFacts.length > 0 && <dl className="accommodation-facts">
+            {accommodationFacts.map(fact => <div key={fact.label}><dt>{fact.label}</dt><dd>{fact.value}</dd></div>)}
+          </dl>}
         </div>
         <div className="accommodation-visual">
           <Photo src={typeof data.image === "string" ? data.image : null} aspectRatio={4 / 3}

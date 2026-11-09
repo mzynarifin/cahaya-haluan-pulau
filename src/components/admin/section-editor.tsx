@@ -14,7 +14,7 @@ const MediaUpload = dynamic(
 
 type SectionKey = "profile" | "accommodation" | "team" | "contact";
 type Item = { name?: string; role?: string; description?: string; visible?: boolean; question?: string; answer?: string; image?: string };
-type Field = { name: string; label: string; kind?: "textarea" | "email" | "map" };
+type Field = { name: string; label: string; kind?: "textarea" | "email" | "map"; hint?: string };
 const configs: Record<SectionKey, { title: string; description: string; fields: Field[] }> = {
   profile: { title: "Profil Lembaga", description: "Informasi profil dan pesan utama yang tampil di website.", fields: [
     { name: "name", label: "Nama lembaga" }, { name: "description", label: "Deskripsi singkat", kind: "textarea" },
@@ -22,9 +22,9 @@ const configs: Record<SectionKey, { title: string; description: string; fields: 
     { name: "mission", label: "Misi", kind: "textarea" }, { name: "heroTitle", label: "Judul beranda" },
     { name: "heroDescription", label: "Deskripsi beranda", kind: "textarea" },
   ] },
-  accommodation: { title: "Asrama & Fasilitas", description: "Terbitkan hanya informasi tempat tinggal yang sudah diverifikasi.", fields: [
+  accommodation: { title: "Asrama & Fasilitas", description: "Kelola informasi yang tampil di halaman asrama. Ringkasan fasilitas beranda otomatis memakai hingga tiga fasilitas yang ditandai tampil di publik.", fields: [
     { name: "description", label: "Deskripsi asrama", kind: "textarea" }, { name: "publicAddress", label: "Alamat untuk publik" },
-    { name: "feeDescription", label: "Informasi biaya", kind: "textarea" }, { name: "requirements", label: "Persyaratan", kind: "textarea" },
+    { name: "targetResidents", label: "Sasaran penghuni", kind: "textarea", hint: "Jelaskan kelompok yang dituju secara singkat. Kolom ini tampil di beranda dan halaman Asrama jika diisi." },
   ] },
   team: { title: "Pengurus", description: "Tampilkan nama dan foto hanya setelah izin publikasi.", fields: [] },
   contact: { title: "Kontak", description: "Nomor WhatsApp resmi diperlukan sebelum website diluncurkan.", fields: [
@@ -106,6 +106,7 @@ export function SectionEditor({ section }: { section: SectionKey }) {
       {config.fields.map(field => <div className="field" key={field.name}><label htmlFor={field.name}>{field.label}</label>
         {field.kind === "textarea" ? <textarea id={field.name} value={String(content[field.name] || "")} placeholder={field.name === "whatsappMessage" ? whatsappMessage : undefined} onChange={e => set(field.name, e.target.value)} />
           : <input id={field.name} type={field.kind === "email" ? "email" : "text"} value={String(content[field.name] || "")} onChange={e => set(field.name, e.target.value)} />}
+        {field.hint && <small>{field.hint}</small>}
         {field.name === "whatsappMessage" && <small>Kosongkan untuk memakai teks contoh di atas. Pesan muncul di WhatsApp dan tetap harus dikirim oleh pengunjung.</small>}
         {field.kind === "map" && <small>Tempel URL dari atribut src iframe, bukan seluruh kode. Setelah disimpan, peta muncul di halaman Kontak.</small>}
       </div>)}
@@ -115,7 +116,7 @@ export function SectionEditor({ section }: { section: SectionKey }) {
         <ImageField label="Foto halaman tentang" hint="Foto memenuhi bingkai pada desktop dan HP; bagian tepi dapat terpotong." folder="about" preset={imagePresets.about} value={String(content.aboutImage || "")} onUploaded={(path, url) => { set("aboutImage", url); recordUpload(path, url); }} />
       </>}
       {section === "accommodation" && <>
-        <ImageField label="Foto asrama" hint="Foto memenuhi bingkai Tempat tinggal di beranda; bagian tepi dapat terpotong." folder="asrama" preset={imagePresets.accommodation} value={String(content.image || "")} onUploaded={(path, url) => { set("image", url); recordUpload(path, url); }} />
+        <ImageField label="Foto asrama" hint="Foto memenuhi bingkai Tempat tinggal di beranda dan halaman Asrama; bagian tepi dapat terpotong." folder="asrama" preset={imagePresets.accommodation} value={String(content.image || "")} onUploaded={(path, url) => { set("image", url); recordUpload(path, url); }} />
         <Repeater title="Fasilitas" items={list("facilities")} fields={[["name", "Nama fasilitas"], ["description", "Keterangan"]]}
           imageFolder="facilities" onUpload={recordUpload} onChange={items => set("facilities", items)} />
         <Repeater title="Pertanyaan umum" items={list("faqs")} fields={[["question", "Pertanyaan"], ["answer", "Jawaban"]]}
@@ -127,7 +128,13 @@ export function SectionEditor({ section }: { section: SectionKey }) {
         <button className="btn btn-primary" type="button" disabled={busy} onClick={save}>{busy ? "Menyimpan..." : "Simpan & Tampilkan"}</button></div>
       {preview && <div className="content-card" style={{ marginTop: 25 }}><h3>Pratinjau informasi</h3>
         {config.fields.map(field => Boolean(content[field.name]) && <p key={field.name}><strong>{field.label}:</strong> {String(content[field.name])}</p>)}
-        {list("facilities").map((item, i) => <p key={i}><strong>{item.name}</strong> — {item.description}</p>)}
+        {section === "accommodation" && <p><strong>Fasilitas utama di beranda:</strong> {list("facilities")
+          .filter(item => item.visible && item.name?.trim())
+          .slice(0, 3)
+          .map(item => item.name?.trim())
+          .filter(Boolean)
+          .join(", ") || "Belum ada fasilitas yang ditandai tampil di publik."}</p>}
+        {list("facilities").map((item, i) => <p key={i}><strong>{item.name}</strong> — {item.description}{item.visible ? "" : " (disembunyikan dari publik)"}</p>)}
         {list("members").map((item, i) => <p key={i}><strong>{item.name}</strong> — {item.role?.trim() || "Pengurus"}{item.visible ? "" : " (disembunyikan)"}</p>)}
       </div>}
     </div></>;

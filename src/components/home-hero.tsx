@@ -25,7 +25,7 @@ export function HomeHero({ profile }: { profile: Record<string, unknown> }) {
         <Link className="btn btn-primary" href="/kontak">Lihat Kontak <ArrowRight size={18}/></Link>
         <Link className="btn btn-outline" href="/asrama">Lihat Asrama</Link>
       </div>
-      <p className="hero-note">Informasi biaya, lokasi, dan persyaratan akan dilengkapi oleh pengurus.</p>
+      <p className="hero-note">Jelajahi informasi asrama dan fasilitas yang telah dipublikasikan pengurus.</p>
     </div>
   </section>;
 }

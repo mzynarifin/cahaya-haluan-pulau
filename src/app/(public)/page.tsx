@@ -19,6 +19,19 @@ export default async function Home() {
     getNews(1),
     getAlbums(),
   ]);
+  const publicFacilities = Array.isArray(accommodation.facilities)
+    ? (accommodation.facilities as { name?: string; visible?: boolean }[])
+      .filter(facility => facility.visible && typeof facility.name === "string" && facility.name.trim())
+      .slice(0, 3)
+      .map(facility => typeof facility.name === "string" ? facility.name.trim() : "")
+      .filter(Boolean)
+      .join(", ")
+    : "";
+  const accommodationFacts = [
+    { label: "Lokasi", value: typeof accommodation.publicAddress === "string" ? accommodation.publicAddress.trim() : "" },
+    { label: "Fasilitas utama", value: publicFacilities },
+    { label: "Sasaran penghuni", value: typeof accommodation.targetResidents === "string" ? accommodation.targetResidents.trim() : "" },
+  ].filter(fact => fact.value);
 
   return <div className="home-page">
     <HomeHero profile={profile} />
@@ -41,11 +54,9 @@ export default async function Home() {
             <span className="eyebrow">Tempat tinggal</span>
             <h2>Kenali asrama sebelum menghubungi pengurus</h2>
             <p className="lead accommodation-description">{String(accommodation.description || "Penjelasan kondisi asrama sedang dilengkapi oleh pengurus.")}</p>
-            <dl className="accommodation-facts">
-              <div><dt>Lokasi</dt><dd>{String(accommodation.publicAddress || "Perlu dilengkapi oleh pengurus")}</dd></div>
-              <div><dt>Biaya</dt><dd>{String(accommodation.feeDescription || "Perlu dikonfirmasi kepada pengurus")}</dd></div>
-              <div><dt>Syarat</dt><dd>{String(accommodation.requirements || "Perlu dikonfirmasi kepada pengurus")}</dd></div>
-            </dl>
+            {accommodationFacts.length > 0 && <dl className="accommodation-facts">
+              {accommodationFacts.map(fact => <div key={fact.label}><dt>{fact.label}</dt><dd>{fact.value}</dd></div>)}
+            </dl>}
             <Link href="/asrama" className="btn btn-primary accommodation-cta">Lihat Asrama & Fasilitas <ArrowRight size={17} aria-hidden="true" /></Link>
           </div>
           <div className="accommodation-visual">
