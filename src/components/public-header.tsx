@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
 
 const links = [["/", "Beranda"], ["/tentang", "Tentang"], ["/asrama", "Asrama & Fasilitas"], ["/berita", "Berita"], ["/galeri", "Galeri"], ["/kontak", "Kontak"]];
-export function Brand() { return <Link href="/" className="brand" aria-label="Cahaya Haluan Pulau, beranda"><span className="brand-logo"><Image src="/logo-cahaya-haluan-pulau.jpg" alt="" width={56} height={56} priority/></span><span>Cahaya<br/>Haluan Pulau</span></Link>; }
+export function Brand() { return <Link href="/" className="brand" aria-label="Cahaya Haluan Pulau, beranda"><span className="brand-logo"><Image src="/logo-cahaya-haluan-pulau.jpg" alt="" width={56} height={56} priority/></span><span className="brand-name">Cahaya Haluan Pulau</span></Link>; }
 export function PublicHeader() {
   const [open, setOpen] = useState(false);
   const path = usePathname();
