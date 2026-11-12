@@ -23,9 +23,9 @@ const configs: Record<SectionKey, { title: string; description: string; fields: 
     { name: "mission", label: "Misi", kind: "textarea" }, { name: "heroTitle", label: "Judul beranda" },
     { name: "heroDescription", label: "Deskripsi beranda", kind: "textarea" },
   ] },
-  accommodation: { title: "Asrama & Fasilitas", description: "Kelola informasi yang tampil di halaman asrama. Ringkasan fasilitas beranda otomatis memakai hingga tiga fasilitas yang ditandai tampil di publik.", fields: [
-    { name: "description", label: "Deskripsi asrama", kind: "textarea" }, { name: "publicAddress", label: "Alamat untuk publik" },
-    { name: "targetResidents", label: "Sasaran penghuni", kind: "textarea", hint: "Jelaskan kelompok yang dituju secara singkat. Kolom ini tampil di beranda dan halaman Asrama jika diisi." },
+  accommodation: { title: "Center & Fasilitas", description: "Kelola informasi yang tampil di halaman Center. Ringkasan fasilitas beranda otomatis memakai hingga tiga fasilitas yang ditandai tampil di publik.", fields: [
+    { name: "description", label: "Deskripsi Center", kind: "textarea" }, { name: "publicAddress", label: "Alamat untuk publik" },
+    { name: "targetResidents", label: "Sasaran penghuni", kind: "textarea", hint: "Jelaskan kelompok yang dituju secara singkat. Kolom ini tampil di beranda dan halaman Center jika diisi." },
   ] },
   team: { title: "Pengurus", description: "Tampilkan nama dan foto hanya setelah izin publikasi.", fields: [] },
   contact: { title: "Kontak", description: "Nomor WhatsApp resmi diperlukan sebelum website diluncurkan.", fields: [
@@ -117,7 +117,7 @@ export function SectionEditor({ section }: { section: SectionKey }) {
         <ImageField label="Foto halaman tentang" hint="Foto memenuhi bingkai pada desktop dan HP; bagian tepi dapat terpotong." folder="about" preset={imagePresets.about} value={String(content.aboutImage || "")} onUploaded={(path, url) => { set("aboutImage", url); recordUpload(path, url); }} />
       </>}
       {section === "accommodation" && <>
-        <ImageField label="Foto asrama" hint="Foto memenuhi bingkai Tempat tinggal di beranda dan halaman Asrama; bagian tepi dapat terpotong." folder="asrama" preset={imagePresets.accommodation} value={String(content.image || "")} onUploaded={(path, url) => { set("image", url); recordUpload(path, url); }} />
+        <ImageField label="Foto Center" hint="Foto memenuhi bingkai Center di beranda dan halaman Center; bagian tepi dapat terpotong." folder="asrama" preset={imagePresets.accommodation} value={String(content.image || "")} onUploaded={(path, url) => { set("image", url); recordUpload(path, url); }} />
         <Repeater title="Fasilitas" items={list("facilities")} fields={[["name", "Nama fasilitas"], ["description", "Keterangan"]]}
           imageFolder="facilities" onUpload={recordUpload} onChange={items => set("facilities", items)} />
         <Repeater title="Pertanyaan umum" items={list("faqs")} fields={[["question", "Pertanyaan"], ["answer", "Jawaban"]]}

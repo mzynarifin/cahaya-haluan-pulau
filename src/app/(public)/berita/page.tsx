@@ -12,7 +12,7 @@ export async function generateMetadata({ searchParams }: { searchParams: Promise
   return {
     ...pageMetadata(
       page > 1 ? `/berita?page=${page}` : "/berita",
-      "Berita Asrama dan Kegiatan",
+      "Berita Center dan Kegiatan",
       "Baca berita, pengumuman, dan kabar kegiatan terbaru dari Cahaya Haluan Pulau.",
     ),
     ...(query ? { robots: { index: false, follow: true } } : {}),

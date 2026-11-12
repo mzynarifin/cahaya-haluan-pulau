@@ -18,14 +18,14 @@ export function HomeHero({ profile }: { profile: Record<string, unknown> }) {
       </picture>
     </div>
     <div className="container hero-content">
-      <span className="eyebrow">Cahaya Haluan Pulau · Informasi Asrama</span>
+      <span className="eyebrow">Cahaya Haluan Pulau · Informasi Center</span>
       <h1>{String(profile.heroTitle || "Tempat tinggal untuk melanjutkan pendidikan di Pulau Jawa.")}</h1>
-      <p className="lead">{String(profile.heroDescription || "Kenali Cahaya Haluan Pulau, informasi asrama, kegiatan, dan cara menghubungi pengurus dalam satu tempat.")}</p>
+      <p className="lead">{String(profile.heroDescription || "Kenali Cahaya Haluan Pulau, informasi Center, kegiatan, dan cara menghubungi pengurus dalam satu tempat.")}</p>
       <div className="hero-actions">
         <Link className="btn btn-primary" href="/kontak">Lihat Kontak <ArrowRight size={18}/></Link>
-        <Link className="btn btn-outline" href="/asrama">Lihat Asrama</Link>
+        <Link className="btn btn-outline" href="/asrama">Lihat Center</Link>
       </div>
-      <p className="hero-note">Jelajahi informasi asrama dan fasilitas yang telah dipublikasikan pengurus.</p>
+      <p className="hero-note">Jelajahi informasi Center dan fasilitas yang telah dipublikasikan pengurus.</p>
     </div>
   </section>;
 }

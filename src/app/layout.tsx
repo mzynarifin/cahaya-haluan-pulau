@@ -3,17 +3,17 @@ import "./globals.css";
 import "./institutional.css";
 import { siteName, siteUrl } from "@/lib/config";
 
-const siteDescription = "Informasi resmi Cahaya Haluan Pulau tentang profil lembaga, asrama, fasilitas, kegiatan, berita, dan kontak pengurus.";
+const siteDescription = "Informasi resmi Cahaya Haluan Pulau tentang profil lembaga, Center, fasilitas, kegiatan, berita, dan kontak pengurus.";
 export const viewport: Viewport = { width: "device-width", initialScale: 1 };
 export const metadata: Metadata = {
-  title: { default: "Cahaya Haluan Pulau | Informasi Asrama", template: `%s | ${siteName}` },
+  title: { default: "Cahaya Haluan Pulau | Informasi Center", template: `%s | ${siteName}` },
   description: siteDescription,
   metadataBase: new URL(siteUrl),
   applicationName: siteName,
   icons: { icon: "/logo-cahaya-haluan-pulau.jpg", apple: "/logo-cahaya-haluan-pulau.jpg" },
   alternates: { canonical: "/" },
-  openGraph: { type: "website", locale: "id_ID", siteName, title: "Cahaya Haluan Pulau | Informasi Asrama", description: siteDescription, images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: "Cahaya Haluan Pulau" }] },
-  twitter: { card: "summary_large_image", title: "Cahaya Haluan Pulau | Informasi Asrama", description: siteDescription, images: ["/opengraph-image"] },
+  openGraph: { type: "website", locale: "id_ID", siteName, title: "Cahaya Haluan Pulau | Informasi Center", description: siteDescription, images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: "Cahaya Haluan Pulau" }] },
+  twitter: { card: "summary_large_image", title: "Cahaya Haluan Pulau | Informasi Center", description: siteDescription, images: ["/opengraph-image"] },
 };
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   const structuredData = [

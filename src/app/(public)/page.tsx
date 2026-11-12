@@ -8,8 +8,8 @@ import { pageMetadata } from "@/lib/seo";
 
 export const metadata = pageMetadata(
   "/",
-  "Informasi Asrama dan Kegiatan",
-  "Kenali Cahaya Haluan Pulau: profil, informasi asrama, fasilitas, kegiatan, berita terbaru, dan kontak resmi pengurus.",
+  "Informasi Center dan Kegiatan",
+  "Kenali Cahaya Haluan Pulau: profil, informasi Center, fasilitas, kegiatan, berita terbaru, dan kontak resmi pengurus.",
 );
 
 export default async function Home() {
@@ -52,15 +52,15 @@ export default async function Home() {
         <div className="accommodation-layout">
           <div className="accommodation-copy">
             <span className="eyebrow">Tempat tinggal</span>
-            <h2>Kenali asrama sebelum menghubungi pengurus</h2>
-            <p className="lead accommodation-description">{String(accommodation.description || "Penjelasan kondisi asrama sedang dilengkapi oleh pengurus.")}</p>
+            <h2>Kenali Center sebelum menghubungi pengurus</h2>
+            <p className="lead accommodation-description">{String(accommodation.description || "Penjelasan kondisi Center sedang dilengkapi oleh pengurus.")}</p>
             {accommodationFacts.length > 0 && <dl className="accommodation-facts">
               {accommodationFacts.map(fact => <div key={fact.label}><dt>{fact.label}</dt><dd>{fact.value}</dd></div>)}
             </dl>}
-            <Link href="/asrama" className="btn btn-primary accommodation-cta">Lihat Asrama & Fasilitas <ArrowRight size={17} aria-hidden="true" /></Link>
+            <Link href="/asrama" className="btn btn-primary accommodation-cta">Lihat Center & Fasilitas <ArrowRight size={17} aria-hidden="true" /></Link>
           </div>
           <div className="accommodation-visual">
-            <Photo aspectRatio={4 / 3} src={typeof accommodation.image === "string" ? accommodation.image : null} alt="Dokumentasi bangunan atau ruang asrama" label="Foto asrama perlu dilengkapi" />
+            <Photo aspectRatio={4 / 3} src={typeof accommodation.image === "string" ? accommodation.image : null} alt="Dokumentasi bangunan atau ruang Center" label="Foto Center perlu dilengkapi" />
           </div>
         </div>
       </div>

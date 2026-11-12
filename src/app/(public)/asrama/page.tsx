@@ -7,8 +7,8 @@ import { pageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = pageMetadata(
   "/asrama",
-  "Asrama & Fasilitas",
-  "Kenali asrama Cahaya Haluan Pulau, fasilitas yang tersedia, sasaran penghuni, dan informasi resmi dari pengurus.",
+  "Center & Fasilitas",
+  "Kenali Center Cahaya Haluan Pulau, fasilitas yang tersedia, sasaran penghuni, dan informasi resmi dari pengurus.",
 );
 
 export default async function Accommodation() {
@@ -32,22 +32,22 @@ export default async function Accommodation() {
     <div className="page-hero">
       <div className="container">
         <span className="eyebrow">Tempat tinggal</span>
-        <h1>Asrama & Fasilitas</h1>
+        <h1>Center & Fasilitas</h1>
         <p className="lead">Kenali lokasi, fasilitas, dan sasaran penghuni sebelum menghubungi pengurus.</p>
       </div>
     </div>
     <section className="section accommodation-overview-section">
       <div className="container accommodation-layout">
         <div className="accommodation-copy">
-          <h2>Gambaran asrama</h2>
-          <p className="lead accommodation-description">{String(data.description || "Penjelasan kondisi asrama sedang dilengkapi oleh pengurus.")}</p>
+          <h2>Gambaran Center</h2>
+          <p className="lead accommodation-description">{String(data.description || "Penjelasan kondisi Center sedang dilengkapi oleh pengurus.")}</p>
           {accommodationFacts.length > 0 && <dl className="accommodation-facts">
             {accommodationFacts.map(fact => <div key={fact.label}><dt>{fact.label}</dt><dd>{fact.value}</dd></div>)}
           </dl>}
         </div>
         <div className="accommodation-visual">
           <Photo src={typeof data.image === "string" ? data.image : null} aspectRatio={4 / 3}
-            alt="Dokumentasi kondisi asrama" label="Foto bangunan perlu dilengkapi" />
+            alt="Dokumentasi kondisi Center" label="Foto bangunan perlu dilengkapi" />
         </div>
       </div>
     </section>
