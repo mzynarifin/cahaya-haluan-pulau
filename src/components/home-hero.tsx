@@ -26,7 +26,10 @@ export function HomeHero({ profile }: { profile: Record<string, unknown> }) {
         <Link className="btn btn-primary" href="/kontak">Lihat Kontak <ArrowRight size={18}/></Link>
         <Link className="btn btn-outline" href="/asrama">Lihat Kantor Pusat</Link>
       </div>
-      <p className="hero-note">Jelajahi informasi Center dan fasilitas yang telah dipublikasikan pengurus.</p>
+      <p className="hero-note"><LocalizedText
+        id="Jelajahi informasi Center dan fasilitas yang telah dipublikasikan pengurus."
+        en="View accommodation information and facilities published by our team."
+      /></p>
     </div>
   </section>;
 }

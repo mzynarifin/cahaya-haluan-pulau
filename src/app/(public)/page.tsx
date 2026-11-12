@@ -7,6 +7,9 @@ import { AlbumCards } from "@/components/album-cards";
 import { LocalizedText } from "@/components/language-runtime";
 import { pageMetadata } from "@/lib/seo";
 
+const defaultProfileDescription = "Cahaya Haluan Pulau menyediakan informasi tentang tempat tinggal bagi mereka yang ingin melanjutkan pendidikan di Pulau Jawa.";
+const defaultProfileDescriptionEn = "Cahaya Haluan Pulau provides information about accommodation for those who wish to continue their education in Java.";
+
 export const metadata = pageMetadata(
   "/",
   "Informasi Center dan Kegiatan",
@@ -29,6 +32,10 @@ export default async function Home() {
     : [];
   const facilitiesId = publicFacilities.map(facility => facility.id).join(", ");
   const facilitiesEn = publicFacilities.map(facility => facility.en).join(", ");
+  const profileDescription = String(profile.description || defaultProfileDescription);
+  const profileDescriptionEn = typeof profile.descriptionEn === "string" && profile.descriptionEn.trim()
+    ? profile.descriptionEn
+    : profileDescription === defaultProfileDescription ? defaultProfileDescriptionEn : undefined;
   const accommodationFacts = [
     { label: "Lokasi", value: typeof accommodation.publicAddress === "string" ? accommodation.publicAddress.trim() : "", en: typeof accommodation.publicAddressEn === "string" ? accommodation.publicAddressEn.trim() : "" },
     { label: "Fasilitas utama", value: facilitiesId, en: facilitiesEn },
@@ -44,7 +51,7 @@ export default async function Home() {
           <h2 id="home-intro-title">Informasi yang jelas untuk calon penghuni dan keluarga.</h2>
         </div>
         <div className="home-intro-copy">
-          <p><LocalizedText id={String(profile.description || "Cahaya Haluan Pulau menyediakan informasi tentang tempat tinggal bagi mereka yang ingin melanjutkan pendidikan di Pulau Jawa.")} en={typeof profile.descriptionEn === "string" ? profile.descriptionEn : undefined} /></p>
+          <p><LocalizedText id={profileDescription} en={profileDescriptionEn} /></p>
           <Link href="/tentang" className="link-arrow">Baca profil lembaga <ArrowRight size={18} aria-hidden="true" /></Link>
         </div>
       </div>
