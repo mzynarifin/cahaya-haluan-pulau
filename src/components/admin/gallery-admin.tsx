@@ -36,6 +36,7 @@ export function GalleryEditor({ id }: { id?: string }) {
     const client = createClient();
     if (!client) { setError("Layanan tidak tersedia."); setLoading(false); return; }
     async function load() {
+      if (!client) return;
       const { data, error: readError } = await client.from("albums").select("*").eq("id", id).single();
       if (readError || !data) { setError("Album tidak ditemukan."); setLoading(false); return; }
       setAlbum(data); setTitle(data.title || ""); setTitleEn(data.title_en || ""); setSlug(data.slug || "");
