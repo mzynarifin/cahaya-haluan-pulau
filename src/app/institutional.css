@@ -72,7 +72,7 @@ p { color: var(--muted); }
 .page-enter .hero { display: flex; align-items: center; min-height: calc(100svh - 92px); padding: 68px 0; background: #173d5a; border-bottom: 4px solid var(--brand-gold); color: #fff; }
 .page-enter .home-hero { position: relative; isolation: isolate; overflow: hidden; }
 .hero-visual { position: absolute; inset: 0; z-index: 0; overflow: hidden; }
-.hero-visual.has-photo::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to right, #173d5a 0%, rgba(23, 61, 90, .95) 24%, rgba(23, 61, 90, .7) 55%, rgba(23, 61, 90, 0) 100%); }
+.hero-visual.has-photo::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to right, rgba(23, 61, 90, 1) 0%, rgba(23, 61, 90, 1) 50%, rgba(23, 61, 90, 1) 51%, rgba(23, 61, 90, 0) 65%); }
 .hero-artwork { position: absolute; inset: 0; display: block; }
 .hero-visual-image { width: 100%; height: 100%; object-fit: cover; object-position: center; }
 .hero-artwork .hero-visual-image { display: block; max-width: none; }

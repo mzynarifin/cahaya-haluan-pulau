@@ -160,8 +160,8 @@ export function SectionEditor({ section }: { section: SectionKey }) {
       </div>)}
       {section === "profile" && <>
         <ImageField label="Foto beranda desktop" hint="Foto memenuhi seluruh area beranda dan dapat terpotong di tepinya. Format lanskap disarankan untuk layar desktop." folder="hero" preset={imagePresets.heroDesktop} value={String(content.heroImage || "")} onUploaded={(path, url) => { set("heroImage", url); recordUpload(path, url); }} />
-        <ImageField label="Foto beranda HP" hint="Foto memenuhi layar HP dan dapat terpotong. Jika kosong, foto desktop atau ilustrasi bawaan digunakan." folder="hero" preset={imagePresets.heroMobile} value={String(content.heroImageMobile || "")} onUploaded={(path, url) => { set("heroImageMobile", url); recordUpload(path, url); }} />
-        <ImageField label="Foto halaman tentang" hint="Foto memenuhi bingkai pada desktop dan HP; bagian tepi dapat terpotong." folder="about" preset={imagePresets.about} value={String(content.aboutImage || "")} onUploaded={(path, url) => { set("aboutImage", url); recordUpload(path, url); }} />
+        <ImageField label="Foto beranda mobile" hint="Foto memenuhi layar mobile dan dapat terpotong. Jika kosong, foto desktop atau ilustrasi bawaan digunakan." folder="hero" preset={imagePresets.heroMobile} value={String(content.heroImageMobile || "")} onUploaded={(path, url) => { set("heroImageMobile", url); recordUpload(path, url); }} />
+        <ImageField label="Foto halaman tentang" hint="Foto memenuhi bingkai pada desktop dan mobile; bagian tepi dapat terpotong." folder="about" preset={imagePresets.about} value={String(content.aboutImage || "")} onUploaded={(path, url) => { set("aboutImage", url); recordUpload(path, url); }} />
       </>}
       {section === "accommodation" && <>
         <ImageField label="Foto Center" hint="Foto memenuhi bingkai Center di beranda dan halaman Center; bagian tepi dapat terpotong." folder="asrama" preset={imagePresets.accommodation} value={String(content.image || "")} onUploaded={(path, url) => { set("image", url); recordUpload(path, url); }} />
