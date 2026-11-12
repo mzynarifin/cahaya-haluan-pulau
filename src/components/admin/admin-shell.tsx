@@ -18,7 +18,7 @@ const navigation = [
     { href: "/admin/galeri", label: "Galeri", enLabel: "Gallery", icon: Images },
     { href: "/admin/profil", label: "Profil", enLabel: "Profile", icon: ContactRound },
     { href: "/admin/asrama", label: "Center", enLabel: "Center", icon: Building2 },
-    { href: "/admin/suara-anak-pulau", label: "Suara Anak Pulau", enLabel: "Island Children's Voice", icon: BookOpen },
+    { href: "/admin/suara-anak-pulau", label: "Suara Anak Pulau", enLabel: "Suara Anak Pulau", icon: BookOpen },
     { href: "/admin/urx1", label: "URX1", enLabel: "URX1", icon: Compass },
     { href: "/admin/pengurus", label: "Pengurus", enLabel: "Team", icon: UsersRound },
     { href: "/admin/kontak", label: "Kontak", enLabel: "Contact", icon: Phone },

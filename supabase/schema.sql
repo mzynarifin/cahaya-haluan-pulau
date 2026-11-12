@@ -40,7 +40,7 @@ insert into public.site_sections(key, content) values
   'focus1', 'Pendidikan', 'focus2', 'Pelatihan', 'focus3', 'Pengalaman hidup yang lebih luas',
   'ctaEyebrow', 'JADI BAGIAN DARI PERJALANAN',
   'ctaTitle', 'Mari wujudkan masa depan yang lebih baik bersama.', 'ctaButton', 'Hubungi pengurus',
-  'eyebrowEn', 'PROGRAM / EDUCATION', 'kickerEn', 'Cahaya Haluan Pulau', 'titleEn', 'Voice of Island Children',
+  'eyebrowEn', 'PROGRAM / EDUCATION', 'kickerEn', 'Cahaya Haluan Pulau', 'titleEn', 'Suara Anak Pulau',
   'subtitleEn', 'Opening our home to young people from the islands.',
   'descriptionEn', 'Opening our home to young people from their local communities, giving them access to education, training, and broader life experiences beyond their islands.',
   'heroButtonEn', 'Get in touch', 'focusEyebrowEn', 'OUR FOCUS',

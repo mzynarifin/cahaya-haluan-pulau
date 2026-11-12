@@ -1,3 +1,5 @@
+import { preserveBrandNames } from "@/lib/brand-names";
+
 export type ProgramSlug = "cahaya-anak-pulau" | "urx1";
 export type ProgramLanguage = "id" | "en";
 
@@ -44,7 +46,7 @@ export const programDefaults: Record<ProgramSlug, Record<ProgramLanguage, Progra
     en: {
       eyebrow: "PROGRAM / EDUCATION",
       kicker: "Cahaya Haluan Pulau",
-      title: "Voice of Island Children",
+      title: "Suara Anak Pulau",
       subtitle: "Opening our home to young people from the islands.",
       description: "Opening our home to young people from their local communities, giving them access to education, training, and broader life experiences beyond their islands.",
       heroButton: "Get in touch",
@@ -105,7 +107,7 @@ export function getProgramCopy(
   const defaults = programDefaults[slug][language];
   const read = (key: ProgramTextKey) => {
     const value = content[`${key}${language === "en" ? "En" : ""}`];
-    return typeof value === "string" && value.trim() ? value : defaults[key];
+    return preserveBrandNames(typeof value === "string" && value.trim() ? value : defaults[key]);
   };
 
   return {
