@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { Images, Pencil, Plus, Trash2 } from "lucide-react";
 import { AdminPageSkeleton } from "@/components/admin/admin-skeleton";
 import { createClient } from "@/lib/supabase/browser";
+import { adminText } from "@/components/language-runtime";
 import { formatDate } from "@/lib/config";
 
 type Album = {
@@ -41,7 +42,7 @@ export function GalleryList() {
   }, []);
 
   async function removeAlbum(album: Album) {
-    if (!window.confirm(`Hapus album "${album.title}" beserta seluruh fotonya secara permanen?`)) return;
+    if (!window.confirm(adminText(`Hapus album "${album.title}" beserta seluruh fotonya secara permanen?`, `Permanently delete album "${album.title}" and all its photos?`))) return;
     const client = createClient();
     if (!client) { setError("Layanan tidak tersedia."); return; }
     setDeletingId(album.id);
