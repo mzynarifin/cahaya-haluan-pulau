@@ -2,19 +2,52 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { getProgramCopy, type ProgramSlug } from "@/lib/program-content";
 
-const programs = {
-  "cahaya-anak-pulau": { title: "Suara Anak Pulau", subtitle: "Membuka rumah bagi putra-putri daerah.", description: "Membuka rumah bagi putra-putri daerah untuk mendapatkan pendidikan, pelatihan, dan pengalaman hidup yang lebih luas di luar pulau mereka.", focus: ["Pendidikan", "Pelatihan", "Pengalaman hidup yang lebih luas"], eyebrow: "Program / Pendidikan" },
-  "urx1": { title: "URX1", subtitle: "Menjangkau pulau dan komunitas di seluruh Indonesia.", description: "Kunjungan rutin ke berbagai daerah dan pedalaman ke pulau-pulau di Indonesia dengan program kemanusiaan dan literasi, serta berbagai program kunjungan, pelatihan, dan kemanusiaan bagi kaum marginal.", focus: ["Kunjungan rutin ke daerah dan pedalaman", "Program kemanusiaan dan literasi", "Kunjungan, pelatihan, dan dukungan bagi kaum marginal"], eyebrow: "Inisiatif / Kemanusiaan" },
-};
-
-export function ProgramPage({ slug }: { slug: keyof typeof programs }) {
+export function ProgramPage({ slug, content }: { slug: ProgramSlug; content: Record<string, unknown> }) {
   const [english, setEnglish] = useState(false);
-  useEffect(() => { const sync = () => setEnglish(document.documentElement.dataset.language === "en" || localStorage.getItem("chp-language") === "en"); sync(); window.addEventListener("chp-language-change", sync); return () => window.removeEventListener("chp-language-change", sync); }, []);
-  const data = programs[slug];
+
+  useEffect(() => {
+    const sync = () => setEnglish(document.documentElement.dataset.language === "en" || localStorage.getItem("chp-language") === "en");
+    sync();
+    window.addEventListener("chp-language-change", sync);
+    return () => window.removeEventListener("chp-language-change", sync);
+  }, []);
+
+  const copy = getProgramCopy(slug, content, english ? "en" : "id");
+
   return <main className="program-page">
-    <section className="program-hero"><div className="container program-hero-inner"><span className="eyebrow">{english ? (slug === "urx1" ? "INITIATIVE / HUMANITARIAN" : "PROGRAM / EDUCATION") : data.eyebrow}</span><p className="program-kicker">Cahaya Haluan Pulau</p><h1>{data.title}</h1><p className="program-subtitle">{english ? (slug === "urx1" ? "Reaching islands and communities across Indonesia." : "Opening our home to young people from the islands.") : data.subtitle}</p><p className="program-description">{english ? (slug === "urx1" ? "Regular visits to regions and remote island communities across Indonesia through humanitarian and literacy programs, alongside visits, training, and humanitarian support for marginalized communities." : "Opening our home to young people from their local communities, giving them access to education, training, and broader life experiences beyond their islands.") : data.description}</p><Link href="/kontak" className="btn btn-primary">{english ? "Get in touch" : "Hubungi kami"}</Link></div></section>
-    <section className="section"><div className="container program-content"><div><span className="eyebrow">{english ? "OUR FOCUS" : "FOKUS KAMI"}</span><h2>{english ? (slug === "urx1" ? "Connecting with communities" : "Room to learn and grow") : (slug === "urx1" ? "Hadir bersama komunitas" : "Ruang untuk belajar dan bertumbuh")}</h2><p>{english ? (slug === "urx1" ? "We build lasting connections through visits, learning, and humanitarian action." : "A welcoming home where young people can learn, train, and discover new possibilities.") : (slug === "urx1" ? "Kami membangun hubungan bermakna melalui kunjungan, pembelajaran, dan aksi kemanusiaan." : "Rumah yang mendukung anak muda untuk belajar, berlatih, dan menemukan berbagai kemungkinan baru.")}</p></div><div className="program-focus-grid">{data.focus.map((item, index) => <article className="program-focus-card" key={item}><span>0{index + 1}</span><h3>{english ? (slug === "urx1" ? ["Regular regional and remote island visits", "Humanitarian and literacy programs", "Training and support for marginalized communities"][index] : ["Education", "Training", "Broader life experiences"][index]) : item}</h3></article>)}</div></div></section>
-    <section className="program-cta"><div className="container"><span className="eyebrow">{english ? "BE PART OF THE JOURNEY" : "JADI BAGIAN DARI PERJALANAN"}</span><h2>{english ? "Let us create a brighter future together." : "Mari wujudkan masa depan yang lebih baik bersama."}</h2><Link href="/kontak" className="btn btn-outline">{english ? "Contact our team" : "Hubungi pengurus"}</Link></div></section>
+    <section className="program-hero">
+      <div className="container program-hero-inner">
+        <span className="eyebrow">{copy.eyebrow}</span>
+        <p className="program-kicker">{copy.kicker}</p>
+        <h1>{copy.title}</h1>
+        <p className="program-subtitle">{copy.subtitle}</p>
+        <p className="program-description">{copy.description}</p>
+        <Link href="/kontak" className="btn btn-primary">{copy.heroButton}</Link>
+      </div>
+    </section>
+    <section className="section">
+      <div className="container program-content">
+        <div>
+          <span className="eyebrow">{copy.focusEyebrow}</span>
+          <h2>{copy.focusTitle}</h2>
+          <p>{copy.focusDescription}</p>
+        </div>
+        <div className="program-focus-grid">
+          {copy.focusItems.map((item, index) => <article className="program-focus-card" key={`${index}-${item}`}>
+            <span>0{index + 1}</span>
+            <h3>{item}</h3>
+          </article>)}
+        </div>
+      </div>
+    </section>
+    <section className="program-cta">
+      <div className="container">
+        <span className="eyebrow">{copy.ctaEyebrow}</span>
+        <h2>{copy.ctaTitle}</h2>
+        <Link href="/kontak" className="btn btn-outline">{copy.ctaButton}</Link>
+      </div>
+    </section>
   </main>;
 }

@@ -13,9 +13,41 @@ const MediaUpload = dynamic(
   { ssr: false, loading: () => <div className="notice" role="status">Memuat alat gambar...</div> },
 );
 
-type SectionKey = "profile" | "accommodation" | "team" | "contact";
+type SectionKey = "profile" | "accommodation" | "team" | "contact" | "program-suara-anak-pulau" | "program-urx1";
 type Item = { name?: string; role?: string; description?: string; visible?: boolean; question?: string; answer?: string; image?: string };
-type Field = { name: string; label: string; kind?: "textarea" | "email" | "map"; hint?: string };
+type Field = { name: string; label: string; kind?: "textarea" | "email" | "map"; hint?: string; language?: "id" | "en" };
+const programFields: Field[] = [
+  { name: "eyebrow", label: "Label program", language: "id" },
+  { name: "kicker", label: "Nama lembaga di hero", language: "id" },
+  { name: "title", label: "Judul utama", language: "id" },
+  { name: "subtitle", label: "Subjudul", language: "id" },
+  { name: "description", label: "Deskripsi program", kind: "textarea", language: "id" },
+  { name: "heroButton", label: "Teks tombol utama", language: "id" },
+  { name: "focusEyebrow", label: "Label fokus", language: "id" },
+  { name: "focusTitle", label: "Judul bagian fokus", language: "id" },
+  { name: "focusDescription", label: "Deskripsi bagian fokus", kind: "textarea", language: "id" },
+  { name: "focus1", label: "Fokus 1", language: "id" },
+  { name: "focus2", label: "Fokus 2", language: "id" },
+  { name: "focus3", label: "Fokus 3", language: "id" },
+  { name: "ctaEyebrow", label: "Label ajakan", language: "id" },
+  { name: "ctaTitle", label: "Judul ajakan", language: "id" },
+  { name: "ctaButton", label: "Teks tombol kontak", language: "id" },
+  { name: "eyebrowEn", label: "Label program", language: "en" },
+  { name: "kickerEn", label: "Nama lembaga di hero", language: "en" },
+  { name: "titleEn", label: "Judul utama", language: "en" },
+  { name: "subtitleEn", label: "Subjudul", language: "en" },
+  { name: "descriptionEn", label: "Deskripsi program", kind: "textarea", language: "en" },
+  { name: "heroButtonEn", label: "Teks tombol utama", language: "en" },
+  { name: "focusEyebrowEn", label: "Label fokus", language: "en" },
+  { name: "focusTitleEn", label: "Judul bagian fokus", language: "en" },
+  { name: "focusDescriptionEn", label: "Deskripsi bagian fokus", kind: "textarea", language: "en" },
+  { name: "focus1En", label: "Fokus 1", language: "en" },
+  { name: "focus2En", label: "Fokus 2", language: "en" },
+  { name: "focus3En", label: "Fokus 3", language: "en" },
+  { name: "ctaEyebrowEn", label: "Label ajakan", language: "en" },
+  { name: "ctaTitleEn", label: "Judul ajakan", language: "en" },
+  { name: "ctaButtonEn", label: "Teks tombol kontak", language: "en" },
+];
 const configs: Record<SectionKey, { title: string; description: string; fields: Field[] }> = {
   profile: { title: "Profil Lembaga", description: "Informasi profil dan pesan utama yang tampil di website.", fields: [
     { name: "name", label: "Nama lembaga" }, { name: "description", label: "Deskripsi singkat", kind: "textarea" },
@@ -36,6 +68,8 @@ const configs: Record<SectionKey, { title: string; description: string; fields: 
     { name: "publicAddress", label: "Alamat publik" }, { name: "contactHours", label: "Jam kontak" },
     { name: "mapUrl", label: "URL embed Google Maps yang disetujui", kind: "map" },
   ] },
+  "program-suara-anak-pulau": { title: "Halaman Suara Anak Pulau", description: "Ubah seluruh teks halaman Suara Anak Pulau dalam Bahasa Indonesia dan English.", fields: programFields },
+  "program-urx1": { title: "Halaman URX1", description: "Ubah seluruh teks halaman URX1 dalam Bahasa Indonesia dan English.", fields: programFields },
 };
 
 export function SectionEditor({ section }: { section: SectionKey }) {
@@ -45,11 +79,16 @@ export function SectionEditor({ section }: { section: SectionKey }) {
   const [busy, setBusy] = useState(false); const [dirty, setDirty] = useState(false);
   const [error, setError] = useState(""); const [success, setSuccess] = useState("");
   const [preview, setPreview] = useState(false);
+  const [programLanguage, setProgramLanguage] = useState<"id" | "en">("id");
   const [uploads, setUploads] = useState<Record<string, string>>({});
+  const isProgramSection = section === "program-suara-anak-pulau" || section === "program-urx1";
+  const visibleFields = config.fields.filter(field => !field.language || field.language === programLanguage);
 
   useEffect(() => { createClient()?.from("site_sections").select("content,version").eq("key", section).single()
     .then(({ data, error: fetchError }) => {
-      if (fetchError) setError("Data gagal dimuat. Periksa skema Supabase lalu muat ulang halaman.");
+      if (fetchError) setError(section.startsWith("program-")
+        ? "Data halaman program belum tersedia. Jalankan supabase/program-content-sections.sql setelah schema.sql, lalu muat ulang halaman."
+        : "Data gagal dimuat. Periksa skema Supabase lalu muat ulang halaman.");
       if (data) { setContent(data.content || {}); setVersion(data.version); }
       setLoading(false);
     }); }, [section]);
@@ -105,7 +144,11 @@ export function SectionEditor({ section }: { section: SectionKey }) {
   return <><div className={`admin-page-head${section === "team" ? " team-admin-page-head" : ""}`}><div><span className="eyebrow">Konten publik</span><h1>{config.title}</h1><p>{config.description}</p></div></div>
     <div className={`admin-form${section === "team" ? " team-admin-form" : ""}`}>
       {error && <div className="alert-error" role="alert">{error}</div>}{success && <div className="alert-success" role="status">{success}</div>}
-      {config.fields.map(field => <div className="field" key={field.name}><label htmlFor={field.name}>{field.label}</label>
+      {isProgramSection && <div className={styles.languageTabs} role="group" aria-label="Bahasa konten">
+        <button type="button" className={styles.languageTab} aria-pressed={programLanguage === "id"} onClick={() => setProgramLanguage("id")}>Bahasa Indonesia</button>
+        <button type="button" className={styles.languageTab} aria-pressed={programLanguage === "en"} onClick={() => setProgramLanguage("en")}>English</button>
+      </div>}
+      {visibleFields.map(field => <div className="field" key={field.name}><label htmlFor={field.name}>{field.label}</label>
         {field.kind === "textarea" ? <textarea id={field.name} value={String(content[field.name] || "")} placeholder={field.name === "whatsappMessage" ? whatsappMessage : undefined} onChange={e => set(field.name, e.target.value)} />
           : <input id={field.name} type={field.kind === "email" ? "email" : "text"} value={String(content[field.name] || "")} onChange={e => set(field.name, e.target.value)} />}
         {field.hint && <small>{field.hint}</small>}
@@ -129,7 +172,7 @@ export function SectionEditor({ section }: { section: SectionKey }) {
       <div className="form-actions"><button className="btn btn-outline" type="button" onClick={() => setPreview(!preview)}>{preview ? "Tutup pratinjau" : "Pratinjau"}</button>
         <button className="btn btn-primary" type="button" disabled={busy} onClick={save}>{busy ? "Menyimpan..." : "Simpan & Tampilkan"}</button></div>
       {preview && <div className="content-card" style={{ marginTop: 25 }}><h3>Pratinjau informasi</h3>
-        {config.fields.map(field => Boolean(content[field.name]) && <p key={field.name}><strong>{field.label}:</strong> {String(content[field.name])}</p>)}
+        {visibleFields.map(field => Boolean(content[field.name]) && <p key={field.name}><strong>{field.label}:</strong> {String(content[field.name])}</p>)}
         {section === "accommodation" && <p><strong>Fasilitas utama di beranda:</strong> {list("facilities")
           .filter(item => item.visible && item.name?.trim())
           .slice(0, 3)

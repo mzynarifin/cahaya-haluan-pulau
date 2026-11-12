@@ -18,6 +18,39 @@
   letter-spacing: -0.025em;
 }
 
+.languageTabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0 0 28px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid #e3ebf0;
+}
+
+.languageTab {
+  min-height: 44px;
+  padding: 9px 16px;
+  border: 1px solid #cbd9e3;
+  border-radius: 6px;
+  background: #fff;
+  color: #31536c;
+  font: inherit;
+  font-size: .9rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.languageTab[aria-pressed="true"] {
+  border-color: #174b6b;
+  background: #174b6b;
+  color: #fff;
+}
+
+.languageTab:focus-visible {
+  outline: 3px solid #f3a938;
+  outline-offset: 3px;
+}
+
 @media (max-width: 560px) {
   .accommodationRepeater {
     margin-block: 28px 24px;
