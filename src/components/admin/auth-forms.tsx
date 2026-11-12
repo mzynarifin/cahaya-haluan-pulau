@@ -4,10 +4,11 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { Eye, EyeOff } from "lucide-react";
 import { Brand } from "@/components/public-header";
-import { createClient } from "@/lib/supabase/browser";
+import { useEnglishLanguage } from "@/components/language-runtime";
 import { safeReturnTo } from "@/lib/config";
 
 export function LoginForm() {
+  const english = useEnglishLanguage();
   const search = useSearchParams();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -26,15 +27,29 @@ export function LoginForm() {
         credentials: "same-origin",
         body: JSON.stringify({ email, password }),
       });
-      const result = await response.json().catch(() => null) as { error?: string } | null;
+      const result = await response.json().catch(() => null) as { error?: string; code?: string; retryAfterSeconds?: number } | null;
       if (!response.ok) {
-        setError(result?.error || "Login gagal. Silakan coba lagi.");
+        const minutes = Math.max(1, Math.ceil((result?.retryAfterSeconds || 0) / 60));
+        const messages: Record<string, string> = english
+          ? {
+              invalid_credentials: "The email or password is incorrect.",
+              cooldown: `Too many failed login attempts. Try again in ${minutes} ${minutes === 1 ? "minute" : "minutes"}.`,
+              invalid_request: "The login request is invalid. Please try again.",
+              service_unavailable: "The login service is unavailable. Check your connection and try again.",
+            }
+          : {
+              invalid_credentials: "Email atau kata sandi tidak sesuai.",
+              cooldown: `Terlalu banyak percobaan login yang gagal. Coba lagi dalam ${minutes} menit.`,
+              invalid_request: "Permintaan login tidak valid. Silakan coba lagi.",
+              service_unavailable: "Layanan login tidak tersedia. Periksa koneksi lalu coba lagi.",
+            };
+        setError((result?.code && messages[result.code]) || result?.error || (english ? "Login failed. Please try again." : "Login gagal. Silakan coba lagi."));
         return;
       }
 
       window.location.assign(safeReturnTo(search.get("next")));
     } catch {
-      setError("Layanan login tidak merespons. Periksa koneksi lalu coba lagi.");
+      setError(english ? "The login service did not respond. Check your connection and try again." : "Layanan login tidak merespons. Periksa koneksi lalu coba lagi.");
     } finally {
       setBusy(false);
     }
