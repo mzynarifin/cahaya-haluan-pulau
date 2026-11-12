@@ -33,9 +33,9 @@ export default async function Home() {
   const facilitiesId = publicFacilities.map(facility => facility.id).join(", ");
   const facilitiesEn = publicFacilities.map(facility => facility.en).join(", ");
   const profileDescription = String(profile.description || defaultProfileDescription);
-  const profileDescriptionEn = typeof profile.descriptionEn === "string" && profile.descriptionEn.trim()
-    ? profile.descriptionEn
-    : profileDescription === defaultProfileDescription ? defaultProfileDescriptionEn : undefined;
+  const profileDescriptionEn = profileDescription.trim() === defaultProfileDescription
+    ? defaultProfileDescriptionEn
+    : typeof profile.descriptionEn === "string" && profile.descriptionEn.trim() ? profile.descriptionEn : undefined;
   const accommodationFacts = [
     { label: "Lokasi", value: typeof accommodation.publicAddress === "string" ? accommodation.publicAddress.trim() : "", en: typeof accommodation.publicAddressEn === "string" ? accommodation.publicAddressEn.trim() : "" },
     { label: "Fasilitas utama", value: facilitiesId, en: facilitiesEn },
