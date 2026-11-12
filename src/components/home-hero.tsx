@@ -19,7 +19,7 @@ export function HomeHero({ profile }: { profile: Record<string, unknown> }) {
     </div>
     <div className="container hero-content">
       <span className="eyebrow">Cahaya Haluan Pulau - Informasi Center</span>
-      <h1>{String(profile.heroTitle || "Tempat tinggal untuk melanjutkan pendidikan di Pulau Jawa.")}</h1>
+      <h1>{String(profile.heroTitle || "Cahaya Haluan Pulau")}</h1>
       <p className="lead">{String(profile.heroDescription || "Kenali Cahaya Haluan Pulau, informasi Center, kegiatan, dan cara menghubungi pengurus dalam satu tempat.")}</p>
       <div className="hero-actions">
         <Link className="btn btn-primary" href="/kontak">Lihat Kontak <ArrowRight size={18}/></Link>

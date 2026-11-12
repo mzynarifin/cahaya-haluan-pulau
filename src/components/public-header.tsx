@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
 import { LanguageToggle } from "@/components/language-toggle";
 
-const links = [["/", "Beranda", "Home"], ["/tentang", "Tentang", "About"], ["/asrama", "Center & Fasilitas", "Center & Facilities"], ["/cahaya-anak-pulau", "Cahaya Anak Pulau", "Cahaya Anak Pulau"], ["/urx1", "URX1", "URX1"], ["/berita", "Berita", "News"], ["/galeri", "Galeri", "Gallery"], ["/kontak", "Kontak", "Contact"]];
+const links = [["/", "Beranda", "Home"], ["/tentang", "Tentang", "About"], ["/asrama", "Center & Fasilitas", "Center & Facilities"], ["/cahaya-anak-pulau", "Suara Anak Pulau", "Voice of Island Children"], ["/urx1", "URX1", "URX1"], ["/berita", "Berita", "News"], ["/galeri", "Galeri", "Gallery"], ["/kontak", "Kontak", "Contact"]];
 export function Brand() { return <Link href="/" className="brand" aria-label="Cahaya Haluan Pulau, beranda"><span className="brand-logo"><Image src="/logo-cahaya-haluan-pulau.jpg" alt="" width={56} height={56} priority/></span><span className="brand-name">Cahaya Haluan Pulau</span></Link>; }
 export function PublicHeader() {
   const [open, setOpen] = useState(false);
