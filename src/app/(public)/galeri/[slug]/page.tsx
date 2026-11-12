@@ -3,8 +3,10 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 import { getAlbumBySlug } from "@/lib/data";
-import { formatDate, siteName, siteUrl } from "@/lib/config";
+import { siteName, siteUrl } from "@/lib/config";
 import { GalleryLightbox } from "@/components/gallery-lightbox";
+import { LocalizedText } from "@/components/language-runtime";
+import { LocalizedDate } from "@/components/localized-date";
 
 const defaultSocialImage = "/opengraph-image";
 
@@ -68,9 +70,9 @@ export default async function GalleryDetail({ params }: { params: Promise<{ slug
             <span>Kembali ke galeri</span>
           </Link>
         </nav>
-        <span className="eyebrow album-detail-date">{formatDate(album.event_date)}</span>
-        <h1>{album.title}</h1>
-        {album.description && <p className="lead">{album.description}</p>}
+        <span className="eyebrow album-detail-date"><LocalizedDate value={album.event_date} /></span>
+        <h1><LocalizedText id={album.title} en={album.title_en} /></h1>
+        {album.description && <p className="lead"><LocalizedText id={album.description} en={album.description_en} /></p>}
       </div>
     </div>
     <section className="section album-detail-section">

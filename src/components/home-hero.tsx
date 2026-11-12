@@ -1,6 +1,7 @@
 import { getImageProps } from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+import { LocalizedText } from "@/components/language-runtime";
 
 export function HomeHero({ profile }: { profile: Record<string, unknown> }) {
   const desktopUpload = typeof profile.heroImage === "string" && profile.heroImage.trim() ? profile.heroImage : null;
@@ -19,8 +20,8 @@ export function HomeHero({ profile }: { profile: Record<string, unknown> }) {
     </div>
     <div className="container hero-content">
       <span className="eyebrow">Cahaya Haluan Pulau - Informasi Center</span>
-      <h1>{String(profile.heroTitle || "Cahaya Haluan Pulau")}</h1>
-      <p className="lead">{String(profile.heroDescription || "Kenali Cahaya Haluan Pulau, informasi Center, kegiatan, dan cara menghubungi pengurus dalam satu tempat.")}</p>
+      <h1><LocalizedText id={String(profile.heroTitle || "Cahaya Haluan Pulau")} en={typeof profile.heroTitleEn === "string" ? profile.heroTitleEn : undefined} /></h1>
+      <p className="lead"><LocalizedText id={String(profile.heroDescription || "Kenali Cahaya Haluan Pulau, informasi Center, kegiatan, dan cara menghubungi pengurus dalam satu tempat.")} en={typeof profile.heroDescriptionEn === "string" ? profile.heroDescriptionEn : undefined} /></p>
       <div className="hero-actions">
         <Link className="btn btn-primary" href="/kontak">Lihat Kontak <ArrowRight size={18}/></Link>
         <Link className="btn btn-outline" href="/asrama">Lihat Kantor Pusat</Link>

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { getSection } from "@/lib/data";
 import { ContactCta, Photo } from "@/components/public-parts";
 import { TeamCards, type TeamMember } from "@/components/team-cards";
+import { LocalizedText } from "@/components/language-runtime";
 import { pageMetadata } from "@/lib/seo";
 import { siteName, siteUrl } from "@/lib/config";
 
@@ -11,9 +12,9 @@ export default async function About() {
   const [profile, team] = await Promise.all([getSection("profile"), getSection("team")]);
   const members = Array.isArray(team.members) ? team.members as TeamMember[] : [];
   const profileDetails = [
-    { number: "01", title: "Sejarah", content: profile.history },
-    { number: "02", title: "Visi", content: profile.vision },
-    { number: "03", title: "Misi", content: profile.mission },
+    { number: "01", title: "Sejarah", content: profile.history, contentEn: profile.historyEn },
+    { number: "02", title: "Visi", content: profile.vision, contentEn: profile.visionEn },
+    { number: "03", title: "Misi", content: profile.mission, contentEn: profile.missionEn },
   ].filter((detail) => Boolean(detail.content));
 
   return <div className="about-page">
@@ -29,7 +30,7 @@ export default async function About() {
           <div className="about-profile-copy">
             <span className="eyebrow">Profil lembaga</span>
             <h2 id="about-profile-title">{String(profile.name || "Cahaya Haluan Pulau")}</h2>
-            <p className="about-profile-intro">{String(profile.description || "Informasi profil resmi sedang disiapkan oleh pengurus.")}</p>
+            <p className="about-profile-intro"><LocalizedText id={String(profile.description || "Informasi profil resmi sedang disiapkan oleh pengurus.")} en={typeof profile.descriptionEn === "string" ? profile.descriptionEn : undefined} /></p>
           </div>
           <div className="about-profile-visual">
             <Photo src={typeof profile.aboutImage === "string" ? profile.aboutImage : null} aspectRatio={4 / 3}
@@ -42,7 +43,7 @@ export default async function About() {
               <span aria-hidden="true">{detail.number}</span>
               <h3>{detail.title}</h3>
             </div>
-            <p>{String(detail.content)}</p>
+            <p><LocalizedText id={String(detail.content)} en={typeof detail.contentEn === "string" ? detail.contentEn : undefined} /></p>
           </section>)}
         </div>}
       </div>

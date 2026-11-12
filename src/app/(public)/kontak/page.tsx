@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import { ArrowUpRight } from "lucide-react";
 import { getSection } from "@/lib/data";
-import { whatsappHref, whatsappMessage } from "@/lib/config";
+import { ContactWhatsAppLink } from "@/components/contact-whatsapp-link";
 import { pageMetadata } from "@/lib/seo";
+import { LocalizedText } from "@/components/language-runtime";
 
 export const metadata: Metadata = pageMetadata(
   "/kontak",
@@ -12,10 +12,6 @@ export const metadata: Metadata = pageMetadata(
 
 export default async function Contact() {
   const contact = await getSection("contact");
-  const message = typeof contact.whatsappMessage === "string" && contact.whatsappMessage.trim()
-    ? contact.whatsappMessage.trim()
-    : whatsappMessage;
-  const wa = whatsappHref(typeof contact.whatsapp === "string" ? contact.whatsapp : null, message);
   const map = typeof contact.mapUrl === "string" && /^https:\/\/(www\.)?google\.com\/maps\/embed\?/.test(contact.mapUrl)
     ? contact.mapUrl : null;
   const isEmail = (value: unknown): value is string => typeof value === "string" && /^[^@]+@[^@]+\.[^@]+$/.test(value.trim());
@@ -38,9 +34,11 @@ export default async function Contact() {
           <span className="eyebrow">Kontak utama</span>
           <h2>WhatsApp pengurus</h2>
           <p>Hubungi pengurus melalui WhatsApp untuk bertanya tentang tempat tinggal dan penerimaan.</p>
-          {wa ? <a className="btn contact-whatsapp-cta" href={wa} target="_blank" rel="noopener noreferrer">
-            Hubungi Pengurus via WhatsApp <ArrowUpRight size={18} aria-hidden="true" />
-          </a> : <div className="notice">Nomor WhatsApp resmi belum tersedia. Silakan gunakan informasi kontak lain yang tercantum di halaman ini.</div>}
+          <ContactWhatsAppLink
+            phone={typeof contact.whatsapp === "string" ? contact.whatsapp : null}
+            message={typeof contact.whatsappMessage === "string" ? contact.whatsappMessage : null}
+            messageEn={typeof contact.whatsappMessageEn === "string" ? contact.whatsappMessageEn : null}
+          />
         </div>
         <div className="content-card contact-details-card">
           <span className="eyebrow">Informasi lainnya</span>
@@ -55,8 +53,8 @@ export default async function Contact() {
             </div>)}
           </div>
           <dl className="contact-info-list">
-            <div className="contact-info-row"><dt>Alamat</dt><dd>{String(contact.publicAddress || "Perlu dilengkapi")}</dd></div>
-            <div className="contact-info-row"><dt>Jam kontak</dt><dd>{String(contact.contactHours || "Perlu dilengkapi")}</dd></div>
+            <div className="contact-info-row"><dt>Alamat</dt><dd><LocalizedText id={String(contact.publicAddress || "Perlu dilengkapi")} en={typeof contact.publicAddressEn === "string" ? contact.publicAddressEn : undefined} /></dd></div>
+            <div className="contact-info-row"><dt>Jam kontak</dt><dd><LocalizedText id={String(contact.contactHours || "Perlu dilengkapi")} en={typeof contact.contactHoursEn === "string" ? contact.contactHoursEn : undefined} /></dd></div>
           </dl>
         </div>
       </div>

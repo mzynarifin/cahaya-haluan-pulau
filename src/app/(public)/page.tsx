@@ -4,6 +4,7 @@ import { getAlbums, getNews, getSection } from "@/lib/data";
 import { ContactCta, NewsCards, Photo } from "@/components/public-parts";
 import { HomeHero } from "@/components/home-hero";
 import { AlbumCards } from "@/components/album-cards";
+import { LocalizedText } from "@/components/language-runtime";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata = pageMetadata(
@@ -20,17 +21,18 @@ export default async function Home() {
     getAlbums(),
   ]);
   const publicFacilities = Array.isArray(accommodation.facilities)
-    ? (accommodation.facilities as { name?: string; visible?: boolean }[])
+    ? (accommodation.facilities as { name?: string; nameEn?: string; visible?: boolean }[])
       .filter(facility => facility.visible && typeof facility.name === "string" && facility.name.trim())
       .slice(0, 3)
-      .map(facility => typeof facility.name === "string" ? facility.name.trim() : "")
-      .filter(Boolean)
-      .join(", ")
-    : "";
+      .map(facility => ({ id: facility.name?.trim() || "", en: facility.nameEn?.trim() || facility.name?.trim() || "" }))
+      .filter(facility => facility.id)
+    : [];
+  const facilitiesId = publicFacilities.map(facility => facility.id).join(", ");
+  const facilitiesEn = publicFacilities.map(facility => facility.en).join(", ");
   const accommodationFacts = [
-    { label: "Lokasi", value: typeof accommodation.publicAddress === "string" ? accommodation.publicAddress.trim() : "" },
-    { label: "Fasilitas utama", value: publicFacilities },
-    { label: "Sasaran penghuni", value: typeof accommodation.targetResidents === "string" ? accommodation.targetResidents.trim() : "" },
+    { label: "Lokasi", value: typeof accommodation.publicAddress === "string" ? accommodation.publicAddress.trim() : "", en: typeof accommodation.publicAddressEn === "string" ? accommodation.publicAddressEn.trim() : "" },
+    { label: "Fasilitas utama", value: facilitiesId, en: facilitiesEn },
+    { label: "Sasaran penghuni", value: typeof accommodation.targetResidents === "string" ? accommodation.targetResidents.trim() : "", en: typeof accommodation.targetResidentsEn === "string" ? accommodation.targetResidentsEn.trim() : "" },
   ].filter(fact => fact.value);
 
   return <div className="home-page">
@@ -42,7 +44,7 @@ export default async function Home() {
           <h2 id="home-intro-title">Informasi yang jelas untuk calon penghuni dan keluarga.</h2>
         </div>
         <div className="home-intro-copy">
-          <p>{String(profile.description || "Cahaya Haluan Pulau menyediakan informasi tentang tempat tinggal bagi mereka yang ingin melanjutkan pendidikan di Pulau Jawa.")}</p>
+          <p><LocalizedText id={String(profile.description || "Cahaya Haluan Pulau menyediakan informasi tentang tempat tinggal bagi mereka yang ingin melanjutkan pendidikan di Pulau Jawa.")} en={typeof profile.descriptionEn === "string" ? profile.descriptionEn : undefined} /></p>
           <Link href="/tentang" className="link-arrow">Baca profil lembaga <ArrowRight size={18} aria-hidden="true" /></Link>
         </div>
       </div>
@@ -53,9 +55,9 @@ export default async function Home() {
           <div className="accommodation-copy">
             <span className="eyebrow">Tempat tinggal</span>
             <h2>Kenali Center sebelum menghubungi pengurus</h2>
-            <p className="lead accommodation-description">{String(accommodation.description || "Penjelasan kondisi Center sedang dilengkapi oleh pengurus.")}</p>
+            <p className="lead accommodation-description"><LocalizedText id={String(accommodation.description || "Penjelasan kondisi Center sedang dilengkapi oleh pengurus.")} en={typeof accommodation.descriptionEn === "string" ? accommodation.descriptionEn : undefined} /></p>
             {accommodationFacts.length > 0 && <dl className="accommodation-facts">
-              {accommodationFacts.map(fact => <div key={fact.label}><dt>{fact.label}</dt><dd>{fact.value}</dd></div>)}
+              {accommodationFacts.map(fact => <div key={fact.label}><dt>{fact.label}</dt><dd><LocalizedText id={fact.value} en={fact.en} /></dd></div>)}
             </dl>}
             <Link href="/asrama" className="btn btn-primary accommodation-cta">Lihat Kantor Pusat <ArrowRight size={17} aria-hidden="true" /></Link>
           </div>

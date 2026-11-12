@@ -14,8 +14,8 @@ const MediaUpload = dynamic(
 );
 
 type SectionKey = "profile" | "accommodation" | "team" | "contact" | "program-suara-anak-pulau" | "program-urx1";
-type Item = { name?: string; role?: string; description?: string; visible?: boolean; question?: string; answer?: string; image?: string };
-type Field = { name: string; label: string; kind?: "textarea" | "email" | "map"; hint?: string; language?: "id" | "en" };
+type Item = { name?: string; nameEn?: string; role?: string; roleEn?: string; description?: string; descriptionEn?: string; question?: string; questionEn?: string; answer?: string; answerEn?: string; visible?: boolean; image?: string };
+type Field = { name: string; label: string; kind?: "textarea" | "email" | "map"; hint?: string; language?: "id" | "en"; bilingual?: boolean };
 const programFields: Field[] = [
   { name: "eyebrow", label: "Label program", language: "id" },
   { name: "kicker", label: "Nama lembaga di hero", language: "id" },
@@ -50,22 +50,22 @@ const programFields: Field[] = [
 ];
 const configs: Record<SectionKey, { title: string; description: string; fields: Field[] }> = {
   profile: { title: "Profil Lembaga", description: "Informasi profil dan pesan utama yang tampil di website.", fields: [
-    { name: "name", label: "Nama lembaga" }, { name: "description", label: "Deskripsi singkat", kind: "textarea" },
-    { name: "history", label: "Sejarah", kind: "textarea" }, { name: "vision", label: "Visi", kind: "textarea" },
-    { name: "mission", label: "Misi", kind: "textarea" }, { name: "heroTitle", label: "Judul beranda" },
-    { name: "heroDescription", label: "Deskripsi beranda", kind: "textarea" },
+    { name: "name", label: "Nama lembaga" }, { name: "description", label: "Deskripsi singkat", kind: "textarea", bilingual: true },
+    { name: "history", label: "Sejarah", kind: "textarea", bilingual: true }, { name: "vision", label: "Visi", kind: "textarea", bilingual: true },
+    { name: "mission", label: "Misi", kind: "textarea", bilingual: true }, { name: "heroTitle", label: "Judul beranda", bilingual: true },
+    { name: "heroDescription", label: "Deskripsi beranda", kind: "textarea", bilingual: true },
   ] },
   accommodation: { title: "Center & Fasilitas", description: "Kelola informasi yang tampil di halaman Center. Ringkasan fasilitas beranda otomatis memakai hingga tiga fasilitas yang ditandai tampil di publik.", fields: [
-    { name: "description", label: "Deskripsi Center", kind: "textarea" }, { name: "publicAddress", label: "Alamat untuk publik" },
-    { name: "targetResidents", label: "Sasaran penghuni", kind: "textarea", hint: "Jelaskan kelompok yang dituju secara singkat. Kolom ini tampil di beranda dan halaman Center jika diisi." },
+    { name: "description", label: "Deskripsi Center", kind: "textarea", bilingual: true }, { name: "publicAddress", label: "Alamat untuk publik", bilingual: true },
+    { name: "targetResidents", label: "Sasaran penghuni", kind: "textarea", bilingual: true, hint: "Jelaskan kelompok yang dituju secara singkat. Kolom ini tampil di beranda dan halaman Center jika diisi." },
   ] },
   team: { title: "Pengurus", description: "Tampilkan nama dan foto hanya setelah izin publikasi.", fields: [] },
   contact: { title: "Kontak", description: "Nomor WhatsApp resmi diperlukan sebelum website diluncurkan.", fields: [
     { name: "whatsapp", label: "WhatsApp (format 62...)" },
-    { name: "whatsappMessage", label: "Pesan awal WhatsApp", kind: "textarea" },
+    { name: "whatsappMessage", label: "Pesan awal WhatsApp", kind: "textarea", bilingual: true },
     { name: "emailSuaraAnakPulau", label: "Email Suara Anak Pulau", kind: "email", hint: "Email umum lama akan tetap tampil sebagai fallback hingga alamat khusus diisi." },
     { name: "emailUrx1", label: "Email URX1", kind: "email" },
-    { name: "publicAddress", label: "Alamat publik" }, { name: "contactHours", label: "Jam kontak" },
+    { name: "publicAddress", label: "Alamat publik", bilingual: true }, { name: "contactHours", label: "Jam kontak", bilingual: true },
     { name: "mapUrl", label: "URL embed Google Maps yang disetujui", kind: "map" },
   ] },
   "program-suara-anak-pulau": { title: "Halaman Suara Anak Pulau", description: "Ubah seluruh teks halaman Suara Anak Pulau dalam Bahasa Indonesia dan English.", fields: programFields },
@@ -79,10 +79,15 @@ export function SectionEditor({ section }: { section: SectionKey }) {
   const [busy, setBusy] = useState(false); const [dirty, setDirty] = useState(false);
   const [error, setError] = useState(""); const [success, setSuccess] = useState("");
   const [preview, setPreview] = useState(false);
-  const [programLanguage, setProgramLanguage] = useState<"id" | "en">("id");
+  const [contentLanguage, setContentLanguage] = useState<"id" | "en">("id");
   const [uploads, setUploads] = useState<Record<string, string>>({});
   const isProgramSection = section === "program-suara-anak-pulau" || section === "program-urx1";
-  const visibleFields = config.fields.filter(field => !field.language || field.language === programLanguage);
+  const visibleFields = config.fields.flatMap(field => {
+    if (field.language) return field.language === contentLanguage ? [field] : [];
+    if (!field.bilingual || contentLanguage === "id") return [field];
+    return [{ ...field, name: `${field.name}En`, hint: undefined }];
+  });
+  const hasBilingualContent = isProgramSection || section === "team" || config.fields.some(field => field.bilingual);
 
   useEffect(() => { createClient()?.from("site_sections").select("content,version").eq("key", section).single()
     .then(({ data, error: fetchError }) => {
@@ -144,9 +149,9 @@ export function SectionEditor({ section }: { section: SectionKey }) {
   return <><div className={`admin-page-head${section === "team" ? " team-admin-page-head" : ""}`}><div><span className="eyebrow">Konten publik</span><h1>{config.title}</h1><p>{config.description}</p></div></div>
     <div className={`admin-form${section === "team" ? " team-admin-form" : ""}`}>
       {error && <div className="alert-error" role="alert">{error}</div>}{success && <div className="alert-success" role="status">{success}</div>}
-      {isProgramSection && <div className={styles.languageTabs} role="group" aria-label="Bahasa konten">
-        <button type="button" className={styles.languageTab} aria-pressed={programLanguage === "id"} onClick={() => setProgramLanguage("id")}>Bahasa Indonesia</button>
-        <button type="button" className={styles.languageTab} aria-pressed={programLanguage === "en"} onClick={() => setProgramLanguage("en")}>English</button>
+      {hasBilingualContent && <div className={styles.languageTabs} role="group" aria-label="Bahasa konten">
+        <button type="button" className={styles.languageTab} aria-pressed={contentLanguage === "id"} onClick={() => setContentLanguage("id")}>Bahasa Indonesia</button>
+        <button type="button" className={styles.languageTab} aria-pressed={contentLanguage === "en"} onClick={() => setContentLanguage("en")}>English</button>
       </div>}
       {visibleFields.map(field => <div className="field" key={field.name}><label htmlFor={field.name}>{field.label}</label>
         {field.kind === "textarea" ? <textarea id={field.name} value={String(content[field.name] || "")} placeholder={field.name === "whatsappMessage" ? whatsappMessage : undefined} onChange={e => set(field.name, e.target.value)} />
@@ -162,12 +167,12 @@ export function SectionEditor({ section }: { section: SectionKey }) {
       </>}
       {section === "accommodation" && <>
         <ImageField label="Foto Center" hint="Foto memenuhi bingkai Center di beranda dan halaman Center; bagian tepi dapat terpotong." folder="asrama" preset={imagePresets.accommodation} value={String(content.image || "")} onUploaded={(path, url) => { set("image", url); recordUpload(path, url); }} />
-        <Repeater title="Fasilitas" items={list("facilities")} fields={[["name", "Nama fasilitas"], ["description", "Keterangan"]]}
+        <Repeater language={contentLanguage} title="Fasilitas" items={list("facilities")} fields={[["name", "Nama fasilitas"], ["description", "Keterangan"]]}
           imageFolder="facilities" onUpload={recordUpload} onChange={items => set("facilities", items)} />
-        <Repeater title="Pertanyaan umum" items={list("faqs")} fields={[["question", "Pertanyaan"], ["answer", "Jawaban"]]}
+        <Repeater language={contentLanguage} title="Pertanyaan umum" items={list("faqs")} fields={[["question", "Pertanyaan"], ["answer", "Jawaban"]]}
           onChange={items => set("faqs", items)} />
       </>}
-      {section === "team" && <Repeater title="Daftar pengurus" items={list("members")} fields={[["name", "Nama"], ["role", "Jabatan"]]}
+      {section === "team" && <Repeater language={contentLanguage} title="Daftar pengurus" items={list("members")} fields={[["name", "Nama"], ["role", "Jabatan"]]}
         imageFolder="team" onUpload={recordUpload} onChange={items => set("members", items)} />}
       <div className="form-actions"><button className="btn btn-outline" type="button" onClick={() => setPreview(!preview)}>{preview ? "Tutup pratinjau" : "Pratinjau"}</button>
         <button className="btn btn-primary" type="button" disabled={busy} onClick={save}>{busy ? "Menyimpan..." : "Simpan & Tampilkan"}</button></div>
@@ -179,8 +184,8 @@ export function SectionEditor({ section }: { section: SectionKey }) {
           .map(item => item.name?.trim())
           .filter(Boolean)
           .join(", ") || "Belum ada fasilitas yang ditandai tampil di publik."}</p>}
-        {list("facilities").map((item, i) => <p key={i}><strong>{item.name}</strong> — {item.description}{item.visible ? "" : " (disembunyikan dari publik)"}</p>)}
-        {list("members").map((item, i) => <p key={i}><strong>{item.name}</strong> — {item.role?.trim() || "Pengurus"}{item.visible ? "" : " (disembunyikan)"}</p>)}
+        {list("facilities").map((item, i) => <p key={i}><strong>{contentLanguage === "en" ? item.nameEn || item.name : item.name}</strong> — {contentLanguage === "en" ? item.descriptionEn || item.description : item.description}{item.visible ? "" : " (disembunyikan dari publik)"}</p>)}
+        {list("members").map((item, i) => <p key={i}><strong>{contentLanguage === "en" ? item.nameEn || item.name : item.name}</strong> — {(contentLanguage === "en" ? item.roleEn || item.role : item.role)?.trim() || "Pengurus"}{item.visible ? "" : " (disembunyikan)"}</p>)}
       </div>}
     </div></>;
 }
@@ -191,7 +196,7 @@ function ImageField({ label, hint, folder, preset, value, onUploaded }: { label:
     {value && <img src={value} alt={`Pratinjau ${label}`} style={{ width: 180, aspectRatio: imageAspectFromUrl(value, preset.aspect), objectFit: "contain", borderRadius: 4 }} />}</div>;
 }
 
-function Repeater({ title, items, fields, imageFolder, onUpload, onChange }: { title: string; items: Item[]; fields: [string, string][]; imageFolder?: "team" | "facilities"; onUpload?: (path: string, url: string) => void; onChange: (items: Item[]) => void }) {
+function Repeater({ title, items, fields, language, imageFolder, onUpload, onChange }: { title: string; items: Item[]; fields: [string, string][]; language: "id" | "en"; imageFolder?: "team" | "facilities"; onUpload?: (path: string, url: string) => void; onChange: (items: Item[]) => void }) {
   const isTeam = imageFolder === "team";
   return <div className={`repeater${isTeam ? " team-repeater" : ` ${styles.accommodationRepeater}`}`} style={isTeam ? { margin: "14px 0" } : undefined}>
     <div className={isTeam ? "team-repeater-heading" : styles.accommodationRepeaterHeading}>
@@ -203,8 +208,11 @@ function Repeater({ title, items, fields, imageFolder, onUpload, onChange }: { t
         <span className={`team-editor-status ${item.visible ? "is-visible" : "is-hidden"}`}>{item.visible ? "Tampil" : "Disembunyikan"}</span></div>}
       <div className={isTeam ? "team-editor-card-content" : undefined}>
         <div className={isTeam ? "team-editor-fields" : undefined}>
-          {fields.map(([key, label]) => <div className={`field${isTeam ? " team-editor-field" : ""}`} key={key}><label htmlFor={`${title}-${i}-${key}`}>{label}</label>
-            <input id={`${title}-${i}-${key}`} value={String(item[key as keyof Item] || "")} placeholder={isTeam && key === "role" ? "Jika kosong, tampil sebagai Pengurus" : undefined} onChange={e => onChange(items.map((value, index) => index === i ? { ...value, [key]: e.target.value } : value))} /></div>)}
+          {fields.map(([key, label]) => {
+            const fieldName = language === "en" ? `${key}En` : key;
+            return <div className={`field${isTeam ? " team-editor-field" : ""}`} key={key}><label htmlFor={`${title}-${i}-${key}`}>{label}</label>
+              <input id={`${title}-${i}-${key}`} value={String(item[fieldName as keyof Item] || "")} placeholder={isTeam && key === "role" ? "Jika kosong, tampil sebagai Pengurus" : undefined} onChange={e => onChange(items.map((value, index) => index === i ? { ...value, [fieldName]: e.target.value } : value))} /></div>;
+          })}
         </div>
         {imageFolder && <div className={isTeam ? `team-editor-media${item.image ? " has-preview" : ""}` : undefined}>
           <MediaUpload label={imageFolder === "team" ? "Foto pengurus" : "Foto fasilitas"} folder={imageFolder} preset={imageFolder === "team" ? imagePresets.team : imagePresets.facilities} onUploaded={({ path, preview }) => { onUpload?.(path, preview); onChange(items.map((value, index) => index === i ? { ...value, image: preview } : value)); }} />

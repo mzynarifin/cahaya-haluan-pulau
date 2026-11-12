@@ -5,8 +5,10 @@ import Image from "next/image";
 import { createPortal } from "react-dom";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import type { Photo } from "@/lib/data";
+import { useEnglishLanguage } from "@/components/language-runtime";
 
 export function GalleryLightbox({ photos }: { photos: Photo[] }) {
+  const english = useEnglishLanguage();
   const [active, setActive] = useState<number | null>(null);
   const buttons = useRef<(HTMLButtonElement | null)[]>([]);
   const close = useRef<HTMLButtonElement>(null);
@@ -61,16 +63,16 @@ export function GalleryLightbox({ photos }: { photos: Photo[] }) {
           ref={element => { buttons.current[index] = element; }}
           key={photo.id}
           onClick={() => setActive(index)}
-          aria-label={`Buka foto ${index + 1} dari ${photos.length}: ${photo.alt}`}
+          aria-label={`${english ? "Open photo" : "Buka foto"} ${index + 1} ${english ? "of" : "dari"} ${photos.length}: ${english ? photo.alt_en || photo.alt : photo.alt}`}
         >
-          <Image src={photo.image_url} alt={photo.alt} fill sizes="(max-width: 640px) 50vw, (max-width: 900px) 33vw, 25vw" />
+          <Image src={photo.image_url} alt={english ? photo.alt_en || photo.alt : photo.alt} fill sizes="(max-width: 640px) 50vw, (max-width: 900px) 33vw, 25vw" />
         </button>)}
     </div>
-    {active !== null && createPortal(<div className="lightbox" role="dialog" aria-modal="true" aria-label={`Foto ${active + 1} dari ${photos.length}`}>
+    {active !== null && createPortal(<div className="lightbox" role="dialog" aria-modal="true" aria-label={`${english ? "Photo" : "Foto"} ${active + 1} ${english ? "of" : "dari"} ${photos.length}`}>
       <div className="lightbox-panel">
         <div className="lightbox-top">
-          <span>Foto {active + 1} dari {photos.length}</span>
-          <button className="lightbox-close" ref={close} onClick={() => setActive(null)} aria-label="Tutup foto"><X size={20} aria-hidden="true" /></button>
+          <span>{english ? "Photo" : "Foto"} {active + 1} {english ? "of" : "dari"} {photos.length}</span>
+          <button className="lightbox-close" ref={close} onClick={() => setActive(null)} aria-label={english ? "Close photo" : "Tutup foto"}><X size={20} aria-hidden="true" /></button>
         </div>
         <div className="lightbox-viewer">
           <div className="lightbox-stage"
@@ -85,14 +87,14 @@ export function GalleryLightbox({ photos }: { photos: Photo[] }) {
                 setActive(index => index === null ? index : (index + (deltaX < 0 ? 1 : -1) + photos.length) % photos.length);
               }
             }}>
-            <Image src={photos[active].image_url} alt={photos[active].alt} fill sizes="(max-width: 800px) 100vw, 90vw" />
+            <Image src={photos[active].image_url} alt={english ? photos[active].alt_en || photos[active].alt : photos[active].alt} fill sizes="(max-width: 800px) 100vw, 90vw" />
           </div>
           {photos.length > 1 && <div className="lightbox-controls">
-            <button type="button" onClick={() => setActive((active - 1 + photos.length) % photos.length)} aria-label="Foto sebelumnya"><ChevronLeft size={24} aria-hidden="true" /></button>
-            <button type="button" onClick={() => setActive((active + 1) % photos.length)} aria-label="Foto berikutnya"><ChevronRight size={24} aria-hidden="true" /></button>
+            <button type="button" onClick={() => setActive((active - 1 + photos.length) % photos.length)} aria-label={english ? "Previous photo" : "Foto sebelumnya"}><ChevronLeft size={24} aria-hidden="true" /></button>
+            <button type="button" onClick={() => setActive((active + 1) % photos.length)} aria-label={english ? "Next photo" : "Foto berikutnya"}><ChevronRight size={24} aria-hidden="true" /></button>
           </div>}
         </div>
-        <p className="lightbox-caption">{photos[active].caption || photos[active].alt}</p>
+        <p className="lightbox-caption">{english ? photos[active].caption_en || photos[active].caption || photos[active].alt_en || photos[active].alt : photos[active].caption || photos[active].alt}</p>
       </div>
     </div>, document.body)}
   </>;

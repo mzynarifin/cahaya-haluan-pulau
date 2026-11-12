@@ -6,18 +6,20 @@ import { useRouter } from "next/navigation";
 import { Images, Pencil, Plus, Trash2 } from "lucide-react";
 import { AdminPageSkeleton } from "@/components/admin/admin-skeleton";
 import { createClient } from "@/lib/supabase/browser";
-import { adminText } from "@/components/language-runtime";
-import { formatDate } from "@/lib/config";
+import { adminText, LocalizedText, useEnglishLanguage } from "@/components/language-runtime";
+import { LocalizedDate } from "@/components/localized-date";
 
 type Album = {
   id: string;
   title: string;
+  title_en: string | null;
   status: string;
   event_date: string | null;
   version: number;
 };
 
 export function GalleryList() {
+  const english = useEnglishLanguage();
   const router = useRouter();
   const [items, setItems] = useState<Album[]>([]);
   const [loading, setLoading] = useState(true);
@@ -32,7 +34,7 @@ export function GalleryList() {
       setLoading(false);
       return;
     }
-    client.from("albums").select("id,title,status,event_date,version")
+    client.from("albums").select("id,title,title_en,status,event_date,version")
       .order("updated_at", { ascending: false })
       .then(({ data, error }) => {
         if (error) setError("Album gagal dimuat.");
@@ -42,7 +44,8 @@ export function GalleryList() {
   }, []);
 
   async function removeAlbum(album: Album) {
-    if (!window.confirm(adminText(`Hapus album "${album.title}" beserta seluruh fotonya secara permanen?`, `Permanently delete album "${album.title}" and all its photos?`))) return;
+    const visibleTitle = english ? album.title_en || album.title : album.title;
+    if (!window.confirm(adminText(`Hapus album "${visibleTitle}" beserta seluruh fotonya secara permanen?`, `Permanently delete album "${visibleTitle}" and all its photos?`))) return;
     const client = createClient();
     if (!client) { setError("Layanan tidak tersedia."); return; }
     setDeletingId(album.id);
@@ -73,7 +76,7 @@ export function GalleryList() {
           return;
         }
       }
-      setSuccess(`Album "${album.title}" berhasil dihapus.`);
+      setSuccess(english ? `Album "${visibleTitle}" deleted successfully.` : `Album "${visibleTitle}" berhasil dihapus.`);
     } catch (cause) {
       setError(cause instanceof Error ? cause.message : "Album gagal dihapus.");
     } finally {
@@ -87,12 +90,12 @@ export function GalleryList() {
     {success && <div className="alert-success" role="status">{success}</div>}
     {loading ? <AdminPageSkeleton variant="list" embedded /> : items.length ? <div className="table-wrap gallery-table-wrap"><table className="data-table gallery-table"><thead><tr><th>Album</th><th>Tanggal kegiatan</th><th>Status</th><th className="gallery-actions-heading">Tindakan</th></tr></thead><tbody>
       {items.map(album => <tr key={album.id}>
-        <td className="gallery-cell gallery-cell-title"><span className="gallery-cell-label">Album</span><div><span className="gallery-album-icon"><Images size={17} aria-hidden="true" /></span><strong>{album.title}</strong></div></td>
-        <td className="gallery-cell gallery-cell-date"><span className="gallery-cell-label">Tanggal kegiatan</span>{formatDate(album.event_date)}</td>
+        <td className="gallery-cell gallery-cell-title"><span className="gallery-cell-label">Album</span><div><span className="gallery-album-icon"><Images size={17} aria-hidden="true" /></span><strong><LocalizedText id={album.title} en={album.title_en} /></strong></div></td>
+        <td className="gallery-cell gallery-cell-date"><span className="gallery-cell-label">Tanggal kegiatan</span><LocalizedDate value={album.event_date} /></td>
         <td className="gallery-cell gallery-cell-status"><span className="gallery-cell-label">Status</span><span className={`status ${album.status}`}>{album.status}</span></td>
         <td className="gallery-cell gallery-cell-actions"><div className="gallery-row-actions">
           <Link className="btn btn-quiet gallery-action-edit" href={`/admin/galeri/${album.id}/edit`}><Pencil size={15} aria-hidden="true" />Ubah</Link>
-          <button type="button" className="btn btn-danger gallery-action-delete" disabled={deletingId !== null} onClick={() => removeAlbum(album)} aria-label={`Hapus album: ${album.title}`}>
+          <button type="button" className="btn btn-danger gallery-action-delete" disabled={deletingId !== null} onClick={() => removeAlbum(album)} aria-label={`${english ? "Delete album" : "Hapus album"}: ${english ? album.title_en || album.title : album.title}`}>
             <Trash2 size={15} aria-hidden="true" />{deletingId === album.id ? "Menghapus..." : "Hapus"}
           </button>
         </div></td>

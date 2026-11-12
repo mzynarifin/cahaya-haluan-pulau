@@ -1,11 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import Image from "next/image";
 import { notFound } from "next/navigation";
 import { getNewsBySlug } from "@/lib/data";
-import { formatDate, siteName, siteUrl } from "@/lib/config";
+import { siteName, siteUrl } from "@/lib/config";
 import { ArticleBody } from "@/components/article-body";
 import { imageAspectFromUrl } from "@/lib/image-presets";
+import { LocalizedText } from "@/components/language-runtime";
+import { LocalizedDate } from "@/components/localized-date";
+import { NewsCoverImage } from "@/components/news-cover-image";
 
 const defaultSocialImage = "/opengraph-image";
 
@@ -80,21 +82,22 @@ export default async function NewsDetail({ params }: { params: Promise<{ slug: s
     <div className="container article">
       <Link href="/berita" className="link-arrow">← Kembali ke berita</Link>
       <header style={{ margin: "32px 0" }}>
-        <span className="eyebrow">{formatDate(news.published_at)}</span>
-        <h1 style={{ margin: "12px 0" }}>{news.title}</h1>
-        {news.excerpt && <p className="lead">{news.excerpt}</p>}
+        <span className="eyebrow"><LocalizedDate value={news.published_at} /></span>
+        <h1 style={{ margin: "12px 0" }}><LocalizedText as="span" id={news.title} en={news.title_en} /></h1>
+        {news.excerpt && <p className="lead"><LocalizedText id={news.excerpt} en={news.excerpt_en} /></p>}
       </header>
       {news.cover_url && <figure style={{ margin: "0 0 34px" }}>
-        <Image
+        <NewsCoverImage
           src={news.cover_url}
           alt={news.cover_alt || ""}
+          altEn={news.cover_alt_en}
           width={1200}
           height={Math.round(1200 / imageAspectFromUrl(news.cover_url, 16 / 10))}
           sizes="(max-width: 890px) calc(100vw - 40px), 850px"
           style={{ borderRadius: 12, width: "100%", maxHeight: 700, objectFit: "contain" }}
         />
       </figure>}
-      <ArticleBody body={news.body} />
+      <ArticleBody body={news.body} bodyEn={news.body_en} />
     </div>
   </article>;
 }

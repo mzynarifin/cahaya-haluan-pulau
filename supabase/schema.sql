@@ -97,12 +97,16 @@ create policy "Admins edit sections" on public.site_sections for update to authe
 create table if not exists public.news (
   id uuid primary key default gen_random_uuid(),
   title text not null check (char_length(title) between 5 and 150),
+  title_en text check (char_length(title_en) <= 150),
   slug text not null unique check (slug ~ '^[a-z0-9]+(-[a-z0-9]+)*$' and char_length(slug) <= 160),
   excerpt text check (char_length(excerpt) <= 300),
+  excerpt_en text check (char_length(excerpt_en) <= 300),
   body text not null check (char_length(trim(body)) > 0),
+  body_en text,
   cover_path text,
   cover_url text,
   cover_alt text check (char_length(cover_alt) <= 200),
+  cover_alt_en text check (char_length(cover_alt_en) <= 200),
   status text not null default 'draft' check (status in ('draft','published','archived')),
   published_at timestamptz,
   version integer not null default 1,
@@ -140,8 +144,10 @@ create trigger news_audit before insert or update on public.news for each row ex
 create table if not exists public.albums (
   id uuid primary key default gen_random_uuid(),
   title text not null check (char_length(title) between 3 and 150),
+  title_en text check (char_length(title_en) <= 150),
   slug text not null unique check (slug ~ '^[a-z0-9]+(-[a-z0-9]+)*$'),
   description text,
+  description_en text,
   event_date date,
   cover_url text,
   status text not null default 'draft' check (status in ('draft','published','archived')),
@@ -171,7 +177,9 @@ create table if not exists public.album_photos (
   image_url text,
   storage_path text,
   alt text not null check (char_length(alt) between 1 and 200),
+  alt_en text check (char_length(alt_en) <= 200),
   caption text,
+  caption_en text,
   display_order integer not null default 0
 );
 alter table public.album_photos enable row level security;

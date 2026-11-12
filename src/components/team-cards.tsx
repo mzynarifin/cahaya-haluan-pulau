@@ -4,13 +4,15 @@ import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useRef, useState } from "react";
 import { imageAspectFromUrl } from "@/lib/image-presets";
+import { LocalizedText, useEnglishLanguage } from "@/components/language-runtime";
 
-export type TeamMember = { name: string; role?: string; image?: string; visible?: boolean };
+export type TeamMember = { name: string; nameEn?: string; role?: string; roleEn?: string; image?: string; visible?: boolean };
 
 export function TeamCards({ items }: { items: TeamMember[] }) {
   const members = items.filter(member => member.visible && member.name?.trim());
   const trackRef = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState(0);
+  const english = useEnglishLanguage();
 
   function scrollTo(index: number) {
     const track = trackRef.current;
@@ -42,10 +44,10 @@ export function TeamCards({ items }: { items: TeamMember[] }) {
       {members.map((member, index) => <article className="team-card" key={`${member.name}-${index}`}>
         <div className="team-card-media" style={{ aspectRatio: imageAspectFromUrl(member.image, 4 / 5) }}>
           {member.image
-            ? <Image src={member.image} alt={`Foto ${member.name}`} fill sizes="(max-width: 640px) 230px, 240px" />
+            ? <Image src={member.image} alt={`Foto ${english ? member.nameEn?.trim() || member.name : member.name}`} fill sizes="(max-width: 640px) 230px, 240px" />
             : <span className="team-card-initials" aria-hidden="true">{member.name.trim().split(/\s+/).slice(0, 2).map(part => part[0]).join("").toUpperCase()}</span>}
         </div>
-        <div className="team-card-body"><h3>{member.name}</h3><p>{member.role?.trim() || "Pengurus"}</p></div>
+        <div className="team-card-body"><h3><LocalizedText id={member.name} en={member.nameEn} /></h3><p><LocalizedText id={member.role?.trim() || "Pengurus"} en={member.roleEn?.trim() || "Team member"} /></p></div>
       </article>)}
     </div>
     {members.length > 1 && <div className="team-controls" aria-label="Navigasi pengurus">
