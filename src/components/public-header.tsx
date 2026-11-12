@@ -29,8 +29,8 @@ export function PublicHeader() {
         <nav id="primary-navigation" className={`site-nav ${open ? "open" : ""}`} aria-label="Navigasi utama">
           {links.map(([href, label, en]) => {
             const active = path === href || (href !== "/" && path.startsWith(`${href}/`));
-            return <a key={href} href={href} data-no-translate={href === "/cahaya-anak-pulau" || undefined} onClick={() => setOpen(false)}
-              className={active ? "active" : ""} aria-current={active ? "page" : undefined}>{english ? en : label}</a>;
+            return <Link key={href} href={href} data-no-translate={href === "/cahaya-anak-pulau" || undefined} onClick={() => setOpen(false)}
+              className={active ? "active" : ""} aria-current={active ? "page" : undefined}>{english ? en : label}</Link>;
           })}
         </nav>
       </div>

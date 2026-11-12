@@ -16,7 +16,7 @@ export function ProgramPage({ slug, content }: { slug: ProgramSlug; content: Rec
 
   const copy = getProgramCopy(slug, content, english ? "en" : "id");
 
-  return <main className="program-page">
+  return <div className="program-page">
     <section className="program-hero">
       <div className="container program-hero-inner">
         <span className="eyebrow">{copy.eyebrow}</span>
@@ -49,5 +49,5 @@ export function ProgramPage({ slug, content }: { slug: ProgramSlug; content: Rec
         <Link href="/kontak" className="btn btn-outline">{copy.ctaButton}</Link>
       </div>
     </section>
-  </main>;
+  </div>;
 }
