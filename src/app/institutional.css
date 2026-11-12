@@ -73,7 +73,7 @@ p { color: var(--muted); }
 .page-enter .home-hero { position: relative; isolation: isolate; overflow: hidden; }
 .hero-visual { position: absolute; inset: 0; z-index: 0; overflow: hidden; }
 .hero-visual.has-photo::before { content: ""; position: absolute; z-index: 1; inset: 0 auto 0 50%; width: 20%; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); pointer-events: none; }
-.hero-visual.has-photo::after { content: ""; position: absolute; z-index: 2; inset: 0; background: linear-gradient(to right, rgba(23, 61, 90, .7) 0%, rgba(23, 61, 90, .7) 50%, rgba(23, 61, 90, 0) 70%, rgba(23, 61, 90, 0) 100%); pointer-events: none; }
+.hero-visual.has-photo::after { content: ""; position: absolute; z-index: 2; inset: 0; background: linear-gradient(to right, rgba(23, 61, 90, .7) 0%, rgba(23, 61, 90, .7) 70%, rgba(23, 61, 90, 0) 100%); pointer-events: none; }
 .hero-artwork { position: absolute; z-index: 0; inset: 0; display: block; }
 .hero-visual-image { width: 100%; height: 100%; object-fit: cover; object-position: center; }
 .hero-artwork .hero-visual-image { display: block; max-width: none; }
@@ -354,7 +354,7 @@ p { color: var(--muted); }
   .album-card-link { min-height: 44px; }
   .page-enter .home-hero { min-height: calc(100svh - 74px); align-items: flex-start; padding: var(--first-content-offset) 0 min(32svh, 300px); }
   .hero-visual.has-photo::before { inset: 50% 0 auto; width: auto; height: 20%; }
-  .hero-visual.has-photo::after { background: linear-gradient(to bottom, rgba(23, 61, 90, .7) 0%, rgba(23, 61, 90, .7) 50%, rgba(23, 61, 90, 0) 70%, rgba(23, 61, 90, 0) 100%); }
+  .hero-visual.has-photo::after { background: linear-gradient(to bottom, rgba(23, 61, 90, .7) 0%, rgba(23, 61, 90, .7) 70%, rgba(23, 61, 90, 0) 100%); }
   .hero-artwork .hero-visual-image { object-position: center; }
   .page-enter .home-hero h1, .page-enter .home-hero .lead, .page-enter .home-hero .hero-note { max-width: 100%; }
   .home-hero .hero-actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); max-width: 420px; gap: 10px; }
