@@ -4,6 +4,7 @@ import { useState } from "react";
 import dynamic from "next/dynamic";
 import { createClient } from "@/lib/supabase/browser";
 import { type CroppedImage, type ImagePreset } from "@/lib/image-presets";
+import { LocalizedText } from "@/components/language-runtime";
 
 const ImageCropDialog = dynamic(
   () => import("@/components/admin/image-crop-dialog").then(module => module.ImageCropDialog),
@@ -58,7 +59,10 @@ export function MediaUpload({ folder, onUploaded, label = "Pilih foto", preset }
       <label>{label}<input type="file" accept="image/jpeg,image/png,image/webp" disabled={busy || Boolean(selected)}
         onChange={event => { void choose(event.target.files?.[0]); event.target.value = ""; }} /></label>
       <small>JPG, PNG, atau WebP. Maksimal 5 MB. Foto draft tetap privat.</small>
-      <small>Foto akan dipotong ke rasio {preset.ratio}. Sesuaikan area foto melalui sudut kotak.</small>
+      <small><LocalizedText
+        id={`Foto akan dipotong ke rasio ${preset.ratio}. Sesuaikan area foto melalui sudut kotak.`}
+        en={`Images will be cropped to a ${preset.ratio} aspect ratio. Adjust the crop area using the box corners.`}
+      /></small>
       {busy && <small role="status">Mengunggah foto...</small>}
       {error && <span className="field-error" role="alert">{error}</span>}
     </div>
