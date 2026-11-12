@@ -581,9 +581,12 @@ p { color: var(--muted); }
   .accommodation-facts dt, .accommodation-facts dd { font-size: .9rem; }
 }
 
-.gallery-albums-section { padding-top: clamp(36px, 5vw, 56px); }
+.page-enter .gallery-page-hero { padding-bottom: clamp(24px, 3vw, 36px); }
+.page-enter .gallery-page-hero h1 { margin-bottom: 0; }
+.gallery-albums-section { padding-top: clamp(24px, 3vw, 36px); }
 @media (max-width: 560px) {
-  .gallery-albums-section { padding-top: 32px; padding-bottom: 48px; }
+  .page-enter .gallery-page-hero { padding-bottom: 24px; }
+  .gallery-albums-section { padding-top: 24px; padding-bottom: 48px; }
   .gallery-albums-section .card-grid { gap: 16px; }
   .gallery-albums-section .album-card { padding: 0; border-radius: 12px; box-shadow: 0 7px 20px rgba(24, 58, 84, .08); }
   .gallery-albums-section .album-card-media { margin-bottom: 0; border-bottom: 1px solid #dce8ef; border-radius: 11px 11px 0 0; }

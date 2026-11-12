@@ -13,11 +13,10 @@ export default async function Gallery() {
   const albums = await getAlbums();
 
   return <>
-    <div className="page-hero">
+    <div className="page-hero gallery-page-hero">
       <div className="container">
         <span className="eyebrow">Dokumentasi</span>
         <h1>Galeri kegiatan</h1>
-        <p className="lead">Foto kegiatan yang telah disetujui untuk publikasi.</p>
       </div>
     </div>
     <section className="section gallery-albums-section">
