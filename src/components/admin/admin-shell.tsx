@@ -28,7 +28,7 @@ export function AdminShell({ children, email }: { children: React.ReactNode; ema
   const [open, setOpen] = useState(false);
   const path = usePathname();
   const [english, setEnglish] = useState(false);
-  useEffect(() => { const sync = () => setEnglish(document.documentElement.dataset.language === "en"); sync(); window.addEventListener("chp-language-change", sync); return () => window.removeEventListener("chp-language-change", sync); }, []);
+  useEffect(() => { const sync = () => setEnglish(document.documentElement.dataset.language === "en" || localStorage.getItem("chp-language") === "en"); sync(); window.addEventListener("chp-language-change", sync); return () => window.removeEventListener("chp-language-change", sync); }, []);
   async function logout() {
     await createClient()?.auth.signOut();
     window.location.replace("/admin-chppanel");

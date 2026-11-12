@@ -5,7 +5,7 @@ import { ArrowUpRight, Building2, Images, Newspaper, UsersRound } from "lucide-r
 
 export function DashboardContent({ counts }: { counts: [number | null, number | null, number | null, number | null] }) {
   const [en, setEn] = useState(false);
-  useEffect(() => { const sync = () => setEn(document.documentElement.dataset.language === "en"); sync(); window.addEventListener("chp-language-change", sync); return () => window.removeEventListener("chp-language-change", sync); }, []);
+  useEffect(() => { const sync = () => setEn(document.documentElement.dataset.language === "en" || localStorage.getItem("chp-language") === "en"); sync(); window.addEventListener("chp-language-change", sync); return () => window.removeEventListener("chp-language-change", sync); }, []);
   const stats = [
     { label: en ? "News drafts" : "Draft berita", value: counts[0], icon: Newspaper },
     { label: en ? "Published news" : "Berita terbit", value: counts[1], icon: Newspaper },

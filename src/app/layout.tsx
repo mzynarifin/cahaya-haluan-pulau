@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import "./institutional.css";
 import { siteName, siteUrl } from "@/lib/config";
+import { LanguageRuntime } from "@/components/language-runtime";
 
 const siteDescription = "Informasi resmi Cahaya Haluan Pulau tentang profil lembaga, Center, fasilitas, kegiatan, berita, dan kontak pengurus.";
 export const viewport: Viewport = { width: "device-width", initialScale: 1 };
@@ -40,6 +41,6 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return <html lang="id"><body>
     <a href="#main" className="skip">Lewati ke konten</a>
     <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData).replace(/</g, "\\u003c") }} />
-    {children}
+    <LanguageRuntime />{children}
   </body></html>;
 }
