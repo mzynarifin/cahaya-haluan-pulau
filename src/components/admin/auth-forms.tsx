@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { Eye, EyeOff } from "lucide-react";
 import { Brand } from "@/components/public-header";
+import { createClient } from "@/lib/supabase/browser";
 import { useEnglishLanguage } from "@/components/language-runtime";
 import { safeReturnTo } from "@/lib/config";
 
