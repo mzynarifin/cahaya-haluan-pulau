@@ -23,37 +23,57 @@ const pairs: [string, string][] = [
   ["Memuat halaman", "Loading page"], ["Memuat halaman...", "Loading page..."], ["Lewati ke konten", "Skip to content"], ["Bahasa", "Language"], ["Nama lengkap", "Full name"], ["Nomor WhatsApp", "WhatsApp number"], ["Daerah asal", "Region of origin"], ["Kampus tujuan", "Destination campus"], ["Tahun rencana masuk", "Expected enrollment year"], ["Catatan internal", "Internal notes"], ["Simpan perubahan", "Save changes"], ["Batal", "Cancel"], ["Kembali", "Back"], ["Cari", "Search"], ["Simpan", "Save"], ["Hapus", "Delete"], ["Edit", "Edit"], ["Terbit", "Published"], ["Draft", "Draft"], ["Pratinjau", "Preview"], ["Buat baru", "Create new"], ["Tambah", "Add"], ["Unggah", "Upload"], ["Pilih gambar", "Choose image"], ["Judul", "Title"], ["Deskripsi", "Description"], ["Tanggal", "Date"], ["Status", "Status"], ["Nama", "Name"], ["Email", "Email"], ["Alamat", "Address"], ["Telepon", "Phone"], ["Tidak ditemukan", "Not found"], ["Terjadi kesalahan", "Something went wrong"],
 ];
 
-function translateValue(input: string, english: boolean) {
+const excludedText = "script,style,noscript,textarea,input,select,[data-no-translate],.article-body,.home-hero h1,.home-hero .lead,.content-card h3,.content-card p,.team-card h3,.team-card p,.contact-info-row dd,.accommodation-description,.about-profile-intro,.about-profile-detail p,.faq summary,.faq p,.applicant-data-table td,.data-table td";
+const translatedAttributes = ["placeholder", "aria-label", "title", "alt", "value", "content"] as const;
+
+function createTranslator(english: boolean) {
   const replacements = new Map<string, string>();
   for (const [id, en] of pairs) replacements.set((english ? id : en).toLocaleLowerCase(), english ? en : id);
   const alternatives = [...replacements.keys()].sort((a, b) => b.length - a.length)
     .map(value => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"));
-  if (!alternatives.length) return input;
   const pattern = new RegExp(`(^|[^\\p{L}\\p{N}])(${alternatives.join("|")})(?=$|[^\\p{L}\\p{N}])`, "giu");
-  return input.replace(pattern, (_match, prefix: string, phrase: string) => `${prefix}${replacements.get(phrase.toLocaleLowerCase()) || phrase}`);
+  return (input: string) => input.replace(pattern, (_match, prefix: string, phrase: string) => `${prefix}${replacements.get(phrase.toLocaleLowerCase()) || phrase}`);
+}
+
+function translateAttributes(element: Element, translate: (value: string) => string) {
+  if (element.closest(excludedText)) return;
+  for (const name of translatedAttributes) {
+    const original = element.getAttribute(name);
+    if (!original) continue;
+    const translated = translate(original);
+    if (translated !== original) element.setAttribute(name, translated);
+  }
+}
+
+function translateSubtree(root: Node, translate: (value: string) => string) {
+  if (root instanceof Element) {
+    if (root.matches(excludedText)) return;
+    translateAttributes(root, translate);
+  }
+  const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT | NodeFilter.SHOW_ELEMENT);
+  let current: Node | null = root.nodeType === Node.TEXT_NODE ? root : null;
+  while (current || walker.nextNode()) {
+    const node = current || walker.currentNode;
+    current = null;
+    if (node.nodeType === Node.TEXT_NODE) {
+      const text = node as Text;
+      if (!text.parentElement?.closest(excludedText)) {
+        const original = text.nodeValue || "";
+        const translated = translate(original);
+        if (translated !== original) text.nodeValue = translated;
+      }
+    } else if (node instanceof Element) {
+      translateAttributes(node, translate);
+    }
+  }
 }
 
 function translateDocument(english: boolean) {
-  document.title = translateValue(document.title, english);
-  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
-  const nodes: Text[] = [];
-  while (walker.nextNode()) nodes.push(walker.currentNode as Text);
-  for (const node of nodes) {
-    if (!node.parentElement?.closest("script,style,noscript,textarea,input,select,[data-no-translate],.article-body,.home-hero h1,.home-hero .lead,.content-card h3,.content-card p,.team-card h3,.team-card p,.contact-info-row dd,.accommodation-description,.about-profile-intro,.about-profile-detail p,.faq summary,.faq p,.applicant-data-table td,.data-table td")) {
-      const original = node.nodeValue || "";
-      const translated = translateValue(original, english);
-      if (translated !== original) node.nodeValue = translated;
-    }
-  }
-  document.querySelectorAll<HTMLElement>("[placeholder],[aria-label],[title],[alt],input[type=submit],meta[name=description],meta[property='og:title'],meta[property='og:description']").forEach(element => {
-    for (const attribute of ["placeholder", "aria-label", "title", "alt", "value", "content"]) {
-      const value = element.getAttribute(attribute);
-      if (value) {
-        const translated = translateValue(value, english);
-        if (translated !== value) element.setAttribute(attribute, translated);
-      }
-    }
-  });
+  const translate = createTranslator(english);
+  document.title = translate(document.title);
+  translateSubtree(document.body, translate);
+  document.head.querySelectorAll("meta[name=description],meta[property='og:title'],meta[property='og:description']")
+    .forEach(element => translateAttributes(element, translate));
 }
 
 export function LanguageRuntime() {
@@ -63,10 +83,21 @@ export function LanguageRuntime() {
     document.documentElement.dataset.language = english ? "en" : "id";
     translateDocument(english);
     let queued = false;
-    const observer = new MutationObserver(() => {
-      if (queued) return;
+    let changedNodes = new Set<Node>();
+    let frame = 0;
+    const observer = new MutationObserver(records => {
+      for (const record of records) {
+        if (record.type === "characterData") changedNodes.add(record.target);
+        for (const node of record.addedNodes) changedNodes.add(node);
+      }
+      if (queued || changedNodes.size === 0) return;
       queued = true;
-      queueMicrotask(() => { queued = false; translateDocument(english); });
+      frame = requestAnimationFrame(() => {
+        queued = false;
+        const translate = createTranslator(english);
+        for (const node of changedNodes) translateSubtree(node, translate);
+        changedNodes = new Set<Node>();
+      });
     });
     observer.observe(document.documentElement, { childList: true, characterData: true, subtree: true });
     const change = (event: Event) => {
@@ -74,7 +105,7 @@ export function LanguageRuntime() {
       translateDocument(english);
     };
     window.addEventListener("chp-language-change", change);
-    return () => { observer.disconnect(); window.removeEventListener("chp-language-change", change); };
+    return () => { observer.disconnect(); cancelAnimationFrame(frame); window.removeEventListener("chp-language-change", change); };
   }, []);
   return null;
 }
