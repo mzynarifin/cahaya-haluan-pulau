@@ -14,6 +14,7 @@ import { LocalizedDate } from "@/components/localized-date";
 import { imageAspectFromUrl, imagePresets } from "@/lib/image-presets";
 import { useDebouncedValue } from "@/lib/use-debounced-value";
 import { LocalizedText, useEnglishLanguage } from "@/components/language-runtime";
+import { ContentLanguageSwitch } from "@/components/admin/content-language-switch";
 
 const MediaUpload = dynamic(
   () => import("@/components/admin/media-upload").then(module => module.MediaUpload),
@@ -317,10 +318,7 @@ export function NewsEditor({ id }: { id?: string }) {
     <div className="admin-page-head"><div><span className="eyebrow">Berita {row ? `· ${row.status}` : "· baru"}</span><h1>{row ? "Ubah berita" : "Tulis berita"}</h1><p>{row?.status === "published" ? "Perubahan akan tampil setelah berhasil disimpan." : "Simpan sebagai draft sebelum diterbitkan."}</p></div><Link href="/admin/berita" className="btn btn-quiet">Kembali ke daftar</Link></div>
     <div className="admin-form">
       {error && <div className="alert-error" role="alert">{error}</div>}{success && <div className="alert-success" role="status">{success}</div>}
-      <div className="form-actions" role="group" aria-label="Bahasa konten" style={{ margin: "0 0 20px" }}>
-        <button type="button" className={`btn ${contentLanguage === "id" ? "btn-primary" : "btn-quiet"}`} aria-pressed={contentLanguage === "id"} onClick={() => setContentLanguage("id")}>Bahasa Indonesia</button>
-        <button type="button" className={`btn ${contentLanguage === "en" ? "btn-primary" : "btn-quiet"}`} aria-pressed={contentLanguage === "en"} onClick={() => setContentLanguage("en")}>English</button>
-      </div>
+      <ContentLanguageSwitch value={contentLanguage} onChange={setContentLanguage} />
       <form onSubmit={handleSubmit(data => save(data, row?.status === "published" ? "published" : "draft"))}>
         <div className="field"><label htmlFor={contentLanguage === "en" ? "title_en" : "title"}>Judul *</label><input id={contentLanguage === "en" ? "title_en" : "title"} {...register(contentLanguage === "en" ? "title_en" : "title", { required: contentLanguage === "id" })} maxLength={150} onBlur={event => { if (contentLanguage === "id" && !row && !values.slug) setValue("slug", event.target.value.toLowerCase().normalize("NFKD").replace(/[^a-z0-9\s-]/g, "").trim().replace(/\s+/g, "-"), { shouldDirty: true }); }} />{contentLanguage === "id" && errors.title && <span className="field-error">Judul wajib diisi.</span>}</div>
         {contentLanguage === "id" && <div className="field"><label htmlFor="slug">Slug *</label><input id="slug" {...register("slug", { required: true })} maxLength={160} disabled={row?.status === "published"} /><small>Tautan artikel. Slug berita terbit dikunci.</small></div>}

@@ -4,6 +4,7 @@ import dynamic from "next/dynamic";
 import { createClient } from "@/lib/supabase/browser";
 import { promoteMedia } from "@/lib/admin-media";
 import { AdminPageSkeleton } from "@/components/admin/admin-skeleton";
+import { ContentLanguageSwitch } from "@/components/admin/content-language-switch";
 import { whatsappMessage } from "@/lib/config";
 import { imageAspectFromUrl, imagePresets, type ImagePreset } from "@/lib/image-presets";
 import styles from "./section-editor.module.css";
@@ -149,10 +150,7 @@ export function SectionEditor({ section }: { section: SectionKey }) {
   return <><div className={`admin-page-head${section === "team" ? " team-admin-page-head" : ""}`}><div><span className="eyebrow">Konten publik</span><h1>{config.title}</h1><p>{config.description}</p></div></div>
     <div className={`admin-form${section === "team" ? " team-admin-form" : ""}`}>
       {error && <div className="alert-error" role="alert">{error}</div>}{success && <div className="alert-success" role="status">{success}</div>}
-      {hasBilingualContent && <div className={styles.languageTabs} role="group" aria-label="Bahasa konten">
-        <button type="button" className={styles.languageTab} aria-pressed={contentLanguage === "id"} onClick={() => setContentLanguage("id")}>Bahasa Indonesia</button>
-        <button type="button" className={styles.languageTab} aria-pressed={contentLanguage === "en"} onClick={() => setContentLanguage("en")}>English</button>
-      </div>}
+      {hasBilingualContent && <ContentLanguageSwitch value={contentLanguage} onChange={setContentLanguage} />}
       {visibleFields.map(field => <div className="field" key={field.name}><label htmlFor={field.name}>{field.label}</label>
         {field.kind === "textarea" ? <textarea id={field.name} value={String(content[field.name] || "")} placeholder={field.name === "whatsappMessage" ? whatsappMessage : undefined} onChange={e => set(field.name, e.target.value)} />
           : <input id={field.name} type={field.kind === "email" ? "email" : "text"} value={String(content[field.name] || "")} onChange={e => set(field.name, e.target.value)} />}

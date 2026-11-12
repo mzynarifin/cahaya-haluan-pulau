@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { AdminPageSkeleton } from "@/components/admin/admin-skeleton";
+import { ContentLanguageSwitch } from "@/components/admin/content-language-switch";
 import { GalleryUpload } from "@/components/admin/gallery-upload";
 import { createClient } from "@/lib/supabase/browser";
 import { promoteMedia } from "@/lib/admin-media";
@@ -174,7 +175,7 @@ export function GalleryEditor({ id }: { id?: string }) {
     <div className="admin-page-head"><div><span className="eyebrow">Galeri {album ? `· ${album.status}` : "· baru"}</span><h1>{album ? "Ubah Album" : "Buat Album"}</h1><p>Simpan album terlebih dahulu, kemudian tambahkan foto.</p></div><Link href="/admin/galeri" className="btn btn-quiet">Kembali ke daftar</Link></div>
     <div className="admin-form">
       {error && <div className="alert-error" role="alert">{error}</div>}{success && <div className="alert-success" role="status">{success}</div>}
-      <div className="form-actions" role="group" aria-label="Bahasa konten" style={{ margin: "0 0 20px" }}><button type="button" className={`btn ${lang === "id" ? "btn-primary" : "btn-quiet"}`} aria-pressed={lang === "id"} onClick={() => setContentLanguage("id")}>Bahasa Indonesia</button><button type="button" className={`btn ${lang === "en" ? "btn-primary" : "btn-quiet"}`} aria-pressed={lang === "en"} onClick={() => setContentLanguage("en")}>English</button></div>
+      <ContentLanguageSwitch value={lang} onChange={setContentLanguage} />
       <div className="field"><label htmlFor={lang === "en" ? "album-title-en" : "album-title"}>Judul album *</label><input id={lang === "en" ? "album-title-en" : "album-title"} value={lang === "en" ? titleEn : title} maxLength={150} onChange={event => {
         if (lang === "en") setTitleEn(event.target.value);
         else { setTitle(event.target.value); if (!album) setSlug(event.target.value.toLowerCase().replace(/[^a-z0-9\s-]/g, "").trim().replace(/\s+/g, "-")); }
