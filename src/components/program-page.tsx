@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 
 const programs = {
-  "cahaya-anak-pulau": { title: "Cahaya Anak Pulau", subtitle: "Membuka rumah bagi putra-putri daerah.", description: "Membuka rumah bagi putra-putri daerah untuk mendapatkan pendidikan, pelatihan, dan pengalaman hidup yang lebih luas di luar pulau mereka.", focus: ["Pendidikan", "Pelatihan", "Pengalaman hidup yang lebih luas"], eyebrow: "Program / Pendidikan" },
+  "cahaya-anak-pulau": { title: "Suara Anak Pulau", subtitle: "Membuka rumah bagi putra-putri daerah.", description: "Membuka rumah bagi putra-putri daerah untuk mendapatkan pendidikan, pelatihan, dan pengalaman hidup yang lebih luas di luar pulau mereka.", focus: ["Pendidikan", "Pelatihan", "Pengalaman hidup yang lebih luas"], eyebrow: "Program / Pendidikan" },
   "urx1": { title: "URX1", subtitle: "Menjangkau pulau dan komunitas di seluruh Indonesia.", description: "Kunjungan rutin ke berbagai daerah dan pedalaman ke pulau-pulau di Indonesia dengan program kemanusiaan dan literasi, serta berbagai program kunjungan, pelatihan, dan kemanusiaan bagi kaum marginal.", focus: ["Kunjungan rutin ke daerah dan pedalaman", "Program kemanusiaan dan literasi", "Kunjungan, pelatihan, dan dukungan bagi kaum marginal"], eyebrow: "Inisiatif / Kemanusiaan" },
 };
 

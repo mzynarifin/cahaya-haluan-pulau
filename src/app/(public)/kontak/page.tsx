@@ -18,8 +18,11 @@ export default async function Contact() {
   const wa = whatsappHref(typeof contact.whatsapp === "string" ? contact.whatsapp : null, message);
   const map = typeof contact.mapUrl === "string" && /^https:\/\/(www\.)?google\.com\/maps\/embed\?/.test(contact.mapUrl)
     ? contact.mapUrl : null;
-  const email = typeof contact.email === "string" && /^[^@]+@[^@]+\.[^@]+$/.test(contact.email)
-    ? contact.email : null;
+  const isEmail = (value: unknown): value is string => typeof value === "string" && /^[^@]+@[^@]+\.[^@]+$/.test(value.trim());
+  const emailSuaraAnakPulau = Object.prototype.hasOwnProperty.call(contact, "emailSuaraAnakPulau")
+    ? isEmail(contact.emailSuaraAnakPulau) ? contact.emailSuaraAnakPulau.trim() : null
+    : isEmail(contact.email) ? contact.email.trim() : null;
+  const emailUrx1 = isEmail(contact.emailUrx1) ? contact.emailUrx1.trim() : null;
 
   return <div className="contact-page">
     <div className="page-hero">
@@ -42,11 +45,16 @@ export default async function Contact() {
         <div className="content-card contact-details-card">
           <span className="eyebrow">Informasi lainnya</span>
           <h3>Kontak resmi</h3>
+          <div className="contact-email-grid" role="group" aria-label="Email resmi">
+            {[
+              { label: "Suara Anak Pulau", email: emailSuaraAnakPulau },
+              { label: "URX1", email: emailUrx1 },
+            ].map(({ label, email: address }) => <div className="contact-email-card" key={label}>
+              <span className="contact-email-label">{label}</span>
+              {address ? <a href={`mailto:${address}`} className="contact-email">{address.split(/([@.])/).map((part, index) => <span key={index}>{part}{(part === "@" || part === ".") && <wbr />}</span>)}</a> : <span className="contact-email-missing">Perlu dilengkapi</span>}
+            </div>)}
+          </div>
           <dl className="contact-info-list">
-            <div className="contact-info-row">
-              <dt>Email</dt>
-              <dd>{email ? <a href={`mailto:${email}`} className="link-arrow contact-email">{email.split(/([@.])/).map((part, index) => <span key={index}>{part}{(part === "@" || part === ".") && <wbr />}</span>)}</a> : "Perlu dilengkapi"}</dd>
-            </div>
             <div className="contact-info-row"><dt>Alamat</dt><dd>{String(contact.publicAddress || "Perlu dilengkapi")}</dd></div>
             <div className="contact-info-row"><dt>Jam kontak</dt><dd>{String(contact.contactHours || "Perlu dilengkapi")}</dd></div>
           </dl>

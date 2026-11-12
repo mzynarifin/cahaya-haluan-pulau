@@ -31,7 +31,8 @@ const configs: Record<SectionKey, { title: string; description: string; fields: 
   contact: { title: "Kontak", description: "Nomor WhatsApp resmi diperlukan sebelum website diluncurkan.", fields: [
     { name: "whatsapp", label: "WhatsApp (format 62...)" },
     { name: "whatsappMessage", label: "Pesan awal WhatsApp", kind: "textarea" },
-    { name: "email", label: "Email", kind: "email" },
+    { name: "emailSuaraAnakPulau", label: "Email Suara Anak Pulau", kind: "email", hint: "Email umum lama akan tetap tampil sebagai fallback hingga alamat khusus diisi." },
+    { name: "emailUrx1", label: "Email URX1", kind: "email" },
     { name: "publicAddress", label: "Alamat publik" }, { name: "contactHours", label: "Jam kontak" },
     { name: "mapUrl", label: "URL embed Google Maps yang disetujui", kind: "map" },
   ] },

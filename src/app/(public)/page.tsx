@@ -57,7 +57,7 @@ export default async function Home() {
             {accommodationFacts.length > 0 && <dl className="accommodation-facts">
               {accommodationFacts.map(fact => <div key={fact.label}><dt>{fact.label}</dt><dd>{fact.value}</dd></div>)}
             </dl>}
-            <Link href="/asrama" className="btn btn-primary accommodation-cta">Lihat Center & Fasilitas <ArrowRight size={17} aria-hidden="true" /></Link>
+            <Link href="/asrama" className="btn btn-primary accommodation-cta">Lihat Kantor Pusat <ArrowRight size={17} aria-hidden="true" /></Link>
           </div>
           <div className="accommodation-visual">
             <Photo aspectRatio={4 / 3} src={typeof accommodation.image === "string" ? accommodation.image : null} alt="Dokumentasi bangunan atau ruang Center" label="Foto Center perlu dilengkapi" />
