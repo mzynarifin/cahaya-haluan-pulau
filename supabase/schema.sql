@@ -32,6 +32,7 @@ insert into public.site_sections(key) values ('profile'),('accommodation'),('tea
 insert into public.site_sections(key, content) values
 ('program-suara-anak-pulau', jsonb_build_object(
   'eyebrow', 'Program / Pendidikan', 'kicker', 'Cahaya Haluan Pulau', 'title', 'Suara Anak Pulau',
+  'heroImage', '', 'heroImageMobile', '',
   'subtitle', 'Membuka rumah bagi putra-putri daerah.',
   'description', 'Membuka rumah bagi putra-putri daerah untuk mendapatkan pendidikan, pelatihan, dan pengalaman hidup yang lebih luas di luar pulau mereka.',
   'heroButton', 'Hubungi kami', 'focusEyebrow', 'FOKUS KAMI',
@@ -52,6 +53,7 @@ insert into public.site_sections(key, content) values
 )),
 ('program-urx1', jsonb_build_object(
   'eyebrow', 'Inisiatif / Kemanusiaan', 'kicker', 'Cahaya Haluan Pulau', 'title', 'URX1',
+  'heroImage', '', 'heroImageMobile', '',
   'subtitle', 'Menjangkau pulau dan komunitas di seluruh Indonesia.',
   'description', 'Kunjungan rutin ke berbagai daerah dan pedalaman ke pulau-pulau di Indonesia dengan program kemanusiaan dan literasi, serta berbagai program kunjungan, pelatihan, dan kemanusiaan bagi kaum marginal.',
   'heroButton', 'Hubungi kami', 'focusEyebrow', 'FOKUS KAMI',

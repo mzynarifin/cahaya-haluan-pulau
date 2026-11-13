@@ -15,9 +15,19 @@ export function ProgramPage({ slug, content }: { slug: ProgramSlug; content: Rec
   }, []);
 
   const copy = getProgramCopy(slug, content, english ? "en" : "id");
+  const desktopUpload = typeof content.heroImage === "string" && content.heroImage.trim() ? content.heroImage : null;
+  const mobileUpload = typeof content.heroImageMobile === "string" && content.heroImageMobile.trim() ? content.heroImageMobile : null;
+  const desktopImage = desktopUpload || "/hero-lighthouse.webp";
+  const mobileImage = mobileUpload || (desktopUpload ? desktopImage : "/hero-lighthouse-mobile.webp");
 
   return <div className="program-page">
     <section className="program-hero">
+      <div className="program-hero-visual" aria-hidden="true">
+        <picture className="program-hero-artwork">
+          <source media="(max-width: 800px)" srcSet={mobileImage} />
+          <img src={desktopImage} className="program-hero-image" alt="" fetchPriority="high" />
+        </picture>
+      </div>
       <div className="container program-hero-inner">
         <span className="eyebrow">{copy.eyebrow}</span>
         <p className="program-kicker">{copy.kicker}</p>

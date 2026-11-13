@@ -163,6 +163,10 @@ export function SectionEditor({ section }: { section: SectionKey }) {
         <ImageField label="Foto beranda mobile" hint="Foto memenuhi layar mobile dan dapat terpotong. Jika kosong, foto desktop atau ilustrasi bawaan digunakan." folder="hero" preset={imagePresets.heroMobile} value={String(content.heroImageMobile || "")} onUploaded={(path, url) => { set("heroImageMobile", url); recordUpload(path, url); }} />
         <ImageField label="Foto halaman tentang" hint="Foto memenuhi bingkai pada desktop dan mobile; bagian tepi dapat terpotong." folder="about" preset={imagePresets.about} value={String(content.aboutImage || "")} onUploaded={(path, url) => { set("aboutImage", url); recordUpload(path, url); }} />
       </>}
+      {isProgramSection && <>
+        <ImageField label="Foto program desktop" hint="Foto tampil sebagai latar hero program pada layar desktop. Gunakan foto lanskap agar komposisi tetap kuat di sisi kanan." folder="program" preset={imagePresets.programDesktop} value={String(content.heroImage || "")} onUploaded={(path, url) => { set("heroImage", url); recordUpload(path, url); }} />
+        <ImageField label="Foto program mobile" hint="Foto khusus layar mobile. Gunakan komposisi vertikal agar subjek tetap terlihat di belakang teks hero." folder="program" preset={imagePresets.programMobile} value={String(content.heroImageMobile || "")} onUploaded={(path, url) => { set("heroImageMobile", url); recordUpload(path, url); }} />
+      </>}
       {section === "accommodation" && <>
         <ImageField label="Foto Center" hint="Foto memenuhi bingkai Center di beranda dan halaman Center; bagian tepi dapat terpotong." folder="asrama" preset={imagePresets.accommodation} value={String(content.image || "")} onUploaded={(path, url) => { set("image", url); recordUpload(path, url); }} />
         <Repeater language={contentLanguage} title="Fasilitas" items={list("facilities")} fields={[["name", "Nama fasilitas"], ["description", "Keterangan"]]}
@@ -188,7 +192,7 @@ export function SectionEditor({ section }: { section: SectionKey }) {
     </div></>;
 }
 
-function ImageField({ label, hint, folder, preset, value, onUploaded }: { label: string; hint?: string; folder: "hero" | "about" | "asrama"; preset: ImagePreset; value: string; onUploaded: (path: string, url: string) => void }) {
+function ImageField({ label, hint, folder, preset, value, onUploaded }: { label: string; hint?: string; folder: "hero" | "about" | "asrama" | "program"; preset: ImagePreset; value: string; onUploaded: (path: string, url: string) => void }) {
   return <div style={{ margin: "20px 0" }}><MediaUpload label={label} folder={folder} preset={preset} onUploaded={({ path, preview }) => onUploaded(path, preview)} />
     {hint && <p className="tiny muted" style={{ marginTop: -10 }}>{hint}</p>}
     {value && <img src={value} alt={`Pratinjau ${label}`} style={{ width: 180, aspectRatio: imageAspectFromUrl(value, preset.aspect), objectFit: "contain", borderRadius: 4 }} />}</div>;

@@ -12,7 +12,7 @@ const ImageCropDialog = dynamic(
 );
 
 type Uploaded = { path: string; preview: string };
-type Folder = "news" | "gallery" | "hero" | "about" | "asrama" | "team" | "facilities";
+type Folder = "news" | "gallery" | "hero" | "about" | "asrama" | "team" | "facilities" | "program";
 
 export function MediaUpload({ folder, onUploaded, label = "Pilih foto", preset }: {
   folder: Folder;

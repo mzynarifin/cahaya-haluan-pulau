@@ -35,6 +35,8 @@ export function imageAspectFromUrl(url: string | null | undefined, fallback: num
 export const imagePresets = {
   heroDesktop: { aspect: 16 / 9, outputWidth: 1920, ratio: "16:9" },
   heroMobile: { aspect: 9 / 16, outputWidth: 1080, ratio: "9:16" },
+  programDesktop: { aspect: 16 / 9, outputWidth: 1920, ratio: "16:9" },
+  programMobile: { aspect: 9 / 16, outputWidth: 1080, ratio: "9:16" },
   about: { aspect: 4 / 3, outputWidth: 1200, ratio: "4:3" },
   accommodation: { aspect: 4 / 3, outputWidth: 1200, ratio: "4:3" },
   facilities: { aspect: 16 / 10, outputWidth: 1200, ratio: "16:10" },
